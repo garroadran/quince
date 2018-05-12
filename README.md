@@ -20,7 +20,7 @@ Coming soon.
 
 ## Contributing
 
-Contributions of all sorts will be very much welcomed. Please see the CONTRIBUTING.md file in the ./docs directory.
+Contributions of all sorts will be very much welcomed. Please see [CONTRIBUTING.md](https://github.com/garroadran/quince/blob/master/docs/CONTRIBUTING.md) file in the ./docs directory.
 
 ## License
 
