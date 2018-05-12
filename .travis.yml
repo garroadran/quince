@@ -9,7 +9,7 @@ script:
  - python -m unittest discover
 
 after_script:
- - coveralls
+ - pwd && coveralls
 
 branches:
   only:
