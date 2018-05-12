@@ -7,6 +7,10 @@ install:
 # run tests
 script:
  - python -m unittest discover
+
+after_script:
+ - coveralls
+
 branches:
   only:
     - master
