@@ -1,4 +1,6 @@
 # Quince
+Master: [![Build Status](https://travis-ci.com/garroadran/quince.svg?branch=master)](https://travis-ci.com/garroadran/quince)
+Development: [![Build Status](https://travis-ci.com/garroadran/quince.svg?branch=development)](https://travis-ci.com/garroadran/quince)
 ### Classic card game written in Python
 
 ## Overview

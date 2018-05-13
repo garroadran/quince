@@ -9,9 +9,9 @@ script:
  - python -m unittest discover
 
 after_script:
- - COVERALLS_SERVICE_NAME=travis-pro coveralls
+ - coveralls --service=travis-ci
 
-branches:
-  only:
-    - master
-    - development
+notifications:
+ email:
+  on_success: never
+  on_failure: change
