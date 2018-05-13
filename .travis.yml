@@ -9,7 +9,7 @@ script:
  - python -m unittest discover
 
 after_script:
- - coveralls --service=travis-ci
+ - coveralls --service=travis-pro
 
 notifications:
  email:
