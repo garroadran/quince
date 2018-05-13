@@ -1,7 +1,7 @@
 """
 Module containing the Player class
 """
-from quince.components.Pila import Pila
+from quince.components.pila import Pila
 
 class Player(object):
     """Represents a player in the game.

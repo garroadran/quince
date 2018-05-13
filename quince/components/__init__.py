@@ -12,7 +12,7 @@ as they collect cards on their turns.
 Player - A player of the game.
 """
 
-from quince.components.Card import Card
-from quince.components.Deck import Deck
-from quince.components.Pila import Pila
-from quince.components.Player import Player
+from quince.components.card import Card
+from quince.components.deck import Deck
+from quince.components.pila import Pila
+from quince.components.player import Player

@@ -48,5 +48,5 @@ class Card(object):
         """
         if self._number == 7:
             return 10
-        else:
-            return 0
+
+        return 0
