@@ -34,10 +34,10 @@ class Deck(object):
         random.shuffle(self._cards)
 
     def __str__(self):
-        return 'Deck containing ' + str(len(self.cards())) + ' Cards.'
+        return f'Deck containing {len(self.cards())} Cards.'
 
     def __repr__(self):
-        return 'Deck containing ' + str(len(self.cards())) + ' Cards.'
+        return f'Deck containing {len(self.cards())} Cards.'
 
     def cards(self):
         """Returns a copy of the list of cards in the deck.
