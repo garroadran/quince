@@ -35,6 +35,12 @@ class Player(object):
 
         self._total_score = 0
 
+    def __repr__(self):
+        return f'Player, {self.name()}.'
+
+    def __str__(self):
+        return f'Player, {self.name()}.'
+
     def name(self):
         """Getter for the player's name
         """
