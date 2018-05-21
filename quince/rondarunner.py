@@ -41,35 +41,35 @@ print('///////////////////////////')
 print('     Dealing cards . . .')
 print('///////////////////////////')
 
-while not RONDA.is_finished():
+while not RONDA.is_finished:
 
     # Display the current status
-    print(RONDA.current_player().name() + ' holds the following cards:')
-    HAND = RONDA.current_player().current_hand()
+    print(RONDA.current_player.name() + ' holds the following cards:')
+    HAND = RONDA.current_player.current_hand()
     for i in range(1, len(HAND) + 1):
         print('>>> ' + str(i) + ': ' + str(HAND[i-1].info()))
     print('')
     print('The cards on the mesa are:')
-    MESA = RONDA.current_mesa()
+    MESA = RONDA.current_mesa
     for i in range(1, len(MESA) + 1):
         print('>>> ' + str(i) + ': ' + str(MESA[i-1].info()))
     print('...')
 
     # Play a card from the hand
     while True:
-        CARD_CHOICE = int(input('what card will ' + RONDA.current_player().name() +
+        CARD_CHOICE = int(input('what card will ' + RONDA.current_player.name() +
                                 ' play? (integer): '))
         try:
             OWN_CARD = HAND[CARD_CHOICE - 1].info()
             break
         except (ValueError, IndexError):
             print('Invalid entry.')
-    print(RONDA.current_player().name() + ' plays a ' + str(OWN_CARD))
+    print(RONDA.current_player.name() + ' plays a ' + str(OWN_CARD))
 
     # select cards from mesa
     while True:
         try:
-            MESA_CARDS = get_mesa_cards(RONDA.current_mesa() == [])
+            MESA_CARDS = get_mesa_cards(RONDA.current_mesa == [])
             RONDA.play_turn(OWN_CARD, MESA_CARDS)
             break
         except ValueError:
@@ -78,7 +78,7 @@ while not RONDA.is_finished():
     print('.')
     print('.')
 
-    if RONDA.current_player() == BOB and len(BOB.current_hand()) == 3:
+    if RONDA.current_player == BOB and len(BOB.current_hand()) == 3:
         print('///////////////////////////')
         print('     Dealing cards . . .')
         print('///////////////////////////')

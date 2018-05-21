@@ -50,7 +50,7 @@ class TestRonda(unittest.TestCase):
       alice_pila = alice.pila()
       self.assertEqual(1, alice_pila.get_escobas())
       self.assertEqual(4, len(alice_pila.get_cards()))
-      self.assertEqual([], ronda.current_mesa())
+      self.assertEqual([], ronda.current_mesa)
 
     def test_next_player(self):
       deck = Deck(Card)
@@ -60,18 +60,18 @@ class TestRonda(unittest.TestCase):
 
       ronda = Ronda([alice, bob], alice, deck)
       # since alice is dealer, bob should start play
-      self.assertEqual(bob, ronda.current_player())
+      self.assertEqual(bob, ronda.current_player)
       # should cycle back around to alice
       ronda._next_player()
-      self.assertEqual(alice, ronda.current_player())
+      self.assertEqual(alice, ronda.current_player)
 
       # do the same thing with more players
       deck = Deck(Card)
       ronda = Ronda([alice, bob, charlie], charlie, deck)
-      self.assertEqual(alice, ronda.current_player())
+      self.assertEqual(alice, ronda.current_player)
       ronda._next_player()
       ronda._next_player()
-      self.assertEqual(charlie, ronda.current_player())
+      self.assertEqual(charlie, ronda.current_player)
 
     def test_current_mesa(self):
       # Returns a list of cards
@@ -79,7 +79,7 @@ class TestRonda(unittest.TestCase):
       alice = Player('Alice')
       bob = Player('Bob')
       ronda = Ronda([alice, bob], bob, deck)
-      for card in ronda.current_mesa():
+      for card in ronda.current_mesa:
         self.assertTrue(isinstance(card, Card))
 
     def test_play_turn(self):
@@ -90,14 +90,14 @@ class TestRonda(unittest.TestCase):
 
       for _ in  range(0, 35):
         # Both players do nothing except lay down cards
-        card_to_play = ronda.current_player().current_hand()[0]
+        card_to_play = ronda.current_player.current_hand()[0]
         ronda.play_turn(card_to_play.info(), [])
-      self.assertEqual(39, len(ronda.current_mesa()))
+      self.assertEqual(39, len(ronda.current_mesa))
 
       # When the last card is played, the ronda finishes
-      card_to_play = ronda.current_player().current_hand()[0]
+      card_to_play = ronda.current_player.current_hand()[0]
       ronda.play_turn(card_to_play.info(), [])
-      self.assertTrue(ronda.is_finished())
+      self.assertTrue(ronda.is_finished)
 
       # Can't play any more turns once the ronda is finished
       with self.assertRaises(RondaFinishedError):
@@ -113,13 +113,13 @@ class TestRonda(unittest.TestCase):
       ronda.play_turn(bob.current_hand()[2].info(), [(5, 'copa'), (7, 'espada')])
       self.assertEqual(3, bob.pila().total_cards())
       self.assertEqual(2, len(bob.current_hand()))
-      self.assertEqual(2, len(ronda.current_mesa()))
+      self.assertEqual(2, len(ronda.current_mesa))
 
       # lay down a card
       ronda.play_turn(alice.current_hand()[0].info(), [])
       self.assertEqual(0, alice.pila().total_cards())
       self.assertEqual(2, len(alice.current_hand()))
-      self.assertEqual(3, len(ronda.current_mesa()))
+      self.assertEqual(3, len(ronda.current_mesa))
 
     def test_dealt_escoba(self):
       # Remember whether the initial mesa deal was an escoba or not
@@ -127,10 +127,10 @@ class TestRonda(unittest.TestCase):
       alice = Player('Alice')
       bob = Player('Bob')
       ronda = Ronda([alice, bob], alice, deck)
-      self.assertTrue(ronda.dealt_escoba())
+      self.assertTrue(ronda.dealt_escoba)
 
       deck = MockDeck()
       alice = Player('Alice')
       bob = Player('Bob')
       ronda = Ronda([alice, bob], alice, deck)
-      self.assertFalse(ronda.dealt_escoba())
+      self.assertFalse(ronda.dealt_escoba)
