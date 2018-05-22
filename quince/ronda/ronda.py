@@ -31,8 +31,6 @@ A complete game will have as many rondas as necessary
 until one player reaches a total of 30 points.
 """
 
-from quince.ronda import RondaFinishedError, RondaNotFinishedError
-
 class Ronda(object):
     """Represents one play through a single deck of cards."""
 
@@ -112,6 +110,10 @@ class Ronda(object):
         If a player picks up cards, the _last_picked_up attribute is modified to point
         to the current player.
 
+        Once the player has completed their action, the ronda checks its own
+        state and decides whether it should move to the next player, deal another
+        hand, or finish the ronda altogether.
+
         Args:
             own_card (Card info tuple) -- What card from their own hand the user will use.
             mesa_cards (List of card info tuples) -- The cards to pick up
@@ -120,7 +122,7 @@ class Ronda(object):
             raise RondaFinishedError()
 
         # First, the current player performs an action
-        if mesa_cards == [] or mesa_cards is None:
+        if not mesa_cards:
             self.current_player.place_card_on_mesa(self._mesa, own_card)
         else:
             self.current_player.pick_up_from_mesa(self._mesa, own_card, mesa_cards)
@@ -157,7 +159,7 @@ class Ronda(object):
         """Returns True if all players currently have empty hands. False otherwise."""
         for player in self._players:
             if player.current_hand():
-                return False        
+                return False
         return True
 
     def _next_player(self):
@@ -165,3 +167,21 @@ class Ronda(object):
         _current_player attribute.
         """
         self._current_player = (self._current_player + 1) % len(self._players)
+
+class RondaFinishedError(Exception):
+    """Error raised when trying to perform an action that can only
+    be done if the ronda is still ongoing.
+    """
+    def __init__(self, msg=None):
+        if msg is None:
+            msg = "The current ronda is finished."
+        super(RondaFinishedError, self).__init__(msg)
+
+class RondaNotFinishedError(Exception):
+    """Error raised when trying to perform an action that can only
+    be done once the ronda is finished.
+    """
+    def __init__(self, msg=None):
+        if msg is None:
+            msg = "The current ronda is not yet finished."
+        super(RondaNotFinishedError, self).__init__(msg)

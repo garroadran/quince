@@ -10,6 +10,4 @@ Once a ronda is finished, the points for that ronda
 can be calculated.
 """
 
-# Ronda class depends on exceptions, so exceptions must be imported first
-from quince.ronda.ronda_exceptions import RondaFinishedError, RondaNotFinishedError
-from quince.ronda.ronda import Ronda
+from quince.ronda.ronda import Ronda, RondaFinishedError, RondaNotFinishedError
