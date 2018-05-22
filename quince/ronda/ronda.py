@@ -46,7 +46,6 @@ class Ronda(object):
             _players is the list of players in the game
             _DEALER is the index of the player who dealt the cards in the players array
             _deck, a Deck object from which cards are popped out (ie. dealt out)
-            _finished keeps track of whether all the cards have been played
             _last_picked_up reference to the last player to pick up cards. That
             person gets the remaining cards on the mesa when the ronda is finished.
             _dealt_escoba remembers whether an escoba was dealt on the first deal of
@@ -65,7 +64,7 @@ class Ronda(object):
         if mesa_sum == 15:
             # make sure to pass a copy to the dealer's pila, otherwise
             # the cards could be removed from his hand when we clear them here
-            self._players[self._dealer].pila().add(self.current_mesa, True)
+            self._players[self._dealer].pila().add(self.current_mesa[:], True)
             self._mesa = []
             self._dealt_escoba = True
 
