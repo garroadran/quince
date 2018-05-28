@@ -61,6 +61,11 @@ class Pila(object):
                 return False
         return True
 
+    def setenta(self):
+        """Calculates the total setenta score in the pila.
+        """
+        pass
+
     def has_siete_de_belo(self):
         """Returns True if the pila contains the 7 of oro
         """
