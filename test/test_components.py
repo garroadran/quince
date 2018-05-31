@@ -142,20 +142,15 @@ class TestPlayer(unittest.TestCase):
         self.assertEqual([card_bob2, card_bob3], bob.current_hand())
 
 class TestPila(unittest.TestCase):
-    def test_has_setenta(self):
-        """Identifies whether or not the player is able to form a setenta"""
-        pila1 = Pila()
-        pila2 = Pila()
-        basto = Card(4, 'basto')
-        oro = Card(7, 'oro')
-        espada = Card(10, 'espada')
-        copa = Card(1, 'copa')
+    def test_setenta(self):
+        pila = Pila()
+        card1 = Card(4, 'basto')
+        card2 = Card(6, 'copa')
+        card3 = Card(6, 'oro')
+        card4 = Card(7, 'espada')
         
-        pila1.add([basto, oro, espada, copa])
-        pila2.add([basto, oro, espada])
-
-        self.assertTrue(pila1.has_setenta())
-        self.assertFalse(pila2.has_setenta())
+        pila.add([card1, card2, card3, card4])
+        print(pila.setenta())
 
     def test_add(self):
         """Add cards to the pila, and retrieve them"""
