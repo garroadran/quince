@@ -71,9 +71,9 @@ class Pila(object):
         if has_empty_suit:
             return (0, [])
 
-        best_cards_in_each_suit = [max(suit, key=lambda x: x.points_setenta) for suit in cards.values()]
-        score = sum([card.points_setenta for card in best_cards_in_each_suit])
-        return (score, best_cards_in_each_suit)
+        best_cards = [max(suit, key=lambda x: x.points_setenta) for suit in cards.values()]
+        score = sum([card.points_setenta for card in best_cards])
+        return (score, best_cards)
 
 
     def has_siete_de_belo(self):
