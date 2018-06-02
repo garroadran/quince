@@ -21,6 +21,9 @@ class Card(object):
         self._suit = suit
         self._image = 'default.png'
 
+        setenta = [0, 0, 0, 0, 0, 0, 10, 0, 0, 0]
+        self.points_setenta = setenta[number - 1]
+
     def __str__(self):
         return str((self._number, self._suit))
 
@@ -40,13 +43,7 @@ class Card(object):
         """
         return (self._number, self._suit)
 
-    def points_setenta(self):
-        """Returns the card's points value when calculating the setenta.
 
-        This is currently implemented in a very simplistic manner, but
-        can be developed further at a later date.
-        """
-        if self._number == 7:
-            return 10
-
-        return 0
+    def clone(self):
+        """Clones a Card object"""
+        return Card(self._number, self._suit)

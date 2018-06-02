@@ -9,4 +9,5 @@ This repeats until the deck is empty.
 Once a ronda is finished, the points for that ronda
 can be calculated.
 """
+
 from quince.ronda.ronda import Ronda, RondaFinishedError, RondaNotFinishedError

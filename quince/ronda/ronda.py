@@ -34,8 +34,6 @@ until one player reaches a total of 30 points.
 class Ronda(object):
     """Represents one play through a single deck of cards."""
 
-    # pylint: disable=too-many-instance-attributes
-
     def __init__(self, players, dealer, deck):
         """Instantiate a ronda object.
 
@@ -48,7 +46,6 @@ class Ronda(object):
             _players is the list of players in the game
             _DEALER is the index of the player who dealt the cards in the players array
             _deck, a Deck object from which cards are popped out (ie. dealt out)
-            _finished keeps track of whether all the cards have been played
             _last_picked_up reference to the last player to pick up cards. That
             person gets the remaining cards on the mesa when the ronda is finished.
             _dealt_escoba remembers whether an escoba was dealt on the first deal of
@@ -58,7 +55,6 @@ class Ronda(object):
         self._players = players
         self._dealer = players.index(dealer)
         self._deck = deck
-        self._finished = False
         self._last_picked_up = dealer
         self._dealt_escoba = False
         self._mesa = deck.deal(4)
@@ -68,7 +64,7 @@ class Ronda(object):
         if mesa_sum == 15:
             # make sure to pass a copy to the dealer's pila, otherwise
             # the cards could be removed from his hand when we clear them here
-            self._players[self._dealer].pila().add(self.current_mesa(), True)
+            self._players[self._dealer].pila().add(self.current_mesa[:], True)
             self._mesa = []
             self._dealt_escoba = True
 
@@ -79,80 +75,18 @@ class Ronda(object):
         self._current_player = self._dealer
         self._next_player()
 
-    def _deal_hands(self):
-        """Deals a hand to each player in the game
-
-        Modifies the _deck attribute.
-        """
-        if self._finished:
-            raise RondaFinishedError()
-
-        for plyr in self._players:
-            plyr.pick_up_hand(self._deck.deal(3))
-
+    @property
     def current_mesa(self):
         """Returns a copy of the cards on the mesa"""
         return self._mesa[:]
 
-    def _next_player(self):
-        """Iterates over the players list, and updates the
-        _current_player attribute.
-        """
-        self._current_player = (self._current_player + 1) % len(self._players)
-
+    @property
     def current_player(self):
-        """Getter for the player whose turn it currently is.
-
-        Returns:
-            Reference to the current player.
+        """Reference to the player whose turn it is to play.
         """
         return self._players[self._current_player]
 
-    def play_turn(self, own_card, mesa_cards=None):
-        """Cause the current player to perform an action, and then pass
-        the turn to the next player.
-
-        If a player picks up cards, the _last_picked_up attribute is modified to point
-        to the current player.
-
-        Args:
-            own_card (Card info tuple) -- What card from their own hand the user will use.
-            mesa_cards (List of card info tuples) -- The cards to pick up
-        """
-        if self.is_finished():
-            raise RondaFinishedError()
-
-        # First, the current player performs an action
-        if mesa_cards == [] or mesa_cards is None:
-            self.current_player().place_card_on_mesa(self._mesa, own_card)
-        else:
-            self.current_player().pick_up_from_mesa(self._mesa, own_card, mesa_cards)
-            self._last_picked_up = self.current_player()
-
-        # then we branch.
-        # a) The ronda is finished
-        # b) Another hand needs to be dealt
-        # c) The turn passes to the next player
-        hand_is_done = (self.current_player() == self._players[self._dealer]
-                        and self.current_player().current_hand() == [])
-
-        # If the entire ronda is done
-        if hand_is_done and not self._deck.cards():
-            # the last player to pick up cards gets what remains on the mesa
-            self._last_picked_up.pila().add(self.current_mesa())
-            self._finished = True
-        elif hand_is_done:
-            self._deal_hands()
-            self._next_player()
-        else:
-            self._next_player()
-
-    def is_finished(self):
-        """Getter for the state of the ronda.
-        Returns true if the deck is empty and all players have played their last cards.
-        """
-        return self._finished
-
+    @property
     def dealt_escoba(self):
         """Getter for the state of the initial deal to the mesa.
 
@@ -162,6 +96,78 @@ class Ronda(object):
         """
         return self._dealt_escoba
 
+    @property
+    def is_finished(self):
+        """Returns True if the deck is empty and all players have played their last cards.
+        """
+        return self._hand_is_done and not self._deck.cards()
+
+    def play_turn(self, own_card, mesa_cards=None):
+        """Cause the current player to perform an action, and then pass
+        the turn to the next player.
+
+        If a player picks up cards, the _last_picked_up attribute is modified to point
+        to the current player.
+
+        Once the player has completed their action, the ronda checks its own
+        state and decides whether it should move to the next player, deal another
+        hand, or finish the ronda altogether.
+
+        Args:
+            own_card (Card info tuple) -- What card from their own hand the user will use.
+            mesa_cards (List of card info tuples) -- The cards to pick up
+        """
+        if self.is_finished:
+            raise RondaFinishedError()
+
+        # First, the current player performs an action
+        if not mesa_cards:
+            self.current_player.place_card_on_mesa(self._mesa, own_card)
+        else:
+            self.current_player.pick_up_from_mesa(self._mesa, own_card, mesa_cards)
+            self._last_picked_up = self.current_player
+
+        # Then we branch:
+        # If the entire ronda is done
+        if self.is_finished:
+            # the last player to pick up cards gets what remains on the mesa
+            self._last_picked_up.pila().add(self.current_mesa)
+
+        # If the hand is done but there are still cards to be dealt
+        elif self._hand_is_done:
+            self._deal_hands()
+            self._next_player()
+
+        # If the hand is not yet done
+        else:
+            self._next_player()
+
+    def _deal_hands(self):
+        """Deals a hand to each player in the game
+
+        Modifies the _deck attribute and the cards in each player's .current_hand
+        """
+        if self.is_finished:
+            raise RondaFinishedError()
+
+        for plyr in self._players:
+            plyr.pick_up_hand(self._deck.deal(3))
+
+    @property
+    def _hand_is_done(self):
+        """Returns True if all players currently have empty hands. False otherwise."""
+        for player in self._players:
+            if player.current_hand():
+                return False
+        return True
+
+    def _next_player(self):
+        """Iterates over the players list, and updates the
+        _current_player attribute.
+        """
+        self._current_player = (self._current_player + 1) % len(self._players)
+
+
 class RondaFinishedError(Exception):
     """Error raised when trying to perform an action that can only
     be done if the ronda is still ongoing.
@@ -170,6 +176,7 @@ class RondaFinishedError(Exception):
         if msg is None:
             msg = "The current ronda is finished."
         super(RondaFinishedError, self).__init__(msg)
+
 
 class RondaNotFinishedError(Exception):
     """Error raised when trying to perform an action that can only

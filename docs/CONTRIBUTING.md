@@ -27,18 +27,16 @@ If the codebase has moved on since the time you forked the project, you'll want 
 
     # Add a remote to your Git project so that Git knows where the up-to-date code lives.
     $ git remote add upstream https://github.com/garroadran/quince
-    
+
     # Update your local version of the code with the version that's on the upstream
-    # Most of the time you'll be concerned with the development branch, so that's the branch that we pull in
-    $ git pull upstream development
+    $ git pull upstream master
 
 Life gets a little more complicated if the codebase has moved on while you are in the middle of making your own additions. You will need to merge in the latest changes, so that whatever files you change also contain whatever changes were made on the upstream. Read up on Git pulls and merges, and ask if you need assistance.
 
 ## Get To Work!
 
-__When submitting a new feature or fix, be sure that you are branching off of the development branch, and not master.__ Creating a new branch for your work can be done with the following commands:
+__When submitting a new feature or fix, be sure that you create a new branch for your work.__ Creating a new branch for your work can be done with the following command:
 
-    $ git checkout development
     $ git branch -b mynewbranch
 
 Then write your changes and/or additions to the code as necessary. Wherever possible, please try to include tests with your additions.
