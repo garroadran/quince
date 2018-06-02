@@ -26,3 +26,4 @@ Contributions of all sorts will be very much welcomed. Please see [CONTRIBUTING.
 ## License
 
 MIT. Copyright (c) 2018 Daniel Liberatori
+Card designs courtesy of Basquetteur. Available on [Wikipedia](https://commons.wikimedia.org/wiki/File:Baraja_espa%C3%B1ola_completa.png)
