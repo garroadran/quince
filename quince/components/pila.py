@@ -26,6 +26,7 @@ class Pila(object):
         # number of escobas scored
         self._escobas = 0
 
+
     def add(self, cards, escoba=False):
         """Take a list of cards and add them to the pila.
 
@@ -40,6 +41,7 @@ class Pila(object):
         if escoba:
             self._escobas += 1
 
+
     def get_cards(self):
         """Returns a copy of the cards currently in the pila
 
@@ -48,32 +50,31 @@ class Pila(object):
         """
         return copy.deepcopy(self._cards)
 
+
     def get_escobas(self):
         """Returns the number of Escobas the player has made
         """
         return self._escobas
 
-    def has_setenta(self):
-        """Returns True if the pila contains at least 1 card of each suit
-        TO DO: Remove this function
-        """
-        for palo in self._cards:
-            if len(self._cards[palo]) < 1:
-                return False
-        return True
 
     def setenta(self):
         """Calculates the total setenta score in the pila.
+
+        Returns
+            A tuple containing an integer representing the score for the setenta,
+            and a list containing the cards that were used to make it up.
         """
         cards = self.get_cards()
 
         # Setenta requires at least 1 card from each suit
         has_empty_suit = [] in cards.values()
         if has_empty_suit:
-            return 0
-        
+            return (0, [])
+
         best_cards_in_each_suit = [max(suit, key=lambda x: x.points_setenta) for suit in cards.values()]
-        return best_cards_in_each_suit
+        score = sum([card.points_setenta for card in best_cards_in_each_suit])
+        return (score, best_cards_in_each_suit)
+
 
     def has_siete_de_belo(self):
         """Returns True if the pila contains the 7 of oro
@@ -84,6 +85,7 @@ class Pila(object):
 
         return False
 
+
     def total_cards(self):
         """Returns the total number of cards the user has picked up.
         """
@@ -93,10 +95,12 @@ class Pila(object):
 
         return amount
 
+
     def total_oros(self):
         """Returns the total number of oros that the user has picked up.
         """
         return len(self._cards['oro'])
+
 
     def reset(self):
         """Resets the pila to an empty state.

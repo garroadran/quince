@@ -28,6 +28,28 @@ class TestCard(unittest.TestCase):
 
         self.fail('Failed')
 
+
+    def test_points_setenta(self):
+        """The number of points a card is worth in the setenta"""
+        c = Card(7, 'oro')
+        self.assertTrue(10, c.points_setenta)
+
+
+    def test_str(self):
+        """String representation"""
+        c = Card(1, 'oro')
+        s = str(c)
+        self.assertTrue('1' in s)
+        self.assertTrue('oro' in s)
+
+
+    def test_repr(self):
+        """String representation"""
+        c = Card(1, 'oro')
+        s = repr(c)
+        self.assertTrue('1' in s)
+        self.assertTrue('oro' in s)
+
 class TestDeck(unittest.TestCase):
     def test_constructor(self):
         """Takes a Card class and builds a deck of 40 Cards"""
@@ -57,6 +79,7 @@ class TestDeck(unittest.TestCase):
         cards.append('More cards!')
         self.assertEqual(40, len(deck.cards()))
 
+
     def test_deal(self):
         """Deals a random set of cards, and removes them from the deck"""
         deck = Deck(Card)
@@ -65,6 +88,22 @@ class TestDeck(unittest.TestCase):
 
         deck.deal(3)
         self.assertEqual(33, len(deck.cards()))
+
+
+    def test_str(self):
+        """String representation"""
+        d = Deck(Card)
+        s = str(d)
+        self.assertTrue('40' in s)
+
+
+    def test_repr(self):
+        """String representation"""
+        d = Deck(Card)
+        d.deal(4)
+        s = repr(d)
+        self.assertTrue('36' in s)
+
 
 class TestPlayer(unittest.TestCase):
     def test_pick_up_hand(self):
@@ -151,22 +190,52 @@ class TestPlayer(unittest.TestCase):
         self.assertEqual(1, bob.pila().get_escobas())
         self.assertEqual([card_bob2, card_bob3], bob.current_hand())
 
+
+    def test_award_points(self):
+        p = Player('Alice')
+        # Award 1 point by default
+        p.award_points()
+        self.assertEqual(1, p.total_score())
+
+        p.award_points(4)
+        self.assertEqual(5, p.total_score())
+
+
+    def test_raise_not_holding_card(self):
+        """Raise an error if the player tries to drop a card they don't have"""
+        p = Player('Alice')
+        with self.assertRaises(ValueError):
+            p.place_card_on_mesa([], (4, 'copa'))
+
+
+    def test_raise_various(self):
+        """Raise errors if trying to perform illegal pickups"""
+        p = Player('Alice')
+        mesa = [Card(5, 'espada')]
+        p.pick_up_hand([Card(8, 'copa'), Card(10, 'oro'), Card(8, 'espada')])
+        with self.assertRaises(ValueError):
+            p.pick_up_from_mesa(mesa, (8, 'copa'), [(5, 'espada')])
+
+        with self.assertRaises(ValueError):
+            p.pick_up_from_mesa(mesa, (3, 'copa'), [])
+
+        with self.assertRaises(ValueError):
+            p.pick_up_from_mesa(mesa, (8, 'copa'), [(7, 'oro')])
+
+    def test_str(self):
+        """String representation"""
+        p = Player('Annie')
+        s = str(p)
+        self.assertTrue('Annie' in s)
+
+
+    def test_repr(self):
+        """String representation"""
+        p = Player('Billy')
+        s = repr(p)
+        self.assertTrue('Billy' in s)
+
 class TestPila(unittest.TestCase):
-    def test_has_setenta(self):
-        """Identifies whether or not the player is able to form a setenta"""
-        pila1 = Pila()
-        pila2 = Pila()
-        basto = Card(4, 'basto')
-        oro = Card(7, 'oro')
-        espada = Card(10, 'espada')
-        copa = Card(1, 'copa')
-
-        pila1.add([basto, oro, espada, copa])
-        pila2.add([basto, oro, espada])
-
-        self.assertTrue(pila1.has_setenta())
-        self.assertFalse(pila2.has_setenta())
-
     def test_add(self):
         """Add cards to the pila, and retrieve them"""
         pila = Pila()
@@ -189,6 +258,7 @@ class TestPila(unittest.TestCase):
         self.assertEqual(1, len(current_cards['espada']))
         self.assertEqual(0, len(current_cards['copa']))
 
+
     def test_addEscoba(self):
         pila = Pila()
         self.assertEqual(0, pila.get_escobas())
@@ -198,6 +268,7 @@ class TestPila(unittest.TestCase):
         pila.add([card1, card2], True)
 
         self.assertEqual(1, pila.get_escobas())
+
 
     def test_get_cards(self):
         """.get_cards() returns a copy of the dictionary"""
@@ -212,6 +283,7 @@ class TestPila(unittest.TestCase):
 
         pilaCards = pila.get_cards()
         self.assertEqual(2, len(pilaCards['basto']))
+
 
     def test_total_cards(self):
         """Counts the total number of cards the player has picked up.Counts"""
@@ -233,6 +305,7 @@ class TestPila(unittest.TestCase):
         pila.add([card4, card5, card6])
         self.assertEqual(6, pila.total_cards())
 
+
     def test_total_oros(self):
         """Counts the total number of oros collected by the player"""
         pila = Pila()
@@ -250,6 +323,7 @@ class TestPila(unittest.TestCase):
 
         pila.add([card4, card5])
         self.assertEqual(2, pila.total_oros())
+
 
     def test_has_siete_de_belo(self):
         """Checks whether the 7 de belo is in the pile"""
@@ -269,6 +343,35 @@ class TestPila(unittest.TestCase):
 
         pila.add([card5, card6])
         self.assertTrue(pila.has_siete_de_belo())
+
+
+    def test_setenta(self):
+        basto4 = Card(4, 'basto')
+        oro7 = Card(7, 'oro')
+        espada10 = Card(10, 'espada')
+        copa1 = Card(1, 'copa')
+        copa7 = Card(7, 'copa')
+
+        pila1 = Pila()
+        pila1.add([basto4, oro7, espada10, copa1])
+        (score, cards) = pila1.setenta()
+        self.assertEqual(10, score)
+
+        pila2 = Pila()
+        pila2.add([oro7, espada10, copa1, copa7])
+        (score, cards) = pila2.setenta()
+        self.assertEqual(0, score)
+
+
+    def test_reset(self):
+        a = Card(1, 'oro')
+        b = Card(2, 'oro')
+        p = Pila()
+        p.add([a, b])
+        self.assertEqual(2, p.total_cards())
+        p.reset()
+        self.assertEqual(0, p.total_cards())
+
 
 if __name__ == '__main__':
     unittest.main()
