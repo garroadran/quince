@@ -50,3 +50,8 @@ class Card(object):
             return 10
 
         return 0
+
+
+    def clone(self):
+        """Clones a Card object"""
+        return Card(self._number, self._suit)

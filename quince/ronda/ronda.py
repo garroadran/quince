@@ -167,6 +167,7 @@ class Ronda(object):
         """
         self._current_player = (self._current_player + 1) % len(self._players)
 
+
 class RondaFinishedError(Exception):
     """Error raised when trying to perform an action that can only
     be done if the ronda is still ongoing.
@@ -175,6 +176,7 @@ class RondaFinishedError(Exception):
         if msg is None:
             msg = "The current ronda is finished."
         super(RondaFinishedError, self).__init__(msg)
+
 
 class RondaNotFinishedError(Exception):
     """Error raised when trying to perform an action that can only

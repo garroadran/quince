@@ -61,6 +61,14 @@ class Player(object):
         """
         return self._total_score
 
+    def award_points(self, points=1):
+        """Adds points to the player's total score.
+
+        Args:
+            points (int) -- Number of points to award (default=1)
+        """
+        self._total_score += points
+
     def pick_up_hand(self, hand):
         """Collect a hand from the deck.
 
