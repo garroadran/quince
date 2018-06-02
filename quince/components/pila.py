@@ -55,6 +55,7 @@ class Pila(object):
 
     def has_setenta(self):
         """Returns True if the pila contains at least 1 card of each suit
+        TO DO: Remove this function
         """
         for palo in self._cards:
             if len(self._cards[palo]) < 1:
@@ -64,7 +65,15 @@ class Pila(object):
     def setenta(self):
         """Calculates the total setenta score in the pila.
         """
-        pass
+        cards = self.get_cards()
+
+        # Setenta requires at least 1 card from each suit
+        has_empty_suit = [] in cards.values()
+        if has_empty_suit:
+            return 0
+        
+        best_cards_in_each_suit = [max(suit, key=lambda x: x.points_setenta) for suit in cards.values()]
+        return best_cards_in_each_suit
 
     def has_siete_de_belo(self):
         """Returns True if the pila contains the 7 of oro
