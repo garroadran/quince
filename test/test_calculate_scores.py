@@ -47,7 +47,7 @@ class MockPila(object):
     def get_escobas(self):
         return self._escobas
 
-    def has_siete_de_belo(self):
+    def has_siete_de_velo(self):
         return self.has_siete
 
 class TestPointsCounter(unittest.TestCase):

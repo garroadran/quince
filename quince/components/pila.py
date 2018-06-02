@@ -76,7 +76,7 @@ class Pila(object):
         return (score, best_cards)
 
 
-    def has_siete_de_belo(self):
+    def has_siete_de_velo(self):
         """Returns True if the pila contains the 7 of oro
         """
         for card in self._cards['oro']:

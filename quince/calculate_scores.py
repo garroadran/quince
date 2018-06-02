@@ -75,7 +75,7 @@ def calculate_scores(players):
         # This method is not yet implemented
         # setenta.compare(player, player.pila.setenta)
 
-        if pila.has_siete_de_belo():
+        if pila.has_siete_de_velo():
             ronda_points['7_de_velo'] = player
 
         escobas = pila.get_escobas()

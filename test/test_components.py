@@ -325,8 +325,8 @@ class TestPila(unittest.TestCase):
         self.assertEqual(2, pila.total_oros())
 
 
-    def test_has_siete_de_belo(self):
-        """Checks whether the 7 de belo is in the pile"""
+    def test_has_siete_de_velo(self):
+        """Checks whether the 7 de velo is in the pile"""
         pila = Pila()
         card1 = Card(9, 'basto')
         card2 = Card(5, 'espada')
@@ -336,13 +336,13 @@ class TestPila(unittest.TestCase):
         card6 = Card(7, 'espada')
 
         pila.add([card1, card2, card3])
-        self.assertFalse(pila.has_siete_de_belo())
+        self.assertFalse(pila.has_siete_de_velo())
 
         pila.add([card4])
-        self.assertTrue(pila.has_siete_de_belo())
+        self.assertTrue(pila.has_siete_de_velo())
 
         pila.add([card5, card6])
-        self.assertTrue(pila.has_siete_de_belo())
+        self.assertTrue(pila.has_siete_de_velo())
 
 
     def test_setenta(self):
