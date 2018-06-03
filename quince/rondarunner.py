@@ -6,8 +6,12 @@ In the root directory, run `python -m quince.rondarunner`
 """
 
 from ast import literal_eval
-from quince.components import Player, Card, Deck
+import random
+from quince.components import Player, Card, Deck, NPC
 from quince.ronda import Ronda
+from quince.calculate_scores import calculate_scores
+
+random.seed(0)
 
 def get_mesa_cards(empty_mesa=False):
     """Prompt the user to select which cards from the mesa they would like to pick up.
@@ -30,10 +34,34 @@ def get_mesa_cards(empty_mesa=False):
         except (ValueError, IndexError):
             print('Invalid entry.')
 
+
+def getchoices(current_hand, current_mesa):
+    """Get card choices via CLI"""
+    own_card = None
+    mesa_cards = []
+    while True:
+        card_choice = int(input('what card will you play? (integer): '))
+        try:
+            own_card = current_hand[card_choice - 1].info()
+            break
+        except (ValueError, IndexError):
+            print('Invalid entry.')
+
+    # select cards from mesa
+    while True:
+        try:
+            mesa_cards = get_mesa_cards(current_mesa == [])
+            break
+        except ValueError:
+            print('Invalid entry.')
+
+    return (own_card, mesa_cards)
+
+
 ALICE = Player('Alice')
-BOB = Player('Bob')
-CHARLIE = Player('Charlie')
-DAVE = Player('Dave')
+BOB = NPC('Bob')
+CHARLIE = NPC('Charlie')
+DAVE = NPC('Dave')
 
 RONDA = Ronda([ALICE, BOB, CHARLIE, DAVE], BOB, Deck(Card))
 
@@ -44,7 +72,9 @@ print('///////////////////////////')
 while not RONDA.is_finished:
 
     # Display the current status
-    print(RONDA.current_player.name() + ' holds the following cards:')
+    PLAYER = RONDA.current_player
+    PLAYERNAME = PLAYER.name()
+    print(PLAYERNAME + ' holds the following cards:')
     HAND = RONDA.current_player.current_hand()
     for i in range(1, len(HAND) + 1):
         print('>>> ' + str(i) + ': ' + str(HAND[i-1].info()))
@@ -56,31 +86,34 @@ while not RONDA.is_finished:
     print('...')
 
     # Play a card from the hand
-    while True:
-        CARD_CHOICE = int(input('what card will ' + RONDA.current_player.name() +
-                                ' play? (integer): '))
-        try:
-            OWN_CARD = HAND[CARD_CHOICE - 1].info()
-            break
-        except (ValueError, IndexError):
-            print('Invalid entry.')
-    print(RONDA.current_player.name() + ' plays a ' + str(OWN_CARD))
+    if PLAYERNAME == 'Alice':
+        (OWN_CARD, MESA_CARDS) = getchoices(HAND, RONDA.current_mesa)
+    else:
+        CUR_PLAYER_HAND = PLAYER.current_hand()
+        (OWN_CARD, MESA_CARDS) = PLAYER.get_move(CUR_PLAYER_HAND, MESA)
+        OWN_CARD = OWN_CARD.info()
+        MESA_CARDS = [x.info() for x in MESA_CARDS]
 
-    # select cards from mesa
-    while True:
-        try:
-            MESA_CARDS = get_mesa_cards(RONDA.current_mesa == [])
-            RONDA.play_turn(OWN_CARD, MESA_CARDS)
-            break
-        except ValueError:
-            print('Invalid entry.')
-    print('.')
-    print('.')
+    if MESA_CARDS:
+        MSG = PLAYERNAME + ' plays a ' + str(OWN_CARD) + ' and picks up ' + str(MESA_CARDS)
+    else:
+        MSG = PLAYERNAME + ' drops a ' + str(OWN_CARD)
+
+    print(MSG)
+
+    RONDA.play_turn(OWN_CARD, MESA_CARDS)
     print('.')
 
-    if RONDA.current_player == BOB and len(BOB.current_hand()) == 3:
+    if RONDA.current_player == CHARLIE and len(CHARLIE.current_hand()) == 3:
         print('///////////////////////////')
         print('     Dealing cards . . .')
         print('///////////////////////////')
 
 print('Ronda finished!')
+print('')
+
+SCORES = calculate_scores([ALICE, BOB, CHARLIE, DAVE])
+
+print('-------PUNTUAJE----------')
+for key in SCORES:
+    print(key + ':\t' + str(SCORES[key]))

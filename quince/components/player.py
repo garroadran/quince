@@ -1,6 +1,8 @@
 """
 Module containing the Player class
 """
+import random
+from quince.cpu import enumerate_possibilities
 from quince.components.pila import Pila
 
 class Player(object):
@@ -10,7 +12,12 @@ class Player(object):
     a hand of cards which they hold, and a pila of cards where they accumulate
     the cards they collect over the course of a ronda.
     """
-    def __init__(self, name):
+
+    internal_id = 0
+    names_list = ['Alicia', 'Felipe', 'Mariana', 'Pepe', 'Juanita', 'Timoteo']
+
+
+    def __init__(self, name=None):
         """Instantiates a player for the game.
 
         The player is assigned an empty hand to start,
@@ -22,8 +29,13 @@ class Player(object):
         Args:
             name (str) -- Player's name
         """
-        # persistent attribute
-        self._name = name
+        self._id = Player.internal_id
+        Player.internal_id += 1
+
+        if name is None:
+            self._name = random.choice(Player.names_list)
+        else:
+            self._name = name
 
         # Cards held in hand
         # changes with each ronda
@@ -35,31 +47,47 @@ class Player(object):
 
         self._total_score = 0
 
+
     def __repr__(self):
         return f'Player, {self.name()}.'
 
+
     def __str__(self):
         return f'Player, {self.name()}.'
+
+
+    @property
+    def id(self):
+        """Getter for the unique ID assigned to the player.
+        Unique IDs ensure that players can be looked up even
+        if their display names match.
+        """
+        return self._id
+
 
     def name(self):
         """Getter for the player's name
         """
         return self._name
 
+
     def pila(self):
         """Getter for the player's current pila
         """
         return self._pila
+
 
     def current_hand(self):
         """Returns a copy of the hand the player is currently holding.
         """
         return self._current_hand[:]
 
+
     def total_score(self):
         """Getter for the player's total score
         """
         return self._total_score
+
 
     def award_points(self, points=1):
         """Adds points to the player's total score.
@@ -69,6 +97,7 @@ class Player(object):
         """
         self._total_score += points
 
+
     def pick_up_hand(self, hand):
         """Collect a hand from the deck.
 
@@ -77,6 +106,7 @@ class Player(object):
         """
 
         self._current_hand = hand
+
 
     def holds_card(self, card):
         """Test to see whether the player holds a card in their current hand.
@@ -92,6 +122,7 @@ class Player(object):
                 return True
 
         return False
+
 
     def place_card_on_mesa(self, mesa, card):
         """Remove a card from the player's hand and place it on the table.
@@ -116,6 +147,7 @@ class Player(object):
                 return
 
         raise ValueError('Player is not currently holding ' + str(card))
+
 
     def pick_up_from_mesa(self, mesa, own_card, mesa_cards):
         """Remove a single card from the player's current hand,
@@ -158,3 +190,41 @@ class Player(object):
         is_escoba = len(mesa) == 0
 
         self._pila.add(picked_up_cards, is_escoba)
+
+
+class NPC(Player):
+    """A computer player"""
+
+    @staticmethod
+    def get_move(hand, mesa):
+        """Select a move for the NPC to make.
+
+        Args:
+            hand -- List of card objects
+            mesa -- List of card objects
+
+        Returns:
+            Tuple containing a card info tuple in the 0th position
+            (representing the card to be played from the player's hand),
+            and a list of card info tuples in the 1st position
+            (representing the cards to be picked up from the mesa).
+        """
+        possibilities = enumerate_possibilities(mesa, hand)
+
+        # If there's no way to add to 15, select a random card
+        # from the hand and drop it
+        if not possibilities:
+            return (random.choice(hand), [])
+
+        move = random.choice(possibilities)
+
+        from_hand = None
+        from_mesa = []
+
+        for card in move:
+            if card in hand:
+                from_hand = card
+            else:
+                from_mesa.append(card)
+
+        return (from_hand, from_mesa)

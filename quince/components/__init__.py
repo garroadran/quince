@@ -15,4 +15,4 @@ Player - A player of the game.
 from quince.components.card import Card
 from quince.components.deck import Deck
 from quince.components.pila import Pila
-from quince.components.player import Player
+from quince.components.player import Player, NPC
