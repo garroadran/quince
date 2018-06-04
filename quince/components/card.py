@@ -21,19 +21,23 @@ class Card(object):
         self._suit = suit
         self._image = 'default.png'
 
-        setenta = [0, 0, 0, 0, 0, 0, 10, 0, 0, 0]
+        setenta = [11.0, 4.0, 6.0, 8.0, 10.0, 14.0, 17.5, 1, 1, 1]
         self.points_setenta = setenta[number - 1]
+
 
     def __str__(self):
         return str((self._number, self._suit))
 
+
     def __repr__(self):
         return str((self._number, self._suit))
+
 
     def image(self):
         """Getter for the card's image
         """
         return self._image
+
 
     def info(self):
         """Getter for the number and suit of the card.

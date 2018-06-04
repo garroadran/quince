@@ -57,23 +57,22 @@ class Pila(object):
         return self._escobas
 
 
-    def setenta(self):
+    def best_setenta(self):
         """Calculates the total setenta score in the pila.
 
         Returns
-            A tuple containing an integer representing the score for the setenta,
-            and a list containing the cards that were used to make it up.
+            A list containing copies of the card objects used to make up
+            the player's best possible setenta.
         """
         cards = self.get_cards()
 
         # Setenta requires at least 1 card from each suit
         has_empty_suit = [] in cards.values()
         if has_empty_suit:
-            return (0, [])
+            return []
 
         best_cards = [max(suit, key=lambda x: x.points_setenta) for suit in cards.values()]
-        score = sum([card.points_setenta for card in best_cards])
-        return (score, best_cards)
+        return best_cards
 
 
     def has_siete_de_velo(self):
