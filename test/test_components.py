@@ -215,22 +215,47 @@ class TestPila(unittest.TestCase):
         self.assertTrue(pila.has_siete_de_velo())
 
 
-    def test_setenta(self):
+    def test_best_setenta(self):
         basto4 = Card(4, 'basto')
         oro7 = Card(7, 'oro')
         espada10 = Card(10, 'espada')
         copa1 = Card(1, 'copa')
-        copa7 = Card(7, 'copa')
+        copa5 = Card(5, 'copa')
 
+        # Only one option
         pila1 = Pila()
         pila1.add([basto4, oro7, espada10, copa1])
-        (score, cards) = pila1.setenta()
-        self.assertEqual(10, score)
+        setenta = [x.info() for x in pila1.best_setenta()]
+        self.assertTrue(basto4.info() in setenta)
+        self.assertTrue(oro7.info() in setenta)
+        self.assertTrue(espada10.info() in setenta)
+        self.assertTrue(copa1.info() in setenta)
 
+        # No setenta possible
         pila2 = Pila()
-        pila2.add([oro7, espada10, copa1, copa7])
-        (score, cards) = pila2.setenta()
-        self.assertEqual(0, score)
+        pila2.add([oro7, espada10, copa1, copa5])
+        setenta = pila2.best_setenta()
+        self.assertFalse(setenta)
+
+
+    def test_best_setenta2(self):
+        basto4 = Card(4, 'basto')
+        oro7 = Card(7, 'oro')
+        oro4 = Card(4, 'oro')
+        espada10 = Card(10, 'espada')
+        copa1 = Card(1, 'copa')
+        copa5 = Card(5, 'copa')
+
+        pila1 = Pila()
+        pila1.add([basto4, oro7, espada10, copa5, copa1])
+        setenta = [x.info() for x in pila1.best_setenta()]
+        self.assertTrue(copa1.info() in setenta)
+        
+        pila2 = Pila()
+        pila2.add([copa5, basto4, oro4, espada10, oro7, copa1])
+        setenta = [x.info() for x in pila2.best_setenta()]
+        self.assertTrue(copa1.info() in setenta)
+        self.assertTrue(oro7.info() in setenta)
 
 
     def test_reset(self):

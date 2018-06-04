@@ -35,6 +35,44 @@ class PointsCounter(object):
             self.top_score = score
 
 
+class SetentaCounter(PointsCounter):
+    """Subclass of PointsCounter, with specific logic to calculate and generate setenta
+    scores"""
+
+    def compare(self, player, setenta_cards):
+        """Identical to the base class's method, except it requires two extra
+        steps in order to calculate the points for the given cards, and to create
+        an object that will store the reference to the player, the cards, and the
+        points.
+        
+        Args:
+            player -- Reference to a player object
+            setenta_cards -- List of Card objects used to make up a setenta.
+        
+        Returns:
+            Nothing. Modifies the self._players and self.top_score attributes.
+        """
+        setenta_score = sum([card.points_setenta for card in setenta_cards])
+        winner = SetentaWinner(player, setenta_cards)
+        
+        if setenta_score == self.top_score:
+            self._players.append(winner)
+        elif setenta_score > self.top_score:
+            self._players = [winner]
+            self.top_score = setenta_score
+
+
+class SetentaWinner(object):
+    """Describes the results for a player's setenta.
+    Includes a reference to the player, the points for that setenta,
+    and a list with references to the cards they used to make it up."""
+    
+    def __init__(self, player, cards):
+        self.player = player
+        self.cards = cards
+        self.points = sum([card.points_setenta for card in cards])
+
+
 def calculate_scores(players):
     """Compare all players' pilas and tally scores.
 
@@ -54,13 +92,13 @@ def calculate_scores(players):
         Dictionary containing records for each of the 5 types of scores.
         'most_cards' is a tuple ([players who tied for 1st place], card_count)
         'most_oros' is a tuple ([players who tied for 1st place], card_count)
-        'setenta' is a tuple ([players who tied for 1st place], setenta_score)
+        'setenta' is a list of Setenta winner objects
         '7_de_velo' is a reference to the player who obtained the 7
         'escobas' is a list of tuples (player, escobas_count)
     """
     most_cards = PointsCounter()
     most_oros = PointsCounter()
-    setenta = PointsCounter()
+    setenta = SetentaCounter()
 
     ronda_points = {
         'escobas': []
@@ -73,7 +111,7 @@ def calculate_scores(players):
         most_oros.compare(player, pila.total_oros())
 
         # This method is not yet implemented
-        # setenta.compare(player, player.pila.setenta)
+        setenta.compare(player, pila.best_setenta())
 
         if pila.has_siete_de_velo():
             ronda_points['7_de_velo'] = player
@@ -84,6 +122,6 @@ def calculate_scores(players):
 
     ronda_points['most_cards'] = (most_cards.winners, most_cards.top_score)
     ronda_points['most_oros'] = (most_oros.winners, most_oros.top_score)
-    ronda_points['setenta'] = (setenta.winners, setenta.top_score)
+    ronda_points['setenta'] = setenta.winners
 
     return ronda_points

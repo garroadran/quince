@@ -1,5 +1,7 @@
 import unittest
-from quince.calculate_scores import PointsCounter, calculate_scores
+from quince.components import Card
+from quince.calculate_scores import PointsCounter, SetentaWinner, calculate_scores
+
 
 class MockPlayer(object):
     types = ['most_cards', 'most_oros', 'siete_de_velo', 'setenta']
@@ -13,6 +15,7 @@ class MockPlayer(object):
         MockPlayer.current_type += 1
         self._pila = MockPila(self.type)
 
+
     def pila(self):
         return self._pila
 
@@ -23,7 +26,7 @@ class MockPila(object):
         self._total_oros = 2
         self.has_siete = False
         self._escobas = 0
-        self._setenta = 12
+        self._setenta = []
 
         if type == 'most_cards':
             self._total_cards = 16
@@ -31,24 +34,31 @@ class MockPila(object):
             self._total_oros = 4
         elif type == 'siete_de_velo':
             self.has_siete = True
+            self._setenta = [Card(3, 'oro'), Card(10, 'basto'), Card(5, 'espada'), Card(6, 'copa')]
         elif type == 'setenta':
-            self._setenta = 18
+            self._setenta = [Card(7, 'oro'), Card(7, 'basto'), Card(7, 'espada'), Card(7, 'copa')]
             self._escobas = 2
+
 
     def total_cards(self):
         return self._total_cards
 
+
     def total_oros(self):
         return self._total_oros
 
-    def setenta(self):
+
+    def best_setenta(self):
         return self._setenta
+
 
     def get_escobas(self):
         return self._escobas
 
+
     def has_siete_de_velo(self):
         return self.has_siete
+
 
 class TestPointsCounter(unittest.TestCase):
     def test_get_winner(self):
@@ -74,6 +84,14 @@ class TestPointsCounter(unittest.TestCase):
         self.assertTrue('cray' in counter.winners)
         self.assertTrue('regina' in counter.winners)
 
+
+class TestSetentaWinner(unittest.TestCase):
+    def test_instantiation(self):
+        player = 'alice'
+        winner = SetentaWinner(player, [])
+        self.assertEqual('alice', winner.player)
+
+
 class TestCalculateScores(unittest.TestCase):
     def test_calculate_scores(self):
         most_cards_player = MockPlayer()
@@ -93,3 +111,5 @@ class TestCalculateScores(unittest.TestCase):
         self.assertEqual(4, scores['most_oros'][1])
 
         self.assertTrue(scores['7_de_velo'] is siete_player)
+        
+        self.assertTrue(setenta_escobas_player in [x.player for x in scores['setenta']])
