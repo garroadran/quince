@@ -18,7 +18,9 @@ class Card(object):
             raise ValueError('Cards can only be between 1 and 10')
 
         self._number = number
+        self.number = number
         self._suit = suit
+        self.suit = suit
         self._image = 'default.png'
 
         setenta = [11.0, 4.0, 6.0, 8.0, 10.0, 14.0, 17.5, 1, 1, 1]
@@ -26,11 +28,15 @@ class Card(object):
 
 
     def __str__(self):
-        return str((self._number, self._suit))
+        return str((self.number, self.suit))
 
 
     def __repr__(self):
-        return str((self._number, self._suit))
+        return str((self.number, self.suit))
+
+
+    def __eq__(self, other):
+        return self.number == other.number and self.suit == other.suit
 
 
     def image(self):
@@ -45,9 +51,9 @@ class Card(object):
         Returns:
             Tuple containing (number, suit)
         """
-        return (self._number, self._suit)
+        return (self.number, self.suit)
 
 
     def clone(self):
         """Clones a Card object"""
-        return Card(self._number, self._suit)
+        return Card(self.number, self.suit)

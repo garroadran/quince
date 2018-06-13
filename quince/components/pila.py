@@ -1,8 +1,8 @@
 """
 Module containing the Pila object
 """
+from copy import deepcopy
 
-import copy as copy
 
 class Pila(object):
     """A pila ("pile") represents the cards that a player accumulates
@@ -15,31 +15,44 @@ class Pila(object):
     to remove the last card from the table, this is called an "escoba,"
     and counts as an additional point.
     """
-    def __init__(self):
+    def __init__(self, cards=None, escobas=0):
         """Creates a data structure for tallying up the cards that a player has collected.
 
         Cards are organized by suit in order to make it easier to tally up scores
         Any changes made here will probably also need to be made to the reset() function
+        
+        Args:
+            cards -- Dictionary of cards with which to instantiate the pile
         """
-        self._cards = {'oro': [], 'basto': [], 'espada': [], 'copa': []}
+        if cards is None:
+            self._cards = {'oro': [], 'basto': [], 'espada': [], 'copa': []}
+        else:
+            self._cards = deepcopy(cards)
 
         # number of escobas scored
-        self._escobas = 0
+        self._escobas = escobas
 
 
     def add(self, cards, escoba=False):
-        """Take a list of cards and add them to the pila.
+        """Take a list of cards and return a new pila that includes all existing cards
+        in the current pila plus the new ones.
 
         Args:
             cards -- List of cards
             escoba (bool) -- True if the pickup was an escoba
         """
-        for card in cards:
-            palo = card.info()[1]
-            self._cards[palo].append(card)
+        existing_cards = self.get_cards()
 
+        for card in cards:
+            suit = card.info()[1]
+            existing_cards[suit].append(card)
+
+        escobas_count = self._escobas
+        
         if escoba:
-            self._escobas += 1
+            escobas_count += 1
+
+        return Pila(cards=existing_cards, escobas=escobas_count)
 
 
     def get_cards(self):
@@ -48,13 +61,20 @@ class Pila(object):
         Returns:
             Dictionary of cards sorted by suit
         """
-        return copy.deepcopy(self._cards)
+        return deepcopy(self._cards)
 
 
-    def get_escobas(self):
-        """Returns the number of Escobas the player has made
+    @property
+    def escobas(self):
+        """Returns the number of escobas the player has made
         """
         return self._escobas
+    
+
+    def get_escobas(self):
+        """Alias for the escobas property
+        """
+        return self.escobas
 
 
     def best_setenta(self):
@@ -102,7 +122,6 @@ class Pila(object):
 
 
     def reset(self):
-        """Resets the pila to an empty state.
+        """Returns a new, empty pila.
         """
-        self._cards = {'oro': [], 'basto': [], 'espada': [], 'copa': []}
-        self._escobas = 0
+        return Pila()

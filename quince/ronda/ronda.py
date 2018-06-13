@@ -30,77 +30,202 @@ on the mesa will be awarded to the player who last picked up cards.
 A complete game will have as many rondas as necessary
 until one player reaches a total of 30 points.
 """
+from copy import deepcopy
+from quince.components import Pila, Deck, Card
+
+
+def deal_to_players(players, deck):
+    """Perform an initial deal to a list of players.
+    
+    Args:
+        players -- List of Player
+        deck -- Deck object
+
+    Returns:
+        Dictionary with players as keys, and 'hand' and 'pila' keys.
+    """
+    player_cards = {}
+    for player in players:
+        (deck, hand) = deck.deal(3)
+        player_cards[player] = {
+            'hand': hand,
+            'pila': Pila()
+        }
+    
+    return (player_cards, deck)
+
+
+def get_next_player(players, currentplayer):
+    """Returns the next player in an ordered list.
+    Cycles around to the beginning of the list if reaching the end.
+    
+    Args:
+        players -- List
+        currentplayer -- Element in the list
+    """
+    i = players.index(currentplayer) + 1
+    return players[i % len(players)]
+
+
+def remove_card_from_hand(player, card, player_cards):
+    """Returns a copy of a player_cards dictionary but with a single card
+    removed from the player whose reference was provided.
+    
+    Args:
+        player - Reference to a Player object that exists as a key in the player_cards dictionary
+        card - Card object to remove from that player's hand
+        player_cards - Dictionary with player keys.
+    
+    Returns:
+        Copy of the player_cards dictionary with the card of choice removed
+        from that player's hand.
+    """
+    new_dict = deepcopy(player_cards)
+    new_dict[player]['hand'] = remove_cards_from_list([card], new_dict[player]['hand'])
+    return new_dict
+
+
+def remove_cards_from_list(cards, L):
+    """Remove a card from a list of Cards and return a copy.
+    
+    Args:
+        card - Card List of Card objects
+        L - List of card objects
+
+    Returns:
+        List of Card objects
+    """
+    return [c for c in L if c not in cards]
+
+
+def add_cards_to_pila(player, player_cards, cards):
+    """Returns a copy of a player_cards dictionary but with a bunch of cards
+    added on to a single player's pila.
+    
+    Args:
+        player - Player object
+        player_cards - Dictionary with player keys
+        cards - List of Card
+
+    Returns:
+        Copy of the player_cards dictionary.
+    """
+    new_dict = deepcopy(player_cards)
+    new_dict[player]['pila'] = new_dict[player]['pila'].add(cards)
+    return new_dict
+
 
 class Ronda(object):
     """Represents one play through a single deck of cards."""
+    
+    def __init__(self, **kwargs):
+        """Instantiates a new Ronda. This method will generally not be used
+        by outside clients, as they will usually prefer to instantiate a new
+        ronda using the Ronda.start() function.
+        
+        Keyword args:
+            current_player - Reference to a player
+            dealer - Reference to a player
+            deck - Deck to be used (can be full or partially empty)
+            last_pickup - Reference to the last player to pick up cards
+            mesa - List of cards currently on the table
+            players - Ordered list of Player (used to track whose turn is next)
+            player_cards - Dictionary containing all the cards belonging to each player
+        """
+        self.current_player = kwargs.get('current_player', None)
+        self._dealer = kwargs.get('dealer', None)
+        self.deck = kwargs.get('deck', None)
+        self._last_picked_up = kwargs.get('last_pickup', None)
+        self._mesa = kwargs.get('mesa', None)
+        self._players = kwargs.get('players', [])
+        self._player_cards = kwargs.get('player_cards', None)
+        
+        # If the entire ronda is done
+        if self.is_finished:
+            self._player_cards = add_cards_to_pila(self._last_picked_up, self._player_cards, self._mesa)
+            self.mesa = []
 
-    def __init__(self, players, dealer, deck):
-        """Instantiate a ronda object.
+        # If the hand is done but there are still cards to be dealt
+        elif self._hand_is_done:
+            (pc, d) = deal_to_players(self._players, self.deck)
+            self._player_cards = pc
+            self.deck = d
+
+
+    @classmethod
+    def start(cls, players, dealer):
+        """Performs all the initial setup for starting to play a ronda.
 
         Args:
             players (list of Player) -- The players in the game
             dealer (Player) -- The player who will deal the cards
-            deck (Deck) -- The deck to use
-
-        Attributes:
-            _players is the list of players in the game
-            _DEALER is the index of the player who dealt the cards in the players array
-            _deck, a Deck object from which cards are popped out (ie. dealt out)
-            _last_picked_up reference to the last player to pick up cards. That
-            person gets the remaining cards on the mesa when the ronda is finished.
-            _dealt_escoba remembers whether an escoba was dealt on the first deal of
-            4 cards to the mesa.
-            _mesa is the cards on the table at the present time
+        
+        Returns:
+            A new Ronda object.
         """
-        self._players = players
-        self._dealer = players.index(dealer)
-        self._deck = deck
-        self._last_picked_up = dealer
-        self._dealt_escoba = False
-        self._mesa = deck.deal(4)
+        # Deal to players
+        (player_cards, deck) = deal_to_players(players, Deck(Card))
 
-        # check whether a straight escoba has been dealt
-        mesa_sum = sum([x.info()[0] for x in self._mesa])
-        if mesa_sum == 15:
-            # make sure to pass a copy to the dealer's pila, otherwise
-            # the cards could be removed from his hand when we clear them here
-            self._players[self._dealer].pila().add(self.current_mesa[:], True)
-            self._mesa = []
-            self._dealt_escoba = True
+        # Then to the table, and check whether or not a straight escoba was dealt
+        (deck, table_deal) = deck.deal(4)
 
-        # deal three cards to each player
-        self._deal_hands()
+        if sum([card.number for card in table_deal]) == 15:
+            # transfer the cards directly to the dealer's pila
+            player_cards[dealer]['pila'] = player_cards[dealer]['pila'].add(table_deal)
+            mesa = []
+        else:
+            mesa = table_deal
+            
+        attributes = {
+            'current_player': get_next_player(players, dealer),
+            'dealer': dealer,
+            'deck': deck,
+            'last_pickup': dealer,
+            'mesa': mesa,
+            'players': players,
+            'player_cards': player_cards
+        }
+        
+        return cls(**attributes)
 
-        # establish who plays first
-        self._current_player = self._dealer
-        self._next_player()
 
     @property
     def current_mesa(self):
-        """Returns a copy of the cards on the mesa"""
-        return self._mesa[:]
+        """Public getter for the current cards on the table
+        
+        Returns:
+            List of Card objects.
+        """
+        return [card.clone() for card in self._mesa]
+
 
     @property
-    def current_player(self):
-        """Reference to the player whose turn it is to play.
+    def dealer(self):
+        """Public getter for the player who is dealing during the ronda.
+        
+        Returns:
+            Reference to a player object.
         """
-        return self._players[self._current_player]
+        return self._dealer
+
 
     @property
-    def dealt_escoba(self):
-        """Getter for the state of the initial deal to the mesa.
-
-        Returns true if the first 4 cards that were dealt to the mesa
-        added up to 15 (in which case, they should be added automatically
-        to the dealer's pila, along with an escoba).
+    def last_picked_up(self):
+        """Public getter for the player who was the last to pick up a card.
+        Defaults to the dealer at the start of the round.
+        
+        Returns:
+            Reference to a Player object.
         """
-        return self._dealt_escoba
+        return self._last_picked_up
+
 
     @property
     def is_finished(self):
         """Returns True if the deck is empty and all players have played their last cards.
         """
-        return self._hand_is_done and not self._deck.cards()
+        return self._hand_is_done and not self.deck.cards()
+
 
     def play_turn(self, own_card, mesa_cards=None):
         """Cause the current player to perform an action, and then pass
@@ -114,58 +239,45 @@ class Ronda(object):
         hand, or finish the ronda altogether.
 
         Args:
-            own_card (Card info tuple) -- What card from their own hand the user will use.
-            mesa_cards (List of card info tuples) -- The cards to pick up
+            own_card (Card object) -- What card from their own hand the user will use.
+            mesa_cards (List of cards) -- The cards to pick up
+
+        Returns:
+            New Ronda object with updated attributes
         """
         if self.is_finished:
             raise RondaFinishedError()
-
-        # First, the current player performs an action
+        
         if not mesa_cards:
-            self.current_player.place_card_on_mesa(self._mesa, own_card)
+            new_player_cards = remove_card_from_hand(self.current_player, own_card, self._player_cards)
+            new_mesa = self.current_mesa.append(own_card)
         else:
-            self.current_player.pick_up_from_mesa(self._mesa, own_card, mesa_cards)
+            new_player_cards = remove_card_from_hand(self.current_player, own_card, self._player_cards)
+            new_mesa = remove_cards_from_list(mesa_cards, self.current_mesa)
+            new_player_cards = add_cards_to_pila(self.current_player, new_player_cards, mesa_cards + [own_card])
             self._last_picked_up = self.current_player
 
-        # Then we branch:
-        # If the entire ronda is done
-        if self.is_finished:
-            # the last player to pick up cards gets what remains on the mesa
-            self._last_picked_up.pila().add(self.current_mesa)
+        attributes = {
+            'current_player': get_next_player(self._players, self.current_player),
+            'dealer': self.dealer,
+            'deck': self.deck,
+            'last_pickup': self._last_picked_up,
+            'mesa': new_mesa,
+            'players': self._players,
+            'player_cards': new_player_cards
+        }
+        
+        return Ronda(**attributes)
 
-        # If the hand is done but there are still cards to be dealt
-        elif self._hand_is_done:
-            self._deal_hands()
-            self._next_player()
-
-        # If the hand is not yet done
-        else:
-            self._next_player()
-
-    def _deal_hands(self):
-        """Deals a hand to each player in the game
-
-        Modifies the _deck attribute and the cards in each player's .current_hand
-        """
-        if self.is_finished:
-            raise RondaFinishedError()
-
-        for plyr in self._players:
-            plyr.pick_up_hand(self._deck.deal(3))
 
     @property
     def _hand_is_done(self):
         """Returns True if all players currently have empty hands. False otherwise."""
-        for player in self._players:
-            if player.current_hand():
+        for val in self._player_cards.values():
+            if val['hand']:
                 return False
         return True
 
-    def _next_player(self):
-        """Iterates over the players list, and updates the
-        _current_player attribute.
-        """
-        self._current_player = (self._current_player + 1) % len(self._players)
 
 
 class RondaFinishedError(Exception):

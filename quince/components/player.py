@@ -189,7 +189,17 @@ class Player(object):
 
         is_escoba = len(mesa) == 0
 
-        self._pila.add(picked_up_cards, is_escoba)
+        self._pila = self._pila.add(picked_up_cards, is_escoba)
+
+    
+    def __hash__(self):
+        """Hash function for the player object"""
+        return hash(self._name) * self.id
+    
+
+    def __eq__(self,other):
+        """Evaluates two players as equal if they share the same id"""
+        return self.id == other.id;
 
 
 class NPC(Player):
