@@ -32,11 +32,12 @@ until one player reaches a total of 30 points.
 """
 from copy import deepcopy
 from quince.components import Pila, Deck, Card
+from quince.ronda import PointsCounter, SetentaCounter
 
 
 def deal_to_players(players, deck):
     """Perform an initial deal to a list of players.
-    
+
     Args:
         players -- List of Player
         deck -- Deck object
@@ -51,14 +52,14 @@ def deal_to_players(players, deck):
             'hand': hand,
             'pila': Pila()
         }
-    
+
     return (player_cards, deck)
 
 
 def get_next_player(players, currentplayer):
     """Returns the next player in an ordered list.
     Cycles around to the beginning of the list if reaching the end.
-    
+
     Args:
         players -- List
         currentplayer -- Element in the list
@@ -70,12 +71,12 @@ def get_next_player(players, currentplayer):
 def remove_card_from_hand(player, card, player_cards):
     """Returns a copy of a player_cards dictionary but with a single card
     removed from the player whose reference was provided.
-    
+
     Args:
         player - Reference to a Player object that exists as a key in the player_cards dictionary
         card - Card object to remove from that player's hand
         player_cards - Dictionary with player keys.
-    
+
     Returns:
         Copy of the player_cards dictionary with the card of choice removed
         from that player's hand.
@@ -85,9 +86,9 @@ def remove_card_from_hand(player, card, player_cards):
     return new_dict
 
 
-def remove_cards_from_list(cards, L):
+def remove_cards_from_list(cards_to_remove, card_list):
     """Remove a card from a list of Cards and return a copy.
-    
+
     Args:
         card - Card List of Card objects
         L - List of card objects
@@ -95,13 +96,13 @@ def remove_cards_from_list(cards, L):
     Returns:
         List of Card objects
     """
-    return [c for c in L if c not in cards]
+    return [crd for crd in card_list if crd not in cards_to_remove]
 
 
 def add_cards_to_pila(player, player_cards, cards):
     """Returns a copy of a player_cards dictionary but with a bunch of cards
     added on to a single player's pila.
-    
+
     Args:
         player - Player object
         player_cards - Dictionary with player keys
@@ -117,12 +118,12 @@ def add_cards_to_pila(player, player_cards, cards):
 
 class Ronda(object):
     """Represents one play through a single deck of cards."""
-    
+
     def __init__(self, **kwargs):
         """Instantiates a new Ronda. This method will generally not be used
         by outside clients, as they will usually prefer to instantiate a new
         ronda using the Ronda.start() function.
-        
+
         Keyword args:
             current_player - Reference to a player
             dealer - Reference to a player
@@ -139,17 +140,19 @@ class Ronda(object):
         self._mesa = kwargs.get('mesa', None)
         self._players = kwargs.get('players', [])
         self._player_cards = kwargs.get('player_cards', None)
-        
+
         # If the entire ronda is done
         if self.is_finished:
-            self._player_cards = add_cards_to_pila(self._last_picked_up, self._player_cards, self._mesa)
+            self._player_cards = add_cards_to_pila(self._last_picked_up,
+                                                   self._player_cards,
+                                                   self._mesa)
             self.mesa = []
 
         # If the hand is done but there are still cards to be dealt
         elif self._hand_is_done:
-            (pc, d) = deal_to_players(self._players, self.deck)
-            self._player_cards = pc
-            self.deck = d
+            (player_cards, deck) = deal_to_players(self._players, self.deck)
+            self._player_cards = player_cards
+            self.deck = deck
 
 
     @classmethod
@@ -159,7 +162,7 @@ class Ronda(object):
         Args:
             players (list of Player) -- The players in the game
             dealer (Player) -- The player who will deal the cards
-        
+
         Returns:
             A new Ronda object.
         """
@@ -175,7 +178,7 @@ class Ronda(object):
             mesa = []
         else:
             mesa = table_deal
-            
+
         attributes = {
             'current_player': get_next_player(players, dealer),
             'dealer': dealer,
@@ -185,14 +188,14 @@ class Ronda(object):
             'players': players,
             'player_cards': player_cards
         }
-        
+
         return cls(**attributes)
 
 
     @property
     def current_mesa(self):
         """Public getter for the current cards on the table
-        
+
         Returns:
             List of Card objects.
         """
@@ -202,7 +205,7 @@ class Ronda(object):
     @property
     def dealer(self):
         """Public getter for the player who is dealing during the ronda.
-        
+
         Returns:
             Reference to a player object.
         """
@@ -213,7 +216,7 @@ class Ronda(object):
     def last_picked_up(self):
         """Public getter for the player who was the last to pick up a card.
         Defaults to the dealer at the start of the round.
-        
+
         Returns:
             Reference to a Player object.
         """
@@ -247,14 +250,21 @@ class Ronda(object):
         """
         if self.is_finished:
             raise RondaFinishedError()
-        
+
         if not mesa_cards:
-            new_player_cards = remove_card_from_hand(self.current_player, own_card, self._player_cards)
-            new_mesa = self.current_mesa.append(own_card)
+            new_player_cards = remove_card_from_hand(self.current_player,
+                                                     own_card,
+                                                     self._player_cards)
+            new_mesa = self.current_mesa
+            new_mesa.append(own_card)
         else:
-            new_player_cards = remove_card_from_hand(self.current_player, own_card, self._player_cards)
-            new_mesa = remove_cards_from_list(mesa_cards, self.current_mesa)
-            new_player_cards = add_cards_to_pila(self.current_player, new_player_cards, mesa_cards + [own_card])
+            new_player_cards = remove_card_from_hand(self.current_player,
+                                                     own_card, self._player_cards)
+            new_mesa = remove_cards_from_list(mesa_cards,
+                                              self.current_mesa)
+            new_player_cards = add_cards_to_pila(self.current_player,
+                                                 new_player_cards,
+                                                 mesa_cards + [own_card])
             self._last_picked_up = self.current_player
 
         attributes = {
@@ -266,7 +276,7 @@ class Ronda(object):
             'players': self._players,
             'player_cards': new_player_cards
         }
-        
+
         return Ronda(**attributes)
 
 
@@ -277,6 +287,60 @@ class Ronda(object):
             if val['hand']:
                 return False
         return True
+
+
+    def calculate_scores(self):
+        """Compare all players' pilas and tally scores.
+
+        Single points are awarded for:
+        - Most cards
+        - Most oros
+        - Best Setenta score
+        - 7 de velo
+        - Each escoba
+
+        This method returns the scores, but does not award them.
+
+        Args:
+            players - List of Player
+
+        Returns:
+            Dictionary containing records for each of the 5 types of scores.
+            'most_cards' is a tuple ([players who tied for 1st place], card_count)
+            'most_oros' is a tuple ([players who tied for 1st place], card_count)
+            'setenta' is a list of Setenta winner objects
+            '7_de_velo' is a reference to the player who obtained the 7
+            'escobas' is a list of tuples (player, escobas_count)
+        """
+        most_cards = PointsCounter()
+        most_oros = PointsCounter()
+        setenta = SetentaCounter()
+
+        ronda_points = {
+            'escobas': []
+        }
+
+        for player in self._player_cards:
+            pila = self._player_cards[player]['pila']
+            most_cards.compare(player, pila.total_cards())
+
+            most_oros.compare(player, pila.total_oros())
+
+            # This method is not yet implemented
+            setenta.compare(player, pila.best_setenta())
+
+            if pila.has_siete_de_velo():
+                ronda_points['7_de_velo'] = player
+
+            escobas = pila.get_escobas()
+            if escobas > 0:
+                ronda_points['escobas'].append((player, escobas))
+
+        ronda_points['most_cards'] = (most_cards.winners, most_cards.top_score)
+        ronda_points['most_oros'] = (most_oros.winners, most_oros.top_score)
+        ronda_points['setenta'] = setenta.winners
+
+        return ronda_points
 
 
 

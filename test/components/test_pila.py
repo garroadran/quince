@@ -162,15 +162,3 @@ class TestPila(unittest.TestCase):
         self.assertTrue(copa1.info() in setenta)
         self.assertTrue(oro7.info() in setenta)
 
-
-    def test_reset(self):
-        """Reset a pila to an empty state.
-        This method can probably be removed"""
-        a = Card(1, 'oro')
-        b = Card(2, 'oro')
-        p = Pila()
-        p2 = p.add([a, b])
-        self.assertEqual(2, p2.total_cards())
-        p3 = p2.reset()
-        self.assertEqual(0, p3.total_cards())
-        

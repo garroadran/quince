@@ -20,7 +20,7 @@ class Pila(object):
 
         Cards are organized by suit in order to make it easier to tally up scores
         Any changes made here will probably also need to be made to the reset() function
-        
+
         Args:
             cards -- Dictionary of cards with which to instantiate the pile
         """
@@ -48,7 +48,7 @@ class Pila(object):
             existing_cards[suit].append(card)
 
         escobas_count = self._escobas
-        
+
         if escoba:
             escobas_count += 1
 
@@ -69,7 +69,7 @@ class Pila(object):
         """Returns the number of escobas the player has made
         """
         return self._escobas
-    
+
 
     def get_escobas(self):
         """Alias for the escobas property
@@ -119,9 +119,3 @@ class Pila(object):
         """Returns the total number of oros that the user has picked up.
         """
         return len(self._cards['oro'])
-
-
-    def reset(self):
-        """Returns a new, empty pila.
-        """
-        return Pila()
