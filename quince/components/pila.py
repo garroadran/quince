@@ -16,10 +16,11 @@ class Pila(object):
     and counts as an additional point.
     """
     def __init__(self, cards=None, escobas=0):
-        """Creates a data structure for tallying up the cards that a player has collected.
+        """Creates a data structure for tallying up
+        the cards that a player has collected.
 
-        Cards are organized by suit in order to make it easier to tally up scores
-        Any changes made here will probably also need to be made to the reset() function
+        Cards are organized by suit in order to make it easier
+        to tally up scores.
 
         Args:
             cards -- Dictionary of cards with which to instantiate the pile
@@ -32,10 +33,9 @@ class Pila(object):
         # number of escobas scored
         self._escobas = escobas
 
-
     def add(self, cards, escoba=False):
-        """Take a list of cards and return a new pila that includes all existing cards
-        in the current pila plus the new ones.
+        """Take a list of cards and return a new pila that includes
+        all existing cards in the current pila plus the new ones.
 
         Args:
             cards -- List of cards
@@ -54,7 +54,6 @@ class Pila(object):
 
         return Pila(cards=existing_cards, escobas=escobas_count)
 
-
     def get_cards(self):
         """Returns a copy of the cards currently in the pila
 
@@ -63,19 +62,16 @@ class Pila(object):
         """
         return deepcopy(self._cards)
 
-
     @property
     def escobas(self):
         """Returns the number of escobas the player has made
         """
         return self._escobas
 
-
     def get_escobas(self):
         """Alias for the escobas property
         """
         return self.escobas
-
 
     def best_setenta(self):
         """Calculates the total setenta score in the pila.
@@ -91,9 +87,9 @@ class Pila(object):
         if has_empty_suit:
             return []
 
-        best_cards = [max(suit, key=lambda x: x.points_setenta) for suit in cards.values()]
+        best_cards = [max(suit, key=lambda x: x.points_setenta)
+                      for suit in cards.values()]
         return best_cards
-
 
     def has_siete_de_velo(self):
         """Returns True if the pila contains the 7 of oro
@@ -104,7 +100,6 @@ class Pila(object):
 
         return False
 
-
     def total_cards(self):
         """Returns the total number of cards the user has picked up.
         """
@@ -113,7 +108,6 @@ class Pila(object):
             amount = amount + len(self._cards[palo])
 
         return amount
-
 
     def total_oros(self):
         """Returns the total number of oros that the user has picked up.

@@ -3,6 +3,7 @@ Module containing the Deck class, for creating a deck of cards.
 """
 import random as random
 
+
 class Deck(object):
     """
     A Deck represents a deck of cards. When the constructor is called,
@@ -22,7 +23,7 @@ class Deck(object):
             Card -- A class of card to deal
             clone (Deck object) - An existing deck to clone.
         """
-        self._card_type = Card;
+        self._card_type = Card
 
         if clone is None:
             self._build_new_deck()
@@ -30,7 +31,6 @@ class Deck(object):
         else:
             self._cards = clone.cards()
 
-        
     def _build_new_deck(self):
         self._cards = []
 
@@ -44,20 +44,16 @@ class Deck(object):
         # shuffle the deck so that cards can be popped off the end
         random.shuffle(self._cards)
 
-
     def __str__(self):
         return f'Deck containing {len(self.cards())} Cards.'
 
-
     def __repr__(self):
         return f'Deck containing {len(self.cards())} Cards.'
-
 
     def cards(self):
         """Returns a copy of the list of cards in the deck.
         """
         return [x.clone() for x in self._cards]
-
 
     def deal(self, amount):
         """Removes cards from the deck and returns a tuple containing a new deck
@@ -72,5 +68,5 @@ class Deck(object):
         hand = [x.clone() for x in self._cards[:amount]]
         self._cards = self._cards[amount:]
         newdeck = Deck(self._card_type, clone=self)
-        
+
         return (newdeck, hand)

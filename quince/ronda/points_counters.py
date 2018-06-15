@@ -2,6 +2,7 @@
 Methods for use in calculating the scores after a single complete ronda.
 """
 
+
 class PointsCounter(object):
     """An abstraction for keeping track of who has the highest score in
     any one particular score type.
@@ -9,14 +10,14 @@ class PointsCounter(object):
     If two or more players tie for a particular score type, both will
     receive a point.
     """
+
     def __init__(self):
         """Constructor for the counter object.
-        Creates a players list to track which players have the current highest score
-        and an attribute to track the best score seen so far.
+        Creates a players list to track which players have the current highest
+        score and an attribute to track the best score seen so far.
         """
         self._players = []
         self.top_score = 0
-
 
     @property
     def winners(self):
@@ -24,11 +25,10 @@ class PointsCounter(object):
         """
         return self._players
 
-
     def compare(self, player, score):
-        """Evaluates a score, and decides whether it is the top point-getter or not.
-        Players that are tied for the top score will all earn points for that score
-        type.
+        """Evaluates a score, and decides whether it is the top
+        point-getter or not. Players that are tied for the top score
+        will all earn points for that score type.
         """
         if score == self.top_score:
             self._players.append(player)
@@ -38,14 +38,17 @@ class PointsCounter(object):
 
 
 class SetentaCounter(PointsCounter):
-    """Subclass of PointsCounter, with specific logic to calculate and generate setenta
-    scores"""
+    """Subclass of PointsCounter, with specific logic
+    to calculate and generate setenta scores"""
+
+    # pylint: disable=arguments-differ
+    # Inelegant solution. Things can probably be refactored to avoid this error
 
     def compare(self, player, setenta_cards):
-        """Identical to the base class's method, except it requires two extra
-        steps in order to calculate the points for the given cards, and to create
-        an object that will store the reference to the player, the cards, and the
-        points.
+        """Identical to the base class's method, except it requires
+        two extra steps in order to calculate the points for the given cards,
+        and to create an object that will store the reference to the player,
+        the cards, and the points.
 
         Args:
             player -- Reference to a player object
@@ -74,14 +77,27 @@ class SetentaWinner(object):
     and a list with references to the cards they used to make it up."""
 
     def __init__(self, player, cards):
-        self.player = player
-        self.cards = cards
-        self.points = sum([card.points_setenta for card in cards])
+        self._player = player
+        self._cards = cards
+        self._points = sum([card.points_setenta for card in cards])
 
+    @property
+    def player(self):
+        """Public getter for the pointer to the player object."""
+        return self._player
+
+    @property
+    def cards(self):
+        """Public getter for the list of cards in the setenta."""
+        return self._cards
+
+    @property
+    def points(self):
+        """Public getter for the total points contained in the setenta."""
+        return self._points
 
     def __repr__(self):
         return f'{self.player} has {self.points} setenta pts.'
-
 
     def __str__(self):
         return f'{self.player} has {self.points} setenta pts.'

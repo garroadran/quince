@@ -1,10 +1,13 @@
 """
-The Card object represents a Card. Each card has a number, and a suit or "palo".
+The Card object represents a Card.
+Each card has a number, and a suit or "palo".
 """
+
 
 class Card(object):
     """
-    The Card object represents a Card. Each card has a number, and a suit or "palo".
+    The Card object represents a Card.
+    Each card has a number, and a suit or "palo".
     """
 
     def __init__(self, number, suit):
@@ -26,24 +29,19 @@ class Card(object):
         setenta = [11.0, 4.0, 6.0, 8.0, 10.0, 14.0, 17.5, 1, 1, 1]
         self.points_setenta = setenta[number - 1]
 
-
     def __str__(self):
         return str((self.number, self.suit))
-
 
     def __repr__(self):
         return str((self.number, self.suit))
 
-
     def __eq__(self, other):
         return self.number == other.number and self.suit == other.suit
-
 
     def image(self):
         """Getter for the card's image
         """
         return self._image
-
 
     def info(self):
         """Getter for the number and suit of the card.
@@ -52,7 +50,6 @@ class Card(object):
             Tuple containing (number, suit)
         """
         return (self.number, self.suit)
-
 
     def clone(self):
         """Clones a Card object"""
