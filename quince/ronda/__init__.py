@@ -10,6 +10,9 @@ Once a ronda is finished, the points for that ronda
 can be calculated.
 """
 
+__all__ = ['PointsCounter', 'SetentaCounter', 'SetentaWinner',
+           'Ronda', 'RondaFinishedError', 'RondaNotFinishedError']
+
 from quince.ronda.points_counters import (PointsCounter,
                                           SetentaCounter,
                                           SetentaWinner)

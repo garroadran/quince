@@ -7,7 +7,8 @@ install:
 
 # run tests
 script:
- - coverage run -m unittest discover
+ - make lint
+ - make coverage
 
 after_success:
   - codecov -t $CC_TOKEN
