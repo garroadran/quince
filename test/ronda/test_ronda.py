@@ -141,6 +141,8 @@ class TestRonda(unittest.TestCase):
                      Card(9, 'oro'), Card(8, 'oro'), Card(2, 'oro')]
         charlie_cards = [Card(10, 'basto'), Card(5, 'basto'), Card(4, 'basto'),
                          Card(9, 'copa'), Card(7, 'copa'), Card(5, 'oro'),
+                         Card(1, 'oro'), Card(2, 'basto'), Card(4, 'copa'),
+                         Card(10, 'copa'), Card(5, 'copa'), Card(4, 'espada'),
                          Card(3, 'copa'), Card(6, 'espada'), Card(2, 'espada'),
                          Card(7, 'oro'), Card(6, 'basto'), Card(10, 'oro')]
 
