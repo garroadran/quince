@@ -1,4 +1,5 @@
 import tkinter as tk
+from ui.components.opponents.hand import OpponentHand
 
 LARGE_FONT = ("Verdana", 12)
 
@@ -38,8 +39,11 @@ class StartPage(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
 
-        label = tk.Label(self, text="Hello!", font=LARGE_FONT)
-        label.pack(pady=10, padx=10)
+        # label = tk.Label(self, text="Hello!", font=LARGE_FONT)
+        # label.pack(pady=10, padx=10)
+
+        opp_hand = OpponentHand(self, 3)
+        opp_hand.pack(pady=10, padx=10)
 
 app = GameApp()
 app.mainloop()
