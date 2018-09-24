@@ -2,6 +2,7 @@ import tkinter as tk
 import os
 from PIL import Image, ImageTk
 from ui.components.opponents.opponent_frame import OpponentFrameHorizontal, OpponentFrameVertical
+from ui.components.player.player_frame import PlayerFrame
 
 LARGE_FONT = ("Verdana", 12)
 
@@ -9,6 +10,7 @@ LARGE_FONT = ("Verdana", 12)
 class GameApp(tk.Tk):
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
+        self.winfo_toplevel().title("Quince")
 
         self._build_menus()
 
@@ -59,21 +61,39 @@ class StartPage(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
 
-        # label = tk.Label(self, text="Hello!", font=LARGE_FONT)
-        # label.pack(pady=10, padx=10)
+        # OPPONENT 1
+        opp1_path = os.path.join(os.getcwd(), 'ui/assets/avatars/alice.png')
+        opp1_img = Image.open(opp1_path)
+        opp1_name = "Alice"
+        opp1_active = False
+        opp1_hand_size = 3
+        opp1 = OpponentFrameVertical(self, opp1_img, opp1_name, opp1_active, opp1_hand_size)
+        opp1.grid(row=1, column=0)
 
-        relpath = f'ui/assets/avatars/alice.png'
-        image_path = os.path.join(os.getcwd(), relpath)
-        avatar_img = Image.open(image_path)
-        player_name = "Alice"
-        is_active = True
-        hand_size = 3
+        # OPPONENT 2
+        opp2_path = os.path.join(os.getcwd(), 'ui/assets/avatars/bob.png')
+        opp2_img = Image.open(opp2_path)
+        opp2_name = "Bob"
+        opp2_active = False
+        opp2_hand_size = 3
+        opp2 = OpponentFrameHorizontal(self, opp2_img, opp2_name, opp2_active, opp2_hand_size)
+        opp2.grid(row=0, column=1)
+        
+        # OPPONENT 3
+        opp3_path = os.path.join(os.getcwd(), 'ui/assets/avatars/charlie.png')
+        opp3_img = Image.open(opp3_path)
+        opp3_name = "Charlie"
+        opp3_active = False
+        opp3_hand_size = 3
+        opp3 = OpponentFrameVertical(self, opp3_img, opp3_name, opp3_active, opp3_hand_size)
+        opp3.grid(row=1, column=2)
 
-        # opp1 = OpponentFrameHorizontal(self, avatar_img, player_name, is_active, hand_size)
-        # opp1.pack()
+        # PLAYER
+        hud = PlayerFrame(self)
+        hud.grid(row=2, column=0, columnspan=3)
 
-        opp2 = OpponentFrameVertical(self, avatar_img, player_name, is_active, hand_size)
-        opp2.pack()
+
+
 
 app = GameApp()
 app.mainloop()
