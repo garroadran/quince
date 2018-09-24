@@ -24,7 +24,7 @@ class OpponentHand(tk.Frame):
             raise AttributeError("Invalid number of cards in opponent's hand. \
                                  Should be between 0 and 3")
 
-        tk.Frame.__init__(self, parent, background="green")
+        tk.Frame.__init__(self, parent)
 
         relpath = f'ui/assets/opponent_hands/cards_{number_of_cards}.png'
         image_path = os.path.join(os.getcwd(), relpath)
