@@ -12,7 +12,7 @@ class OpponentHand(tk.Frame):
     A frame containing for an image that shows an opponent's hand (i.e., the backs)
     of the cards.
     """
-    def __init__(self, parent, number_of_cards, size=150):
+    def __init__(self, parent, number_of_cards, size=100):
         """
         Creates a frame that shows how many cards the opponent is holding.
 

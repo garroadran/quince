@@ -11,6 +11,7 @@ class GameApp(tk.Tk):
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
         self.winfo_toplevel().title("Quince")
+        self.minsize(600, 600)
 
         self._build_menus()
 
@@ -60,6 +61,14 @@ class GameApp(tk.Tk):
 class StartPage(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
+
+        self.grid_rowconfigure(0, weight=1)
+        self.grid_rowconfigure(1, weight=3)
+        self.grid_rowconfigure(2, weight=1)
+
+        self.grid_columnconfigure(0, weight=1)
+        self.grid_columnconfigure(1, weight=3)
+        self.grid_columnconfigure(2, weight=1)
 
         # OPPONENT 1
         opp1_path = os.path.join(os.getcwd(), 'ui/assets/avatars/alice.png')
