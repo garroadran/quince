@@ -36,7 +36,7 @@ class PlayerHand(tk.Frame):
 
     def _display_card(self, card, column):
 
-        resized = card['image'].resize((104, 160), Image.ANTIALIAS)
+        resized = card.image().resize((104, 160), Image.ANTIALIAS)
 
         decolor = ImageEnhance.Color(resized)
         decolorized = decolor.enhance(0.2)
