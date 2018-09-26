@@ -28,8 +28,8 @@ class PlayerAvatar(tk.Frame):
         self.grid_columnconfigure(1, weight=1)
 
 
-        resized = image.resize((65, 65), Image.ANTIALIAS)
-        img = ImageTk.PhotoImage(resized)
+        image.thumbnail((65, 65), Image.ANTIALIAS)
+        img = ImageTk.PhotoImage(image)
 
         img_args = { 'image': img }
 

@@ -28,9 +28,9 @@ class OpponentHand(tk.Frame):
 
         relpath = f'ui/assets/opponent_hands/cards_{number_of_cards}.png'
         image_path = os.path.join(os.getcwd(), relpath)
-        orig = Image.open(image_path)
-        img = orig.resize((size, size), Image.ANTIALIAS)
-        card_backs = ImageTk.PhotoImage(img)
+        image = Image.open(image_path)
+        image.thumbnail((size, size), Image.ANTIALIAS)
+        card_backs = ImageTk.PhotoImage(image)
 
         label = tk.Label(self, image=card_backs)
         label.image = card_backs # hold on to the reference

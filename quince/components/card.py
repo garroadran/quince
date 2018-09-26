@@ -54,3 +54,7 @@ class Card(object):
     def clone(self):
         """Clones a Card object"""
         return Card(self.number, self.suit)
+
+    def __hash__(self):
+        hashable = f'{self.number}{self.suit}'
+        return hash(hashable)

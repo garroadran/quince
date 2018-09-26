@@ -1,8 +1,13 @@
+"""
+    Graphical application initialization
+"""
 import tkinter as tk
 import os
-from PIL import Image, ImageTk
+from PIL import Image
+from quince.components.card import Card
 from ui.components.opponents.opponent_frame import OpponentFrameHorizontal, OpponentFrameVertical
 from ui.components.player.player_frame import PlayerFrame
+from ui.components.table.table import Table
 
 LARGE_FONT = ("Verdana", 12)
 
@@ -11,7 +16,7 @@ class GameApp(tk.Tk):
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
         self.winfo_toplevel().title("Quince")
-        self.minsize(600, 600)
+        self.minsize(800, 600)
 
         self._build_menus()
 
@@ -101,7 +106,30 @@ class StartPage(tk.Frame):
         hud = PlayerFrame(self)
         hud.grid(row=2, column=0, columnspan=3)
 
+        # TABLE
+        tbl = Table(self, generate_mesa())
+        tbl.grid(row=1, column=1)
 
+
+def generate_mesa():
+    a = generate_card('copa', 2)
+    b = generate_card('espada', 6)
+    c = generate_card('basto', 5)
+    d = generate_card('espada', 10)
+    e = generate_card('espada', 1)
+    f = generate_card('oro', 1)
+    return [a, b, c, d, e, f]
+
+def generate_card(suit, num):
+    """Temporary function for development/debugging"""
+
+    c1pth = f'quince/assets/img/card_{suit}_{num}.png'
+    c1fpth = os.path.join(os.getcwd(), c1pth)
+    c1_img = Image.open(c1fpth)
+
+    mycard = Card(num, suit)
+    mycard._image = c1_img
+    return mycard
 
 
 app = GameApp()
