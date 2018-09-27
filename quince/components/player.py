@@ -2,6 +2,8 @@
 Module containing the Player class
 """
 import random
+import os as os
+from PIL import Image
 from quince.cpu import enumerate_possibilities
 from quince.components.pila import Pila
 
@@ -61,6 +63,19 @@ class Player(object):
         if their display names match.
         """
         return self._id
+
+    def image(self):
+        """Getter for the player's avatar image
+        Returns:
+            PIL Image object
+        """
+        path = os.path.join(os.getcwd(), f'ui/assets/avatars/{self.name().lower()}.png')
+
+        if not os.path.exists(path):
+            # to do: replace with a proper stock image
+            path = 'ui/assets/avatars/alice.png'
+
+        return Image.open(path)
 
     def name(self):
         """Getter for the player's name

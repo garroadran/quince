@@ -26,7 +26,8 @@ class PlayerHand(tk.Frame):
 
         self.grid_rowconfigure(0, weight=1)
 
-        self.selected = None
+        self.cards = cards
+        self._selected_index = tk.IntVar()
 
         column = 0
         for card in cards:
@@ -48,8 +49,8 @@ class PlayerHand(tk.Frame):
             self,
             image=unselected_img,
             selectimage=selected_img,
-            variable=self.selected,
-            value=card,
+            variable=self._selected_index,
+            value=column,
             indicatoron=0,
             highlightthickness=0,
             borderwidth=0,
@@ -60,3 +61,7 @@ class PlayerHand(tk.Frame):
         btn.selected_image = selected_img
 
         btn.grid(row=0, column=column, padx=2)
+
+    def selected_card(self):
+        """Getter for the card that the user has selected."""
+        return self.cards[self._selected_index.get()]

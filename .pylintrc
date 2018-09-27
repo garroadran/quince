@@ -2,3 +2,5 @@
 
 # Good variable names which should always be accepted, separated by a comma
 good-names=i,j,k,ex,Run,_,id
+
+max-parents=9

@@ -10,14 +10,17 @@ class Table(tk.Frame):
     """
     A container for a set of cards laid face-up on the table.
     """
-    def __init__(self, parent, cards):
+    def __init__(self, parent, cards, callback):
         """
         Args:
             parent (tk widget) - Element on which to render the frame
             cards (List of Card)
+            callback (function) - Callback function to execute when
+            the selection of cards on the table has changed.
         """
         tk.Frame.__init__(self, parent)
 
+        self.callback = callback
         self.card_statuses = dict()
 
         column_count = math.ceil(len(cards)/2)
@@ -35,6 +38,11 @@ class Table(tk.Frame):
         """Return a list of cards that the user has selected.
         """
         return [c for c in self.card_statuses if self.card_statuses[c].get() == 1]
+
+    def _notify_selection_changed(self):
+        """Uses the callback provided in the constructor to
+        notify the caller that the user has selected or deselected a card."""
+        self.callback(self.selected_cards())
 
     def _generate_card_button(self, card):
         resized = card.image()
@@ -56,6 +64,7 @@ class Table(tk.Frame):
                              offvalue=0,
                              onvalue=1,
                              variable=self.card_statuses[card],
+                             command=self._notify_selection_changed,
                              indicatoron=False,
                             )
 
