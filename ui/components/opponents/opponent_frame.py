@@ -20,6 +20,16 @@ class OpponentFrameBase(tk.Frame):
 
         self._place_elements()
 
+    def refresh(self, hand_size, is_active):
+        """Refreshes the child widgets with the updated parameters.
+
+        Args:
+            hand_size (int) Integer between 0 and 3
+            is_active (bool) Whether or not it is currently this player's turn
+        """
+        self.hand.refresh(hand_size)
+        self.avatar.refresh(is_active)
+
     def _place_elements(self):
         raise NotImplementedError("Subclasses must override this method.")
 

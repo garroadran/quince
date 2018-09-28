@@ -26,12 +26,21 @@ class OpponentHand(tk.Frame):
 
         tk.Frame.__init__(self, parent)
 
+        self.image_size = size
+
+        self.label = tk.Label(self)
+        self.label.pack()
+        self.refresh(number_of_cards)
+
+    def refresh(self, number_of_cards):
+        """Redraws the widget with the correct number of cards.
+        """
         relpath = f'ui/assets/opponent_hands/cards_{number_of_cards}.png'
         image_path = os.path.join(os.getcwd(), relpath)
         image = Image.open(image_path)
-        image.thumbnail((size, size), Image.ANTIALIAS)
+        image.thumbnail((self.image_size, self.image_size), Image.ANTIALIAS)
         card_backs = ImageTk.PhotoImage(image)
 
-        label = tk.Label(self, image=card_backs)
-        label.image = card_backs # hold on to the reference
-        label.pack()
+        
+        self.label.config(image=card_backs)
+        self.image = card_backs # hold on to the reference

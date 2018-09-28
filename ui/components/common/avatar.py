@@ -10,7 +10,7 @@ class PlayerAvatar(tk.Frame):
     The player's avatar and name.
     A highlight is shown if it is the player's turn.
     """
-    def __init__(self, parent, image, player_name="Player Name", isActive=False):
+    def __init__(self, parent, image, player_name="Player Name", is_active=False):
         """
         Args:
             parent (tk.Frame) - The root node where this frame is packed
@@ -27,19 +27,25 @@ class PlayerAvatar(tk.Frame):
         self.grid_columnconfigure(0, weight=0)
         self.grid_columnconfigure(1, weight=1)
 
-
         image.thumbnail((65, 65), Image.ANTIALIAS)
         img = ImageTk.PhotoImage(image)
 
-        img_args = { 'image': img }
+        self.img_label = tk.Label(self, image=img, relief='solid')
+        self.img_label.image = img # hold on to the reference
 
-        if isActive:
-            img_args['background'] = 'red'
+        self.label = tk.Label(self, text=player_name)
 
-        img_label = tk.Label(self, **img_args)
-        img_label.image = img # hold on to the reference
+        self.img_label.grid(row=0, column=0)
+        self.label.grid(row=0, column=1, sticky="nw", padx=10)
 
-        label = tk.Label(self, text=player_name)
+        self.refresh(is_active)
 
-        img_label.grid(row=0, column=0)
-        label.grid(row=0, column=1, sticky="nw", padx=10)
+    def refresh(self, is_active):
+        """Updates the avatar image to mark whether or not
+        it is this player's turn to play.
+
+        Args:
+            is_active (bool) - Is it this player's turn to play?
+        """
+        width = 1 if is_active else 0
+        self.img_label.config(borderwidth=width)

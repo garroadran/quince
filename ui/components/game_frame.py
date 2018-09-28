@@ -41,6 +41,24 @@ class GameFrame(tk.Frame):
 
         self.ronda = Ronda.start([self.player, self.npc1, self.npc2, self.npc3], self.npc3)
 
+        # OPPONENT 1
+        opp1_hand_size = len(self.ronda.player_cards[self.npc1]['hand'])
+        opp1_active = self.ronda.current_player is self.npc1
+        self.opp1 = OpponentFrameVertical(self, self.npc1.image(), self.npc1.name(), opp1_active, opp1_hand_size)
+        self.opp1.grid(row=1, column=0)
+
+        # OPPONENT 2
+        opp2_active = self.ronda.current_player is self.npc2
+        opp2_hand_size = len(self.ronda.player_cards[self.npc2]['hand'])
+        self.opp2 = OpponentFrameHorizontal(self, self.npc2.image(), self.npc2.name(), opp2_active, opp2_hand_size)
+        self.opp2.grid(row=0, column=1)
+
+        # OPPONENT 3
+        opp3_active = self.ronda.current_player is self.npc3
+        opp3_hand_size = len(self.ronda.player_cards[self.npc3]['hand'])
+        self.opp3 = OpponentFrameVertical(self, self.npc3.image(), self.npc3.name(), opp3_active, opp3_hand_size)
+        self.opp3.grid(row=1, column=2)
+
     def draw(self):
         self.selected_table_cards = []
         # for widget in self.winfo_children():
@@ -51,23 +69,19 @@ class GameFrame(tk.Frame):
         table_cards = self.ronda.current_mesa
         current_player = self.ronda.current_player
 
-        # OPPONENT 1
         opp1_hand_size = len(self.ronda.player_cards[self.npc1]['hand'])
-        opp1_active = current_player is self.npc1
-        opp1 = OpponentFrameVertical(self, self.npc1.image(), self.npc1.name(), opp1_active, opp1_hand_size)
-        opp1.grid(row=1, column=0)
+        opp1_active = self.ronda.current_player is self.npc1
+        self.opp1.refresh(opp1_hand_size, opp1_active)
 
         # OPPONENT 2
         opp2_active = current_player is self.npc2
         opp2_hand_size = len(self.ronda.player_cards[self.npc2]['hand'])
-        opp2 = OpponentFrameHorizontal(self, self.npc2.image(), self.npc2.name(), opp2_active, opp2_hand_size)
-        opp2.grid(row=0, column=1)
+        self.opp2.refresh(opp2_hand_size, opp2_active)
 
         # OPPONENT 3
         opp3_active = current_player is self.npc3
         opp3_hand_size = len(self.ronda.player_cards[self.npc3]['hand'])
-        opp3 = OpponentFrameVertical(self, self.npc3.image(), self.npc3.name(), opp3_active, opp3_hand_size)
-        opp3.grid(row=1, column=2)
+        self.opp3.refresh(opp3_hand_size, opp3_active)
 
         # PLAYER
         player_is_active = current_player is self.player
