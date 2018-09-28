@@ -5,7 +5,7 @@ from ui.components.game_app import GameApp
 from ui.components.game_frame_factory import GameFrameFactory
 from quince.components import Player, NPC
 
-TINA = Player('Tina')
+TINA = Player('Alice')
 BOB = NPC('Bob')
 CHARLIE = NPC('Charlie')
 DANA = NPC('Dana')
