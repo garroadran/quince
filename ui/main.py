@@ -1,19 +1,19 @@
 """
     Graphical application initialization
 """
-import time as time
 from ui.components.game_app import GameApp
 from ui.components.game_frame_factory import GameFrameFactory
 from quince.components import Player, NPC
 
-TINA = NPC('Tina')
+TINA = Player('Tina')
 BOB = NPC('Bob')
 CHARLIE = NPC('Charlie')
-DANA = Player('Dana')
-FACTORY = GameFrameFactory(DANA, TINA, BOB, CHARLIE)
+DANA = NPC('Dana')
+FACTORY = GameFrameFactory(TINA, BOB, CHARLIE, DANA)
 
 APP = GameApp(FACTORY)
 
+APP.frames['GameFrame'].draw()
 APP.frames['GameFrame'].play_next_move()
 
 APP.mainloop()

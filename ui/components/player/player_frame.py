@@ -8,7 +8,7 @@ class PlayerFrame(tk.Frame):
     """
     Represents the HUD for the player's current hand, score, avatar, etc.
     """
-    def __init__(self, parent, cards, callback):
+    def __init__(self, parent, cards, is_active, callback):
         """
         Args:
             parent (Tk widget) - Root node for this frame
@@ -30,7 +30,6 @@ class PlayerFrame(tk.Frame):
         image_path = os.path.join(os.getcwd(), relpath)
         avatar_img = Image.open(image_path)
         player_name = "Dana"
-        is_active = False
         self.avatar = PlayerAvatar(self, avatar_img, player_name, is_active)
         self.avatar.grid(row=0, column=0)
 
@@ -38,7 +37,8 @@ class PlayerFrame(tk.Frame):
         self.p_hand = PlayerHand(self, cards)
         self.p_hand.grid(row=0, column=1)
 
-        self.play_hand_btn = tk.Button(self, text="Play Hand", command=self.play_hand)
+        btn_state = 'normal' if is_active else 'disabled'
+        self.play_hand_btn = tk.Button(self, text="Play Hand", command=self.play_hand, state=btn_state)
         self.play_hand_btn.grid(row=0, column=2)
 
     def play_hand(self):

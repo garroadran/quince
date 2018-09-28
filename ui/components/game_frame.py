@@ -2,11 +2,11 @@
 The primary frame containing the content for the entire game
 """
 import tkinter as tk
-import time as time
 import random as random
 from ui.components.opponents.opponent_frame import OpponentFrameHorizontal, OpponentFrameVertical
 from ui.components.table.table import Table
 from ui.components.player.player_frame import PlayerFrame
+from quince.utility import is_valid_pickup
 from quince.ronda import Ronda
 
 
@@ -39,11 +39,12 @@ class GameFrame(tk.Frame):
         self.player = player
         self.selected_table_cards = []
 
-        self.ronda = Ronda.start([self.player, self.npc2, self.npc3, self.npc1], self.npc2)
+        self.ronda = Ronda.start([self.player, self.npc1, self.npc2, self.npc3], self.npc3)
 
     def draw(self):
-        for widget in self.winfo_children():
-            widget.destroy()
+        self.selected_table_cards = []
+        # for widget in self.winfo_children():
+        #     widget.destroy()
 
         myhand = self.ronda.player_cards[self.player]['hand']
 
@@ -52,24 +53,25 @@ class GameFrame(tk.Frame):
 
         # OPPONENT 1
         opp1_hand_size = len(self.ronda.player_cards[self.npc1]['hand'])
-        opp1_active = current_player == self.npc1
+        opp1_active = current_player is self.npc1
         opp1 = OpponentFrameVertical(self, self.npc1.image(), self.npc1.name(), opp1_active, opp1_hand_size)
         opp1.grid(row=1, column=0)
 
         # OPPONENT 2
-        opp2_active = current_player == self.npc2
+        opp2_active = current_player is self.npc2
         opp2_hand_size = len(self.ronda.player_cards[self.npc2]['hand'])
         opp2 = OpponentFrameHorizontal(self, self.npc2.image(), self.npc2.name(), opp2_active, opp2_hand_size)
         opp2.grid(row=0, column=1)
 
         # OPPONENT 3
-        opp3_active = current_player == self.npc3
+        opp3_active = current_player is self.npc3
         opp3_hand_size = len(self.ronda.player_cards[self.npc3]['hand'])
         opp3 = OpponentFrameVertical(self, self.npc3.image(), self.npc3.name(), opp3_active, opp3_hand_size)
         opp3.grid(row=1, column=2)
 
         # PLAYER
-        hud = PlayerFrame(self, myhand, self.play_hand)
+        player_is_active = current_player is self.player
+        hud = PlayerFrame(self, myhand, player_is_active, self.play_hand)
         hud.grid(row=2, column=0, columnspan=3)
 
         # TABLE
@@ -77,34 +79,46 @@ class GameFrame(tk.Frame):
         tbl.grid(row=1, column=1)
 
     def register_table_card_selection(self, cards):
+        """Callback function executed by the Table
+        when the user selects cards.
+
+        The list of cards is stored in the GameFrame's
+        state so that it can be queried when the user
+        makes a move.
+        
+        Args:
+            cards (List of Card)
+        """
         self.selected_table_cards = cards
 
     def play_hand(self, hand_card):
         """Callback function executed when player clicks the "Play Hand" button.
         """
-        if self.ronda.current_player.name() == 'Tina':
-            print(f'Playing {hand_card} and picking up: {self.selected_table_cards}')
-            self.ronda = self.ronda.play_turn(hand_card, self.selected_table_cards)
-            self.draw()
-            self.play_next_move()
+        if self.ronda.current_player is self.player:
+            print(f'Attempting to play {hand_card} and pick up: {self.selected_table_cards}')
+            if is_valid_pickup(hand_card, self.selected_table_cards):
+                self.ronda = self.ronda.play_turn(hand_card, self.selected_table_cards)
+                self.draw()
+                self.play_next_move()
         else:
             print("not your turn")
 
     def play_next_move(self):
         """Play a card from the hand
         """
-        table_cards = self.ronda.current_mesa
-        current_player = self.ronda.current_player
-
-        if current_player.name() == 'Tina':
+        if self.ronda.current_player is self.player:
             pass
         else:
-            sleep_time = random.randrange(1, 6)
-            time.sleep(sleep_time)
-            CUR_PLAYER_HAND = self.ronda.player_cards[current_player]['hand']
-            (OWN_CARD, MESA_CARDS) = self.ronda.current_player.get_move(CUR_PLAYER_HAND, table_cards)
+            sleep_time = random.randrange(2, 4)
+            self.after(sleep_time*1000, self._play_cpu_move)
 
-            self.ronda = self.ronda.play_turn(OWN_CARD, MESA_CARDS)
-            print(f'CPU played: {OWN_CARD} -- {MESA_CARDS}')
-            self.draw()
-            self.play_next_move()
+    def _play_cpu_move(self):
+        table_cards = self.ronda.current_mesa
+        current_player = self.ronda.current_player
+        CUR_PLAYER_HAND = self.ronda.player_cards[current_player]['hand']
+        (OWN_CARD, MESA_CARDS) = self.ronda.current_player.get_move(CUR_PLAYER_HAND, table_cards)
+
+        self.ronda = self.ronda.play_turn(OWN_CARD, MESA_CARDS)
+        print(f'CPU played: {OWN_CARD} -- {MESA_CARDS}')
+        self.draw()
+        self.play_next_move()
