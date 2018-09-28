@@ -59,16 +59,24 @@ class GameFrame(tk.Frame):
         self.opp3 = OpponentFrameVertical(self, self.npc3.image(), self.npc3.name(), opp3_active, opp3_hand_size)
         self.opp3.grid(row=1, column=2)
 
+        # PLAYER
+        myhand = self.ronda.player_cards[self.player]['hand']
+        player_is_active = self.ronda.current_player is self.player
+        self.hud = PlayerFrame(self, self.player, myhand, player_is_active, self.play_hand)
+        self.hud.grid(row=2, column=0, columnspan=3)
+
+        # TABLE
+        table_cards = self.ronda.current_mesa
+        self.tbl = Table(self, table_cards, self.register_table_card_selection)
+        self.tbl.grid(row=1, column=1)
+
     def draw(self):
         self.selected_table_cards = []
-        # for widget in self.winfo_children():
-        #     widget.destroy()
-
-        myhand = self.ronda.player_cards[self.player]['hand']
 
         table_cards = self.ronda.current_mesa
         current_player = self.ronda.current_player
 
+        # OPPONENT 1
         opp1_hand_size = len(self.ronda.player_cards[self.npc1]['hand'])
         opp1_active = self.ronda.current_player is self.npc1
         self.opp1.refresh(opp1_hand_size, opp1_active)
@@ -84,13 +92,14 @@ class GameFrame(tk.Frame):
         self.opp3.refresh(opp3_hand_size, opp3_active)
 
         # PLAYER
+        myhand = self.ronda.player_cards[self.player]['hand']
         player_is_active = current_player is self.player
-        hud = PlayerFrame(self, myhand, player_is_active, self.play_hand)
-        hud.grid(row=2, column=0, columnspan=3)
+        self.hud.refresh(myhand, player_is_active)
 
         # TABLE
-        tbl = Table(self, table_cards, self.register_table_card_selection)
-        tbl.grid(row=1, column=1)
+        self.tbl.destroy()
+        self.tbl = Table(self, table_cards, self.register_table_card_selection)
+        self.tbl.grid(row=1, column=1)
 
     def register_table_card_selection(self, cards):
         """Callback function executed by the Table
@@ -99,7 +108,7 @@ class GameFrame(tk.Frame):
         The list of cards is stored in the GameFrame's
         state so that it can be queried when the user
         makes a move.
-        
+
         Args:
             cards (List of Card)
         """

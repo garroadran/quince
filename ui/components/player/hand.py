@@ -5,6 +5,9 @@ is currently holding and manage its interactions.
 import tkinter as tk
 from PIL import Image, ImageTk, ImageEnhance
 
+CARD_SIZE = (104, 160)
+CARD_PADX = 2
+
 class PlayerHand(tk.Frame):
     """
     Represents a frame on the UI where the user can see
@@ -29,15 +32,21 @@ class PlayerHand(tk.Frame):
         self.cards = cards
         self._selected_index = tk.IntVar()
 
-        column = 0
-        for card in cards:
-            self.grid_columnconfigure(0, weight=1)
-            self._display_card(card, column)
-            column += 1
+        col_width = 2 + CARD_SIZE[0] + CARD_PADX * 2
+
+        for column in range(0, 3):
+            self.grid_columnconfigure(column, weight=1, minsize=col_width)
+
+            try:
+                card = self.cards[column]
+                self._display_card(card, column)
+            except IndexError:
+                pass
+
 
     def _display_card(self, card, column):
 
-        resized = card.image().resize((104, 160), Image.ANTIALIAS)
+        resized = card.image().resize(CARD_SIZE, Image.ANTIALIAS)
 
         decolor = ImageEnhance.Color(resized)
         decolorized = decolor.enhance(0.2)
@@ -60,7 +69,7 @@ class PlayerHand(tk.Frame):
         btn.unselected_image = unselected_img
         btn.selected_image = selected_img
 
-        btn.grid(row=0, column=column, padx=2)
+        btn.grid(row=0, column=column, padx=CARD_PADX)
 
     def selected_card(self):
         """Getter for the card that the user has selected."""
