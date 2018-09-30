@@ -4,6 +4,7 @@ Display logic for the cards that are laid face-up on the table.
 import tkinter as tk
 import math as math
 from PIL import Image, ImageTk, ImageEnhance
+from quince.utility import GridPosition
 
 
 class Table(tk.Frame):
@@ -71,40 +72,3 @@ class Table(tk.Frame):
         btn.image = unselected_img
         btn.selected_image = selected_img
         return btn
-
-
-class GridPosition(object):
-    """Specifies a zero-indexed, two-dimensional coordinate point.
-    """
-    def __init__(self, column_count):
-        """Instantiates a GridPosition object with column_count columns.
-
-        Args:
-            column_count (int) - Positive integer
-        """
-        if column_count < 0:
-            raise AttributeError("Cannot have a negative amount of columns")
-
-        self.column_count = column_count
-        self.row = 0
-        self.column = 0
-
-    def get_value(self):
-        """Getter for the current position. Returns a tuple of (row, column)
-        """
-        return self.row, self.column
-
-    def increment_right(self):
-        """Moves one position over to the right. If the last column is reached,
-        wraps around to the next row.
-
-        Returns:
-            A tuple indicating the current position, after the increment (row, column)
-        """
-        if self.column == self.column_count - 1:
-            self.column = 0
-            self.row += 1
-        else:
-            self.column += 1
-
-        return self.get_value()

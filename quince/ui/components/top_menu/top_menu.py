@@ -13,6 +13,7 @@ import tkinter as tk
 import os as os
 from PIL import Image, ImageTk
 from quince.components import Player, NPC
+from quince.ui.components.top_menu.avatar_picker import AvatarPicker
 from quince.ui.components.game_frame_factory import GameFrameFactory
 from quince.ui.components.top_menu.validating_entry import UserNameEntry
 
@@ -39,8 +40,9 @@ class TopMenu(tk.Frame):
         self.grid_columnconfigure(2, weight=0)
         self.grid_columnconfigure(3, weight=1)
 
-        self.avatar = tk.Label(self, text= "")
-        self._display_avatar("quince/ui/assets/avatars/avatar01.png")
+        self.avatar_path = None
+        self.avatar = tk.Label(self, text="")
+        self.set_avatar(os.path.join(os.getcwd(), "quince/ui/assets/avatars/avatar01.png"))
         avatar_label = tk.Label(self, text="Click to edit", font=("Helvetica", 8))
         avatar_label.grid(row=3, column=1)
 
@@ -52,22 +54,30 @@ class TopMenu(tk.Frame):
         btn = tk.Button(self, text="New Game", command=self._start_game)
         btn.grid(row=4, column=1, columnspan=2, pady=64)
 
-    def _display_avatar(self, path):
-        p = os.path.join(os.getcwd(), path)
-        image = Image.open(p)
+    def _display_avatar(self):
+        image = Image.open(self.avatar_path)
         image.thumbnail((65, 65), Image.ANTIALIAS)
         img = ImageTk.PhotoImage(image)
         self.avatar.destroy()
-        self.avatar = tk.Label(self, image=img, cursor="hand2", highlightbackground="black", highlightthickness=1)
+        self.avatar = tk.Label(self,
+                               image=img,
+                               cursor="hand2",
+                               highlightbackground="black",
+                               highlightthickness=1)
         self.avatar.image = img
         self.avatar.grid(row=1, column=1, padx=32, rowspan=2)
         self.avatar.bind("<Enter>", self.on_avatar_enter)
         self.avatar.bind("<Leave>", self.on_avatar_leave)
+        self.avatar.bind("<Button-1>", self.launch_avatar_picker)
 
-    def on_avatar_enter(self, e):
+    # pylint: disable=unused-argument
+    def on_avatar_enter(self, event):
+        """Hoverover event for the currently selected avatar image"""
         self.avatar.config(highlightbackground="firebrick3")
 
-    def on_avatar_leave(self, e):
+    # pylint: disable=unused-argument
+    def on_avatar_leave(self, event):
+        """Hoverover event for the currently selected avatar image"""
         self.avatar.config(highlightbackground="black")
 
     def _start_game(self):
@@ -75,12 +85,11 @@ class TopMenu(tk.Frame):
         Provides the parent with a list of players which it can use to
         initiate a new game.
         """
-
         if not self.name_entry.validate():
             return
 
         user = Player(self.name_entry.get())
-        user.image_path = f'quince/ui/assets/avatars/avatar01.png'
+        user.image_path = self.avatar_path
 
         npc1 = NPC('Bob')
         npc2 = NPC('Charlie')
@@ -88,6 +97,20 @@ class TopMenu(tk.Frame):
         game_frame_factory = GameFrameFactory(user, npc1, npc2, npc3)
 
         self.start_game(game_frame_factory)
+
+    def set_avatar(self, path):
+        """Sets a different avatar that the user can use in-game
+
+        Args:
+            path (string) - Absolute path to the avatar image
+        """
+        self.avatar_path = path
+        self._display_avatar()
+
+    def launch_avatar_picker(self, _):
+        """Launches a popup window where the user can select an image
+        """
+        AvatarPicker(self, self.set_avatar)
 
 
 class TopMenuFactory(object):
