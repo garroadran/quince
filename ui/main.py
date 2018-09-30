@@ -1,19 +1,15 @@
+#!/usr/bin/env python
+
 """
     Graphical application initialization
 """
 from ui.components.game_app import GameApp
-from ui.components.game_frame_factory import GameFrameFactory
-from quince.components import Player, NPC
+from ui.components.about import AboutFactory
+from ui.components.top_menu import TopMenuFactory
 
-TINA = Player('Alice')
-BOB = NPC('Bob')
-CHARLIE = NPC('Charlie')
-DANA = NPC('Dana')
-FACTORY = GameFrameFactory(TINA, BOB, CHARLIE, DANA)
+ABOUT_FACTORY = AboutFactory()
+TOP_MENU_FACTORY = TopMenuFactory()
 
-APP = GameApp(FACTORY)
-
-APP.frames['GameFrame'].draw()
-APP.frames['GameFrame'].play_next_move()
+APP = GameApp(ABOUT_FACTORY, TOP_MENU_FACTORY)
 
 APP.mainloop()
