@@ -26,6 +26,11 @@ class GameApp(tk.Tk):
         self.show_frame('TopMenu')
 
     def _start_new_game(self, game_frame_factory):
+        previous_game = self.frames.get("GameFrame", None)
+
+        if previous_game is not None:
+            previous_game.destroy()
+
         frame = game_frame_factory.generate(self.container)
         self.frames['GameFrame'] = frame
         frame.grid(row=0, column=0, sticky="nsew")
@@ -48,6 +53,8 @@ class GameApp(tk.Tk):
         menubar = tk.Menu(self)
 
         filemenu = tk.Menu(menubar, tearoff=0)
+        filemenu.add_command(label="New Game", command=lambda: self.show_frame("TopMenu"))
+        filemenu.add_separator()
         filemenu.add_command(label="Exit", command=self.quit)
         menubar.add_cascade(label="File", menu=filemenu)
 
@@ -55,6 +62,8 @@ class GameApp(tk.Tk):
         helpmenu.add_command(label="About", command=self._show_about)
         menubar.add_cascade(label="Help", menu=helpmenu)
 
+        # probably unnecessary, but here for legacy compatibility
+        self.option_add('*tearOff', tk.FALSE)
         self.config(menu=menubar)
 
     def _show_about(self):
