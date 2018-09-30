@@ -71,11 +71,17 @@ class Player(object):
         Returns:
             PIL Image object
         """
-        path = os.path.join(os.getcwd(), self.image_path)
+        path = self.image_path
+
+        # fallback in case a relative path was passed in
+        if not os.path.exists(path):
+            print('WARNING: Passing relative paths is deprecated \
+                  and will cause errors in future releases.')
+            path = os.path.join(os.getcwd(), self.image_path)
 
         if not os.path.exists(path):
             # to do: replace with a proper stock image
-            path = 'quince/ui/assets/avatars/alice.png'
+            path = os.path.join(os.getcwd(), 'quince/ui/assets/avatars/avatar01.png')
 
         return Image.open(path)
 
