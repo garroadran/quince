@@ -41,6 +41,5 @@ class OpponentHand(tk.Frame):
         image.thumbnail((self.image_size, self.image_size), Image.ANTIALIAS)
         card_backs = ImageTk.PhotoImage(image)
 
-        
         self.label.config(image=card_backs)
         self.image = card_backs # hold on to the reference
