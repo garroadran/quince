@@ -2,6 +2,8 @@
 Module containing the Player class
 """
 import random
+import os as os
+from PIL import Image
 from quince.cpu import enumerate_possibilities
 from quince.components.pila import Pila
 
@@ -48,6 +50,8 @@ class Player(object):
 
         self._total_score = 0
 
+        self.image_path = f'quince/ui/assets/avatars/{self.name().lower()}.png'
+
     def __repr__(self):
         return f'Player, {self.name()}.'
 
@@ -61,6 +65,26 @@ class Player(object):
         if their display names match.
         """
         return self._id
+
+    def image(self):
+        """Getter for the player's avatar image
+        Returns:
+            PIL Image object
+        """
+        path = self.image_path
+
+        # fallback in case a relative path was passed in
+        if not os.path.exists(path):
+            print('WARNING: Passing relative paths is deprecated \
+                  and will cause errors in future releases.')
+            path = os.path.join(os.getcwd(), self.image_path)
+
+        if not os.path.exists(path):
+            # to do: replace with a proper stock image
+            path = os.path.join(os.getcwd(),
+                                'quince/ui/assets/avatars/avatar01.png')
+
+        return Image.open(path)
 
     def name(self):
         """Getter for the player's name
