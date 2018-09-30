@@ -3,6 +3,7 @@ Root tkinter window.
 """
 import tkinter as tk
 
+
 class GameApp(tk.Tk):
     """Root tkinter window hosting the entire app.
     """
@@ -19,7 +20,8 @@ class GameApp(tk.Tk):
         self.frames = {}
 
         self.about_factory = AboutFactory
-        self.frames['TopMenu'] = TopMenuFactory.generate(self.container, self._start_new_game)
+        self.frames['TopMenu'] = TopMenuFactory.generate(self.container,
+                                                         self._start_new_game)
         self.frames['TopMenu'].grid(row=0, column=0, sticky="nsew")
 
         self._build_menus()
@@ -53,7 +55,8 @@ class GameApp(tk.Tk):
         menubar = tk.Menu(self)
 
         filemenu = tk.Menu(menubar, tearoff=0)
-        filemenu.add_command(label="New Game", command=lambda: self.show_frame("TopMenu"))
+        filemenu.add_command(label="New Game",
+                             command=lambda: self.show_frame("TopMenu"))
         filemenu.add_separator()
         filemenu.add_command(label="Exit", command=self.quit)
         menubar.add_cascade(label="File", menu=filemenu)

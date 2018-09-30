@@ -1,8 +1,12 @@
+"""
+Frame containing the display where the user can see their own
+cards and avatar.
+"""
+
 import tkinter as tk
-import os
-from PIL import Image
 from quince.ui.components.player.hand import PlayerHand
 from quince.ui.components.common.avatar import PlayerAvatar
+
 
 class PlayerFrame(tk.Frame):
     """
@@ -12,7 +16,7 @@ class PlayerFrame(tk.Frame):
         """
         Args:
             parent (Tk widget) - Root node for this frame
-            player (Player) - 
+            player (Player) -
             cards (list of Card) - Cards currently in the player's hand
             is_active (bool) - True if it is this player's turn to move
             callback (function) - Command to execute when the user
@@ -27,12 +31,17 @@ class PlayerFrame(tk.Frame):
 
         self.callback = callback
 
-        self.avatar = PlayerAvatar(self, player.image(), player.name(), is_active)
+        self.avatar = PlayerAvatar(self,
+                                   player.image(),
+                                   player.name(),
+                                   is_active)
         self.avatar.grid(row=0, column=0)
 
         self.p_hand = PlayerHand(self, cards)
 
-        self.play_hand_btn = tk.Button(self, text="Play Hand", command=self.play_hand)
+        self.play_hand_btn = tk.Button(self,
+                                       text="Play Hand",
+                                       command=self.play_hand)
         self.play_hand_btn.grid(row=0, column=2)
 
         self.refresh(cards, is_active)
@@ -45,8 +54,9 @@ class PlayerFrame(tk.Frame):
         self.callback(self.p_hand.selected_card())
 
     def refresh(self, cards, is_active):
-        """Redraws the cards in the player's hand, the marker showing
-        if it is the player's turn, and enables/disables the "Play hand" button.
+        """Redraws the cards in the player's hand,
+        the marker showing if it is the player's turn,
+        and enables/disables the "Play hand" button.
 
         Args:
             cards (List of Card) - Cards in the player's hand

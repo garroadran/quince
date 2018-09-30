@@ -5,7 +5,8 @@ import tkinter as tk
 import random as random
 from quince.utility import is_valid_pickup
 from quince.ronda import Ronda
-from quince.ui.components.opponents.opponent_frame import OpponentFrameHorizontal, OpponentFrameVertical
+from quince.ui.components.opponents.opponent_frame \
+    import OpponentFrameHorizontal, OpponentFrameVertical
 from quince.ui.components.table.table import Table
 from quince.ui.components.player.player_frame import PlayerFrame
 
@@ -39,30 +40,50 @@ class GameFrame(tk.Frame):
         self.player = player
         self.selected_table_cards = []
 
-        self.ronda = Ronda.start([self.player, self.npc1, self.npc2, self.npc3], self.npc3)
+        self.ronda = Ronda.start([self.player,
+                                  self.npc1,
+                                  self.npc2,
+                                  self.npc3],
+                                 self.npc3)
 
         # OPPONENT 1
         opp1_hand_size = len(self.ronda.player_cards[self.npc1]['hand'])
         opp1_active = self.ronda.current_player is self.npc1
-        self.opp1 = OpponentFrameVertical(self, self.npc1.image(), self.npc1.name(), opp1_active, opp1_hand_size)
+        self.opp1 = OpponentFrameVertical(self,
+                                          self.npc1.image(),
+                                          self.npc1.name(),
+                                          opp1_active,
+                                          opp1_hand_size)
         self.opp1.grid(row=1, column=0)
 
         # OPPONENT 2
         opp2_active = self.ronda.current_player is self.npc2
         opp2_hand_size = len(self.ronda.player_cards[self.npc2]['hand'])
-        self.opp2 = OpponentFrameHorizontal(self, self.npc2.image(), self.npc2.name(), opp2_active, opp2_hand_size)
+        self.opp2 = OpponentFrameHorizontal(self,
+                                            self.npc2.image(),
+                                            self.npc2.name(),
+                                            opp2_active,
+                                            opp2_hand_size)
         self.opp2.grid(row=0, column=1)
 
         # OPPONENT 3
         opp3_active = self.ronda.current_player is self.npc3
         opp3_hand_size = len(self.ronda.player_cards[self.npc3]['hand'])
-        self.opp3 = OpponentFrameVertical(self, self.npc3.image(), self.npc3.name(), opp3_active, opp3_hand_size)
+        self.opp3 = OpponentFrameVertical(self,
+                                          self.npc3.image(),
+                                          self.npc3.name(),
+                                          opp3_active,
+                                          opp3_hand_size)
         self.opp3.grid(row=1, column=2)
 
         # PLAYER
         myhand = self.ronda.player_cards[self.player]['hand']
         player_is_active = self.ronda.current_player is self.player
-        self.hud = PlayerFrame(self, self.player, myhand, player_is_active, self.play_hand)
+        self.hud = PlayerFrame(self,
+                               self.player,
+                               myhand,
+                               player_is_active,
+                               self.play_hand)
         self.hud.grid(row=2, column=0, columnspan=3)
 
         # TABLE
@@ -71,6 +92,7 @@ class GameFrame(tk.Frame):
         self.tbl.grid(row=1, column=1)
 
     def draw(self):
+        """Update all widgets on the frame"""
         self.selected_table_cards = []
 
         table_cards = self.ronda.current_mesa
@@ -118,9 +140,12 @@ class GameFrame(tk.Frame):
         """Callback function executed when player clicks the "Play Hand" button.
         """
         if self.ronda.current_player is self.player:
-            print(f'Attempting to play {hand_card} and pick up: {self.selected_table_cards}')
+            print(f'Attempting to play {hand_card} and \
+                pick up: {self.selected_table_cards}')
+
             if is_valid_pickup(hand_card, self.selected_table_cards):
-                self.ronda = self.ronda.play_turn(hand_card, self.selected_table_cards)
+                self.ronda = self.ronda.play_turn(hand_card,
+                                                  self.selected_table_cards)
                 self.draw()
                 self.play_next_move()
         else:
@@ -138,10 +163,11 @@ class GameFrame(tk.Frame):
     def _play_cpu_move(self):
         table_cards = self.ronda.current_mesa
         current_player = self.ronda.current_player
-        CUR_PLAYER_HAND = self.ronda.player_cards[current_player]['hand']
-        (OWN_CARD, MESA_CARDS) = self.ronda.current_player.get_move(CUR_PLAYER_HAND, table_cards)
+        cur_player_hand = self.ronda.player_cards[current_player]['hand']
+        (own_card, mesa_cards) = \
+            self.ronda.current_player.get_move(cur_player_hand, table_cards)
 
-        self.ronda = self.ronda.play_turn(OWN_CARD, MESA_CARDS)
-        print(f'CPU played: {OWN_CARD} -- {MESA_CARDS}')
+        self.ronda = self.ronda.play_turn(own_card, mesa_cards)
+        print(f'CPU played: {own_card} -- {mesa_cards}')
         self.draw()
         self.play_next_move()

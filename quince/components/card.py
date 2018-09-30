@@ -5,6 +5,7 @@ Each card has a number, and a suit or "palo".
 import os as os
 from PIL import Image
 
+
 class Card(object):
     """
     The Card object represents a Card.

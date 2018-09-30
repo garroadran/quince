@@ -8,6 +8,7 @@ from PIL import Image, ImageTk, ImageEnhance
 CARD_SIZE = (104, 160)
 CARD_PADX = 2
 
+
 class PlayerHand(tk.Frame):
     """
     Represents a frame on the UI where the user can see
@@ -42,7 +43,6 @@ class PlayerHand(tk.Frame):
                 self._display_card(card, column)
             except IndexError:
                 pass
-
 
     def _display_card(self, card, column):
 

@@ -38,7 +38,8 @@ class Table(tk.Frame):
     def selected_cards(self):
         """Return a list of cards that the user has selected.
         """
-        return [c for c in self.card_statuses if self.card_statuses[c].get() == 1]
+        return [c for c in self.card_statuses
+                if self.card_statuses[c].get() == 1]
 
     def _notify_selection_changed(self):
         """Uses the callback provided in the constructor to
@@ -67,7 +68,7 @@ class Table(tk.Frame):
                              variable=self.card_statuses[card],
                              command=self._notify_selection_changed,
                              indicatoron=False,
-                            )
+                             )
 
         btn.image = unselected_img
         btn.selected_image = selected_img

@@ -81,7 +81,8 @@ class Player(object):
 
         if not os.path.exists(path):
             # to do: replace with a proper stock image
-            path = os.path.join(os.getcwd(), 'quince/ui/assets/avatars/avatar01.png')
+            path = os.path.join(os.getcwd(),
+                                'quince/ui/assets/avatars/avatar01.png')
 
         return Image.open(path)
 

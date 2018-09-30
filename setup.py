@@ -14,4 +14,4 @@ setup(name='Quince',
       author_email='daniel.liberatori@gmail.com',
       url='http://www.danliberatori.com',
       packages=['quince', 'ui']
-     )
+      )

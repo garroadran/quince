@@ -8,9 +8,17 @@ import webbrowser
 
 LARGE_FONT = ("Helvetica", 18)
 
+
 class AboutFactory(object):
     """Builds an About window"""
     def generate(self, root):
+        """
+        Args:
+            root (tk widget)
+
+        Returns:
+            Tk Frame widget
+        """
         padx = 30
         pady = 10
 
@@ -22,7 +30,7 @@ class AboutFactory(object):
         appname = tk.Label(window,
                            text="Quince",
                            font=LARGE_FONT,
-                          )
+                           )
         appname.pack(pady=pady, padx=padx)
 
         version = tk.Label(window, text="Version:\t1.0 Release 1")
@@ -35,7 +43,7 @@ class AboutFactory(object):
                         text="www.danliberatori.com",
                         fg="blue",
                         cursor="hand2",
-                       )
+                        )
         link.pack(pady=pady, padx=padx)
         link.bind('<Button-1>', open_link)
 

@@ -4,3 +4,5 @@
 good-names=i,j,k,ex,Run,_,id
 
 max-parents=9
+
+max-line-length=79

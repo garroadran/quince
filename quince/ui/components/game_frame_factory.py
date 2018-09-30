@@ -4,6 +4,7 @@
 """
 from quince.ui.components.game_frame import GameFrame
 
+
 class GameFrameFactory(object):
     """Creates a GameFrame object.
     By passing this factory to the GameApp constructor,

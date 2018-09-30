@@ -2,6 +2,7 @@
 
 import tkinter as tk
 
+
 def select_all(event):
     """Select all callback for the Entry widget
 
@@ -11,6 +12,7 @@ def select_all(event):
     event.widget.select_range(0, 'end')
     event.widget.icursor('end')
     return "break"
+
 
 class ValidatingEntry(tk.Entry):
     """Base class for entry widgets that can be validated"""
@@ -41,7 +43,8 @@ class ValidatingEntry(tk.Entry):
         return False
 
     def _validator(self, value):
-        raise NotImplementedError("Subclasses must override the _validator method.")
+        raise NotImplementedError("Subclasses must override \
+                                   the _validator method.")
 
 
 # pylint: disable=no-member, access-member-before-definition

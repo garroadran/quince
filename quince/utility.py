@@ -42,7 +42,8 @@ class GridPosition(object):
         wraps around to the next row.
 
         Returns:
-            A tuple indicating the current position, after the increment (row, column)
+            A tuple indicating the current position,
+            after the increment (row, column)
         """
         if self.column == self.column_count - 1:
             self.column = 0

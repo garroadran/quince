@@ -8,10 +8,12 @@ from os.path import join
 from PIL import Image, ImageTk
 from quince.utility import GridPosition
 
+
 def get_files_from_dir(path):
     """Gets a list of the absolute paths of all the files in a
     specific directory. Does not traverse down the filetree"""
     return [f.path for f in scandir(path) if f.is_file]
+
 
 class AvatarPicker(tk.Toplevel):
     """A window widget that the user can use to
@@ -22,9 +24,9 @@ class AvatarPicker(tk.Toplevel):
     def __init__(self, root, callback, *args, **kwargs):
         tk.Toplevel.__init__(self, root, *args, **kwargs)
 
-        self.grid_rowconfigure(0, weight=0) # title
-        self.grid_rowconfigure(1, weight=1) # avatars
-        self.grid_rowconfigure(2, weight=0) # buttons
+        self.grid_rowconfigure(0, weight=0)  # title
+        self.grid_rowconfigure(1, weight=1)  # avatars
+        self.grid_rowconfigure(2, weight=0)  # buttons
 
         title = tk.Label(self, text="Select Avatar", font=("Helvetica", 12))
         title.grid(row=0, column=0, pady=15, padx=15)
@@ -51,7 +53,7 @@ class AvatarPicker(tk.Toplevel):
 
     def place_images(self, paths):
         """Creates a series of radio buttons with the images provided.
-        
+
         Args:
             paths (list of string) - Absolute paths to images to be used.
 

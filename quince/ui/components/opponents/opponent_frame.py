@@ -12,7 +12,12 @@ class OpponentFrameBase(tk.Frame):
         the opponent's status (how many cards they are holding,
         how many points they currently have, their name, etc.)
     """
-    def __init__(self, parent, avatar_image, player_name, is_active, hand_size):
+    def __init__(self,
+                 parent,
+                 avatar_image,
+                 player_name,
+                 is_active,
+                 hand_size):
         tk.Frame.__init__(self, parent)
 
         self.hand = OpponentHand(self, hand_size)
