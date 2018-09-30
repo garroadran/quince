@@ -6,27 +6,29 @@ import tkinter as tk
 class GameApp(tk.Tk):
     """Root tkinter window hosting the entire app.
     """
-    def __init__(self, GameFrameFactory, *args, **kwargs):
-        tk.Tk.__init__(self, *args, **kwargs)
+    def __init__(self, AboutFactory, TopMenuFactory):
+        tk.Tk.__init__(self)
         self.winfo_toplevel().title("Quince")
         self.minsize(800, 600)
 
-        self._build_menus()
-
-        container = tk.Frame(self)
-
-        container.pack(side="top", fill="both", expand=True)
-
-        container.grid_rowconfigure(0, weight=1)
-        container.grid_columnconfigure(0, weight=1)
+        self.container = tk.Frame(self)
+        self.container.pack(side="top", fill="both", expand=True)
+        self.container.grid_rowconfigure(0, weight=1)
+        self.container.grid_columnconfigure(0, weight=1)
 
         self.frames = {}
 
-        frame = GameFrameFactory.generate(container)
+        self.about_factory = AboutFactory
+        self.frames['TopMenu'] = TopMenuFactory.generate(self.container, self._start_new_game)
+        self.frames['TopMenu'].grid(row=0, column=0, sticky="nsew")
+
+        self._build_menus()
+        self.show_frame('TopMenu')
+
+    def _start_new_game(self, game_frame_factory):
+        frame = game_frame_factory.generate(self.container)
         self.frames['GameFrame'] = frame
-
         frame.grid(row=0, column=0, sticky="nsew")
-
         self.show_frame('GameFrame')
 
     def show_frame(self, controller):
@@ -50,7 +52,10 @@ class GameApp(tk.Tk):
         menubar.add_cascade(label="File", menu=filemenu)
 
         helpmenu = tk.Menu(menubar, tearoff=0)
-        helpmenu.add_command(label="About", command=self.quit)
+        helpmenu.add_command(label="About", command=self._show_about)
         menubar.add_cascade(label="Help", menu=helpmenu)
 
         self.config(menu=menubar)
+
+    def _show_about(self):
+        self.about_factory.generate(self)
