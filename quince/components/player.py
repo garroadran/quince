@@ -50,6 +50,8 @@ class Player(object):
 
         self._total_score = 0
 
+        self.image_path = f'quince/ui/assets/avatars/{self.name().lower()}.png'
+
     def __repr__(self):
         return f'Player, {self.name()}.'
 
@@ -69,11 +71,11 @@ class Player(object):
         Returns:
             PIL Image object
         """
-        path = os.path.join(os.getcwd(), f'quince/ui/assets/avatars/{self.name().lower()}.png')
+        path = os.path.join(os.getcwd(), self.image_path)
 
         if not os.path.exists(path):
             # to do: replace with a proper stock image
-            path = 'ui/assets/avatars/alice.png'
+            path = 'quince/ui/assets/avatars/alice.png'
 
         return Image.open(path)
 
