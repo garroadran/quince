@@ -3,11 +3,11 @@ The primary frame containing the content for the entire game
 """
 import tkinter as tk
 import random as random
-from ui.components.opponents.opponent_frame import OpponentFrameHorizontal, OpponentFrameVertical
-from ui.components.table.table import Table
-from ui.components.player.player_frame import PlayerFrame
 from quince.utility import is_valid_pickup
 from quince.ronda import Ronda
+from quince.ui.components.opponents.opponent_frame import OpponentFrameHorizontal, OpponentFrameVertical
+from quince.ui.components.table.table import Table
+from quince.ui.components.player.player_frame import PlayerFrame
 
 
 class GameFrame(tk.Frame):

@@ -69,7 +69,7 @@ class Player(object):
         Returns:
             PIL Image object
         """
-        path = os.path.join(os.getcwd(), f'ui/assets/avatars/{self.name().lower()}.png')
+        path = os.path.join(os.getcwd(), f'quince/ui/assets/avatars/{self.name().lower()}.png')
 
         if not os.path.exists(path):
             # to do: replace with a proper stock image

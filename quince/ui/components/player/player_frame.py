@@ -1,8 +1,8 @@
 import tkinter as tk
 import os
 from PIL import Image
-from ui.components.player.hand import PlayerHand
-from ui.components.common.avatar import PlayerAvatar
+from quince.ui.components.player.hand import PlayerHand
+from quince.ui.components.common.avatar import PlayerAvatar
 
 class PlayerFrame(tk.Frame):
     """

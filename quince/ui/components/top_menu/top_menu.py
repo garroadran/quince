@@ -1,6 +1,6 @@
 import tkinter as tk
-from ui.components.game_frame_factory import GameFrameFactory
 from quince.components import Player, NPC
+from quince.ui.components.game_frame_factory import GameFrameFactory
 
 class TopMenu(tk.Frame):
     def __init__(self, root, start_game):
@@ -24,7 +24,12 @@ class TopMenu(tk.Frame):
 
         self.start_game(game_frame_factory)
 
+
 class TopMenuFactory(object):
+    """Factory for the top menu object.
+    This factory gets injected into the main app so that
+    it can create a top menu at runtime and attach it to itself.
+    """
     def generate(self, root, start_game):
         """
         Args:

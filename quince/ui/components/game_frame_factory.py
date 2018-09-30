@@ -2,7 +2,7 @@
     Factory object that gets used to inject dependencies
     into the GameApp constructor.
 """
-from ui.components.game_frame import GameFrame
+from quince.ui.components.game_frame import GameFrame
 
 class GameFrameFactory(object):
     """Creates a GameFrame object.

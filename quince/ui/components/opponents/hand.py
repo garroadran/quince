@@ -35,7 +35,7 @@ class OpponentHand(tk.Frame):
     def refresh(self, number_of_cards):
         """Redraws the widget with the correct number of cards.
         """
-        relpath = f'ui/assets/opponent_hands/cards_{number_of_cards}.png'
+        relpath = f'quince/ui/assets/opponent_hands/cards_{number_of_cards}.png'
         image_path = os.path.join(os.getcwd(), relpath)
         image = Image.open(image_path)
         image.thumbnail((self.image_size, self.image_size), Image.ANTIALIAS)

@@ -2,8 +2,8 @@
 Classes used to display the status of an opponent on the game board.
 """
 import tkinter as tk
-from ui.components.common.avatar import PlayerAvatar
-from ui.components.opponents.hand import OpponentHand
+from quince.ui.components.common.avatar import PlayerAvatar
+from quince.ui.components.opponents.hand import OpponentHand
 
 
 class OpponentFrameBase(tk.Frame):
