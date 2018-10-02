@@ -61,7 +61,7 @@ class Pila(object):
             Dictionary of cards sorted by suit
         """
         return deepcopy(self._cards)
-
+    
     @property
     def escobas(self):
         """Returns the number of escobas the player has made

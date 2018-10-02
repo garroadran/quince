@@ -173,3 +173,39 @@ class TestRonda(unittest.TestCase):
         escobas = scores['escobas']
         self.assertTrue((bob, 1) in escobas)
         self.assertEqual(1, len(escobas))
+
+    def test_deal_next_hand(self):
+        """Player retains their pila when a new hand is dealt.
+        """
+        alice = Player('Alice')
+        bob = Player('Bob')
+
+        alice_cards = [Card(7, 'oro'), Card(8, 'oro')]
+
+        player_cards = {}
+        player_cards[alice] = {
+            'hand': [],
+            'pila': Pila().add(alice_cards)
+        }
+        player_cards[bob] = {
+            'hand': [],
+            'pila': Pila()
+        }
+
+        attributes = {
+            'current_player': bob,
+            'dealer': alice,
+            'deck': Deck(Card),
+            'last_pickup': alice,
+            'mesa': [],
+            'players': [alice, bob],
+            'player_cards': player_cards
+        }
+
+        ronda = Ronda(**attributes)
+        alice_pila = ronda._player_cards[alice]['pila']
+        alice_pila_cards = alice_pila.get_cards()
+        self.assertEqual(2, len(alice_pila_cards['oro']))
+        self.assertEqual(0, len(alice_pila_cards['copa']))
+        self.assertEqual(0, len(alice_pila_cards['espada']))
+        self.assertEqual(0, len(alice_pila_cards['basto']))

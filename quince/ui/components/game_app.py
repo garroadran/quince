@@ -7,7 +7,7 @@ import tkinter as tk
 class GameApp(tk.Tk):
     """Root tkinter window hosting the entire app.
     """
-    def __init__(self, AboutFactory, TopMenuFactory):
+    def __init__(self, AboutFactory, TopMenuFactory, ScoreReport):
         tk.Tk.__init__(self)
         self.winfo_toplevel().title("Quince")
         self.minsize(800, 600)
@@ -24,6 +24,9 @@ class GameApp(tk.Tk):
                                                          self._start_new_game)
         self.frames['TopMenu'].grid(row=0, column=0, sticky="nsew")
 
+        self.frames['scores'] = ScoreReport.generate(self.container)
+        self.frames['scores'].grid(row=0, column=0, sticky="nsew")
+
         self._build_menus()
         self.show_frame('TopMenu')
 
@@ -33,7 +36,8 @@ class GameApp(tk.Tk):
         if previous_game is not None:
             previous_game.destroy()
 
-        frame = game_frame_factory.generate(self.container)
+        frame = game_frame_factory.generate(self.container,
+                                            self.display_scores)
         self.frames['GameFrame'] = frame
         frame.grid(row=0, column=0, sticky="nsew")
         self.show_frame('GameFrame')
@@ -71,3 +75,9 @@ class GameApp(tk.Tk):
 
     def _show_about(self):
         self.about_factory.generate(self)
+
+    def display_scores(self, ronda):
+        """Updates and brings up the scores panel.
+        """
+        self.frames['scores'].update_scores(ronda)
+        self.show_frame('scores')

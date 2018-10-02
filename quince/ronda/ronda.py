@@ -156,6 +156,8 @@ class Ronda(object):
         # If the hand is done but there are still cards to be dealt
         elif self._hand_is_done:
             (player_cards, deck) = deal_to_players(self._players, self.deck)
+            for player in self._player_cards.keys():
+                 player_cards[player]['pila'] = self._player_cards[player]['pila']
             self._player_cards = player_cards
             self.deck = deck
 
@@ -214,7 +216,7 @@ class Ronda(object):
         Returns:
             Dictionary containing a "hand" and "pila" for each player key.
         """
-        return deepcopy(self._player_cards)
+        return self._player_cards
 
     @property
     def dealer(self):

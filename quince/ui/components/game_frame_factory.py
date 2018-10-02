@@ -18,10 +18,10 @@ class GameFrameFactory(object):
         self.npc2 = npc2
         self.npc3 = npc3
 
-    def generate(self, root):
+    def generate(self, root, callback):
         """Generates a GameFrame object whose parent Tk widget is 'root'.
 
         Args:
             root (Tk widget)
         """
-        return GameFrame(root, self.player, self.npc1, self.npc2, self.npc3)
+        return GameFrame(root, self.player, self.npc1, self.npc2, self.npc3, callback)

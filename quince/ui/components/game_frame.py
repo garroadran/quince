@@ -14,7 +14,7 @@ from quince.ui.components.player.player_frame import PlayerFrame
 class GameFrame(tk.Frame):
     """Tk frame containing the main gameplay display including
     cards, decks, and avatars."""
-    def __init__(self, parent, player, npc1, npc2, npc3):
+    def __init__(self, parent, player, npc1, npc2, npc3, display_scores):
         """Instantiate a new GameFrame
 
         Args:
@@ -23,8 +23,12 @@ class GameFrame(tk.Frame):
             npc1 (NPC) - Shadow player (opponent)
             npc2 (NPC) - Shadow player (opponent)
             npc3 (NPC) - Shadow player (opponent)
+            display_scores (function) - Callback to execute when
+            a ronda is finished
         """
         tk.Frame.__init__(self, parent)
+        self.parent = parent
+        self.display_scores = display_scores
 
         self.grid_rowconfigure(0, weight=1)
         self.grid_rowconfigure(1, weight=3)
@@ -137,10 +141,11 @@ class GameFrame(tk.Frame):
         self.selected_table_cards = cards
 
     def play_hand(self, hand_card):
-        """Callback function executed when player clicks the "Play Hand" button.
+        """Callback function executed when
+        player clicks the "Play Hand" button.
         """
         if self.ronda.current_player is self.player:
-            print(f'Attempting to play {hand_card} and \
+            print(f'Attempting to play {hand_card} and\
                 pick up: {self.selected_table_cards}')
 
             if is_valid_pickup(hand_card, self.selected_table_cards):
@@ -152,22 +157,29 @@ class GameFrame(tk.Frame):
             print("not your turn")
 
     def play_next_move(self):
-        """Play a card from the hand
+        """This function gets called continually as CPU players make
+        their moves. When it's the user's turn to play, the loop is
+        broken until they play their hand, which will start up the
+        cycle again.
         """
+        if self.ronda.is_finished:
+            self.display_scores(self.ronda)
+            return
+
         if self.ronda.current_player is self.player:
             pass
         else:
-            sleep_time = random.randrange(2, 4)
+            sleep_time = random.randrange(0, 1)
             self.after(sleep_time*1000, self._play_cpu_move)
 
     def _play_cpu_move(self):
         table_cards = self.ronda.current_mesa
         current_player = self.ronda.current_player
-        cur_player_hand = self.ronda.player_cards[current_player]['hand']
-        (own_card, mesa_cards) = \
-            self.ronda.current_player.get_move(cur_player_hand, table_cards)
+        hand = self.ronda.player_cards[current_player]['hand']
+        (own_card, mesa_cards) = current_player.get_move(hand, table_cards)
 
         self.ronda = self.ronda.play_turn(own_card, mesa_cards)
-        print(f'CPU played: {own_card} -- {mesa_cards}')
+        print(f'{current_player.name()}\
+            played: {own_card} and picked up: {mesa_cards}')
         self.draw()
         self.play_next_move()
