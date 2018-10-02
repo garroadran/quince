@@ -12,7 +12,6 @@ class CardScroll(tk.Frame):
     def __init__(self, parent, player_image, cards):
         tk.Frame.__init__(self, parent)
 
-
         player_image.thumbnail((65, 65), Image.ANTIALIAS)
         img = ImageTk.PhotoImage(player_image)
 

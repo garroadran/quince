@@ -24,4 +24,9 @@ class GameFrameFactory(object):
         Args:
             root (Tk widget)
         """
-        return GameFrame(root, self.player, self.npc1, self.npc2, self.npc3, callback)
+        return GameFrame(root,
+                         self.player,
+                         self.npc1,
+                         self.npc2,
+                         self.npc3,
+                         callback)

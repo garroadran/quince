@@ -5,6 +5,7 @@ Displays the scores earned during the round.
 import tkinter as tk
 from quince.ui.components.score_report.card_scroll import CardScroll
 
+
 class ScoreReport(tk.Frame):
     """Tk frame that shows scores after a ronda"""
     def __init__(self, root):

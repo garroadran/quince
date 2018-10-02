@@ -157,7 +157,8 @@ class Ronda(object):
         elif self._hand_is_done:
             (player_cards, deck) = deal_to_players(self._players, self.deck)
             for player in self._player_cards.keys():
-                 player_cards[player]['pila'] = self._player_cards[player]['pila']
+                player_cards[player]['pila'] = \
+                    self._player_cards[player]['pila']
             self._player_cards = player_cards
             self.deck = deck
 
