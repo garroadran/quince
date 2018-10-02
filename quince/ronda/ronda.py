@@ -101,7 +101,7 @@ def remove_cards_from_list(cards_to_remove, card_list):
     return [crd for crd in card_list if crd not in cards_to_remove]
 
 
-def add_cards_to_pila(player, player_cards, cards):
+def add_cards_to_pila(player, player_cards, cards, is_escoba):
     """Returns a copy of a player_cards dictionary but with a bunch of cards
     added on to a single player's pila.
 
@@ -114,7 +114,7 @@ def add_cards_to_pila(player, player_cards, cards):
         Copy of the player_cards dictionary.
     """
     new_dict = deepcopy(player_cards)
-    new_dict[player]['pila'] = new_dict[player]['pila'].add(cards)
+    new_dict[player]['pila'] = new_dict[player]['pila'].add(cards, is_escoba)
     return new_dict
 
 
@@ -150,7 +150,8 @@ class Ronda(object):
         if self.is_finished:
             self._player_cards = add_cards_to_pila(self._last_picked_up,
                                                    self._player_cards,
-                                                   self._mesa)
+                                                   self._mesa,
+                                                   False)
             self.mesa = []
 
         # If the hand is done but there are still cards to be dealt
@@ -277,9 +278,11 @@ class Ronda(object):
                                                      self._player_cards)
             new_mesa = remove_cards_from_list(mesa_cards,
                                               self.current_mesa)
+            is_escoba = True if not new_mesa else False
             new_player_cards = add_cards_to_pila(self.current_player,
                                                  new_player_cards,
-                                                 mesa_cards + [own_card])
+                                                 mesa_cards + [own_card],
+                                                 is_escoba)
             self._last_picked_up = self.current_player
 
         attributes = {

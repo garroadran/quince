@@ -67,6 +67,9 @@ class ScoreReport(tk.Frame):
         setenta = scores.get('setenta', "Score Error")
         self.setenta.config(text=setenta)
 
+        escobas = scores.get('escobas', 'Score Error')
+        self.escobas.config(text=escobas)
+
         # This will blow up when we try to update scores after
         # more than one ronda
         row = 6
@@ -75,7 +78,12 @@ class ScoreReport(tk.Frame):
             C = pila.get_cards()
             cards = C['oro'] + C['copa'] + C['espada'] + C['basto']
             scroll = CardScroll(self, player.image(), cards)
-            scroll.grid(row=row, column=0, columnspan=2, sticky="sew", pady=5)
+            scroll.grid(row=row,
+                        column=0,
+                        columnspan=2,
+                        sticky="sew",
+                        pady=10,
+                        padx=(35, 10))
             row += 1
 
     @staticmethod
