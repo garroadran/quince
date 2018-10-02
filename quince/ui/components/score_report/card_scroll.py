@@ -27,7 +27,9 @@ class CardScroll(tk.Frame):
         row = 0
         col = starting_col
 
-        midpoint = len(self.cards)//2
+        count = len(self.cards)
+        # this should restrict things to two lines in most cases
+        line_break_col = 8 if count < 17 else 12
 
         for card in self.cards:
             resized = card.image()
@@ -39,7 +41,7 @@ class CardScroll(tk.Frame):
             lbl.grid(row=row, column=col, sticky="we")
 
             # split over two lines if holding more than 14 cards
-            if midpoint > 7 and col >= 7:
+            if count > 14 and col >= line_break_col:
                 col = starting_col
                 row += 1
             else:
