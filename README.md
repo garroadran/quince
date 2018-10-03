@@ -26,7 +26,7 @@ The following procedure should get you up and running to either play the game or
 1. Fork the repository to your own GitHub account.
 2. Clone the repository to your local workstation (`git clone https://username.github.com/repository`)
 3. Set up a virtual environment (this step is not required but highly recommended. Read [this](https://docs.python-guide.org/dev/virtualenvs/)
-article to learn ) more about virtual environments in python.
+article to learn more about virtual environments in python.)
 4. Navigate to the main project directory. This is the same directory where you can find the `Makefile`.
 5. Run `make run` to start the graphical user interface.
 
