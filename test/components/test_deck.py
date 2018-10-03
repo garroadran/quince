@@ -9,11 +9,11 @@ class TestDeck(unittest.TestCase):
         self.assertEqual(40, len(deck.cards()))
 
         # Assert that there are no duplicate cards in the deck
-        deck_check = {'oro': [], 'espada': [], 'copa': [], 'basto': []}
+        deck_check = {"oro": [], "espada": [], "copa": [], "basto": []}
         for card in deck.cards():
             (number, palo) = card.info()
             if number in deck_check[palo]:
-                self.fail('Duplicate card in deck')
+                self.fail("Duplicate card in deck")
             else:
                 deck_check[palo].append(number)
 
@@ -21,7 +21,7 @@ class TestDeck(unittest.TestCase):
         for palo in deck_check:
             for i in range(1, 11):
                 if i not in deck_check[palo]:
-                    self.fail('Missing ' + str(i) + ' in ' + palo)
+                    self.fail("Missing " + str(i) + " in " + palo)
 
     def test_cards(self):
         """Returns a copy of the deck"""
@@ -45,14 +45,14 @@ class TestDeck(unittest.TestCase):
         """String representation"""
         d = Deck(Card)
         s = str(d)
-        self.assertTrue('40' in s)
+        self.assertTrue("40" in s)
 
     def test_repr(self):
         """String representation"""
         d = Deck(Card)
         d.deal(4)
         s = repr(d)
-        self.assertTrue('36' in s)
+        self.assertTrue("36" in s)
 
     def test_generate_clone(self):
         """Builds a clone of an existing deck, if one is passed."""

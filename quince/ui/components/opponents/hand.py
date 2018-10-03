@@ -38,7 +38,7 @@ class OpponentHand(tk.Frame):
         Args:
             card_count (int) - Number of cards currently in hand
         """
-        relpath = f'quince/ui/assets/opponent_hands/cards_{card_count}.png'
+        relpath = f"quince/ui/assets/opponent_hands/cards_{card_count}.png"
         image_path = os.path.join(os.getcwd(), relpath)
         image = Image.open(image_path)
         image.thumbnail((self.image_size, self.image_size), Image.ANTIALIAS)

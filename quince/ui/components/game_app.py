@@ -20,15 +20,15 @@ class GameApp(tk.Tk):
         self.frames = {}
 
         self.about_factory = AboutFactory
-        self.frames['TopMenu'] = TopMenuFactory.generate(self.container,
+        self.frames["TopMenu"] = TopMenuFactory.generate(self.container,
                                                          self._start_new_game)
-        self.frames['TopMenu'].grid(row=0, column=0, sticky="nsew")
+        self.frames["TopMenu"].grid(row=0, column=0, sticky="nsew")
 
-        self.frames['scores'] = ScoreReport.generate(self.container)
-        self.frames['scores'].grid(row=0, column=0, sticky="nsew")
+        self.frames["scores"] = ScoreReport.generate(self.container)
+        self.frames["scores"].grid(row=0, column=0, sticky="nsew")
 
         self._build_menus()
-        self.show_frame('TopMenu')
+        self.show_frame("TopMenu")
 
     def _start_new_game(self, game_frame_factory):
         previous_game = self.frames.get("GameFrame", None)
@@ -38,9 +38,9 @@ class GameApp(tk.Tk):
 
         frame = game_frame_factory.generate(self.container,
                                             self.display_scores)
-        self.frames['GameFrame'] = frame
+        self.frames["GameFrame"] = frame
         frame.grid(row=0, column=0, sticky="nsew")
-        self.show_frame('GameFrame')
+        self.show_frame("GameFrame")
 
     def show_frame(self, controller):
         """
@@ -70,7 +70,7 @@ class GameApp(tk.Tk):
         menubar.add_cascade(label="Help", menu=helpmenu)
 
         # probably unnecessary, but here for legacy compatibility
-        self.option_add('*tearOff', tk.FALSE)
+        self.option_add("*tearOff", tk.FALSE)
         self.config(menu=menubar)
 
     def _show_about(self):
@@ -79,5 +79,5 @@ class GameApp(tk.Tk):
     def display_scores(self, ronda):
         """Updates and brings up the scores panel.
         """
-        self.frames['scores'].update_scores(ronda)
-        self.show_frame('scores')
+        self.frames["scores"].update_scores(ronda)
+        self.show_frame("scores")

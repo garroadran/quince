@@ -9,8 +9,8 @@ def select_all(event):
     Args:
         event - Tkinter binding event
     """
-    event.widget.select_range(0, 'end')
-    event.widget.icursor('end')
+    event.widget.select_range(0, "end")
+    event.widget.icursor("end")
     return "break"
 
 

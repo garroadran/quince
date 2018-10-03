@@ -5,22 +5,22 @@ from quince.components import Card, Player, NPC
 class TestPlayer(unittest.TestCase):
     def test_id(self):
         """Initialize different players with different ids"""
-        a = Player('Alice')
-        b = Player('Alice')
+        a = Player("Alice")
+        b = Player("Alice")
         self.assertTrue(a.id + 1 == b.id)
 
     def test_name(self):
         """Getter for the player's name"""
-        alice = Player('Alice')
-        self.assertEqual('Alice', alice.name())
+        alice = Player("Alice")
+        self.assertEqual("Alice", alice.name())
 
     def test_total_score(self):
         """Getter for the player's score"""
-        alice = Player('Alice')
+        alice = Player("Alice")
         self.assertEqual(0, alice.total_score())
 
     def test_award_points(self):
-        p = Player('Alice')
+        p = Player("Alice")
         # Award 1 point by default
         p.award_points()
         self.assertEqual(1, p.total_score())
@@ -30,15 +30,15 @@ class TestPlayer(unittest.TestCase):
 
     def test_str(self):
         """String representation"""
-        p = Player('Annie')
+        p = Player("Annie")
         s = str(p)
-        self.assertTrue('Annie' in s)
+        self.assertTrue("Annie" in s)
 
     def test_repr(self):
         """String representation"""
-        p = Player('Billy')
+        p = Player("Billy")
         s = repr(p)
-        self.assertTrue('Billy' in s)
+        self.assertTrue("Billy" in s)
 
 
 class TestNPC(unittest.TestCase):
@@ -46,8 +46,8 @@ class TestNPC(unittest.TestCase):
         """Given a hand and a mesa,
         select which cards to play and what to pick up."""
         npc = NPC()
-        a = Card(5, 'oro')
-        b = Card(10, 'oro')
+        a = Card(5, "oro")
+        b = Card(10, "oro")
         hand = [a]
         mesa = [b]
         (from_hand, from_mesa) = npc.get_move(hand, mesa)
@@ -57,10 +57,10 @@ class TestNPC(unittest.TestCase):
     def test_get_move_no_choice(self):
         """Drop a card if there are no moves available."""
         npc = NPC()
-        a = Card(1, 'oro')
-        b = Card(1, 'basto')
-        c = Card(9, 'copa')
-        d = Card(8, 'espada')
+        a = Card(1, "oro")
+        b = Card(1, "basto")
+        c = Card(9, "copa")
+        d = Card(8, "espada")
         hand = [a]
         mesa = [b, c, d]
         (from_hand, from_mesa) = npc.get_move(hand, mesa)

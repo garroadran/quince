@@ -1,3 +1,8 @@
+"""
+
+Contains utility functions and classes used throughout project.
+"""
+
 def is_valid_pickup(player_card, mesa_cards):
     """Determines whether a move is valid.
 

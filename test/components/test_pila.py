@@ -6,29 +6,29 @@ class TestPila(unittest.TestCase):
     def test_add(self):
         """Add cards to the pila, and retrieve them"""
         pila = Pila()
-        card1 = Card(4, 'basto')
-        card2 = Card(6, 'basto')
-        card3 = Card(6, 'oro')
-        card4 = Card(1, 'espada')
+        card1 = Card(4, "basto")
+        card2 = Card(6, "basto")
+        card3 = Card(6, "oro")
+        card4 = Card(1, "espada")
 
         pila2 = pila.add([card1, card2])
         current_cards = pila2.get_cards()
-        self.assertEqual(2, len(current_cards['basto']))
-        self.assertEqual(0, len(current_cards['oro']))
-        self.assertEqual(0, len(current_cards['espada']))
-        self.assertEqual(0, len(current_cards['copa']))
+        self.assertEqual(2, len(current_cards["basto"]))
+        self.assertEqual(0, len(current_cards["oro"]))
+        self.assertEqual(0, len(current_cards["espada"]))
+        self.assertEqual(0, len(current_cards["copa"]))
 
         pila3 = pila2.add([card3, card4])
         current_cards = pila3.get_cards()
-        self.assertEqual(2, len(current_cards['basto']))
-        self.assertEqual(1, len(current_cards['oro']))
-        self.assertEqual(1, len(current_cards['espada']))
-        self.assertEqual(0, len(current_cards['copa']))
+        self.assertEqual(2, len(current_cards["basto"]))
+        self.assertEqual(1, len(current_cards["oro"]))
+        self.assertEqual(1, len(current_cards["espada"]))
+        self.assertEqual(0, len(current_cards["copa"]))
 
     def test_add_does_not_modify(self):
         """Returns a new pila, and does not modify the existing one"""
         pila1 = Pila()
-        card1 = Card(3, 'basto')
+        card1 = Card(3, "basto")
         pila2 = pila1.add([card1])
         self.assertEqual(0, pila1.total_cards())
         self.assertEqual(1, pila2.total_cards())
@@ -37,8 +37,8 @@ class TestPila(unittest.TestCase):
         pila = Pila()
         self.assertEqual(0, pila.escobas)
 
-        card1 = Card(7, 'oro')
-        card2 = Card(8, 'copa')
+        card1 = Card(7, "oro")
+        card2 = Card(8, "copa")
         pila2 = pila.add([card1, card2], True)
 
         self.assertEqual(1, pila2.escobas)
@@ -46,28 +46,28 @@ class TestPila(unittest.TestCase):
     def test_get_cards(self):
         """.get_cards() returns a copy of the dictionary"""
         pila = Pila()
-        card1 = Card(9, 'basto')
-        card2 = Card(6, 'basto')
-        card3 = Card(5, 'basto')
+        card1 = Card(9, "basto")
+        card2 = Card(6, "basto")
+        card3 = Card(5, "basto")
         pila2 = pila.add([card1, card2])
         cards = pila2.get_cards()
         # modifying the dictionary doesn't actually affect the pila
-        cards['basto'].append(card3)
+        cards["basto"].append(card3)
 
         pilaCards = pila2.get_cards()
-        self.assertEqual(2, len(pilaCards['basto']))
+        self.assertEqual(2, len(pilaCards["basto"]))
 
     def test_total_cards(self):
         """Counts the total number of cards the player has picked up."""
         pila = Pila()
         self.assertEqual(0, pila.total_cards())
 
-        card1 = Card(9, 'basto')
-        card2 = Card(6, 'basto')
-        card3 = Card(5, 'espada')
-        card4 = Card(1, 'oro')
-        card5 = Card(3, 'copa')
-        card6 = Card(5, 'espada')
+        card1 = Card(9, "basto")
+        card2 = Card(6, "basto")
+        card3 = Card(5, "espada")
+        card4 = Card(1, "oro")
+        card5 = Card(3, "copa")
+        card6 = Card(5, "espada")
         pila2 = pila.add([card1, card2])
         self.assertEqual(2, pila2.total_cards())
 
@@ -81,11 +81,11 @@ class TestPila(unittest.TestCase):
         """Counts the total number of oros collected by the player"""
         pila = Pila()
         self.assertEqual(0, pila.total_oros())
-        card1 = Card(9, 'basto')
-        card2 = Card(5, 'espada')
-        card3 = Card(1, 'oro')
-        card4 = Card(10, 'oro')
-        card5 = Card(10, 'copa')
+        card1 = Card(9, "basto")
+        card2 = Card(5, "espada")
+        card3 = Card(1, "oro")
+        card4 = Card(10, "oro")
+        card5 = Card(10, "copa")
         pila2 = pila.add([card1, card2])
         self.assertEqual(0, pila2.total_oros())
 
@@ -98,12 +98,12 @@ class TestPila(unittest.TestCase):
     def test_has_siete_de_velo(self):
         """Checks whether the 7 de velo is in the pile"""
         pila = Pila()
-        card1 = Card(9, 'basto')
-        card2 = Card(5, 'espada')
-        card3 = Card(1, 'oro')
-        card4 = Card(7, 'oro')
-        card5 = Card(8, 'oro')
-        card6 = Card(7, 'espada')
+        card1 = Card(9, "basto")
+        card2 = Card(5, "espada")
+        card3 = Card(1, "oro")
+        card4 = Card(7, "oro")
+        card5 = Card(8, "oro")
+        card6 = Card(7, "espada")
 
         pila2 = pila.add([card1, card2, card3])
         self.assertFalse(pila2.has_siete_de_velo())
@@ -115,11 +115,11 @@ class TestPila(unittest.TestCase):
         self.assertTrue(pila4.has_siete_de_velo())
 
     def test_best_setenta(self):
-        basto4 = Card(4, 'basto')
-        oro7 = Card(7, 'oro')
-        espada10 = Card(10, 'espada')
-        copa1 = Card(1, 'copa')
-        copa5 = Card(5, 'copa')
+        basto4 = Card(4, "basto")
+        oro7 = Card(7, "oro")
+        espada10 = Card(10, "espada")
+        copa1 = Card(1, "copa")
+        copa5 = Card(5, "copa")
 
         # Only one option
         pila1 = Pila()
@@ -137,12 +137,12 @@ class TestPila(unittest.TestCase):
         self.assertFalse(setenta)
 
     def test_best_setenta2(self):
-        basto4 = Card(4, 'basto')
-        oro7 = Card(7, 'oro')
-        oro4 = Card(4, 'oro')
-        espada10 = Card(10, 'espada')
-        copa1 = Card(1, 'copa')
-        copa5 = Card(5, 'copa')
+        basto4 = Card(4, "basto")
+        oro7 = Card(7, "oro")
+        oro4 = Card(4, "oro")
+        espada10 = Card(10, "espada")
+        copa1 = Card(1, "copa")
+        copa5 = Card(5, "copa")
 
         pila1 = Pila()
         pila2 = pila1.add([basto4, oro7, espada10, copa5, copa1])

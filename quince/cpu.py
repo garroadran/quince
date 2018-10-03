@@ -18,13 +18,13 @@ def enumerate_possibilities(mesa, hand):
 
     Example:
         >>> from quince.components.card import Card
-        >>> card1 = Card(1, 'oro')
-        >>> card2 = Card(9, 'espada')
-        >>> card3 = Card(2, 'oro')
-        >>> card4 = Card(4, 'copa')
-        >>> card5 = Card(3, 'copa')
-        >>> card6 = Card(2, 'basto')
-        >>> card7 = Card(5, 'espada')
+        >>> card1 = Card(1, "oro")
+        >>> card2 = Card(9, "espada")
+        >>> card3 = Card(2, "oro")
+        >>> card4 = Card(4, "copa")
+        >>> card5 = Card(3, "copa")
+        >>> card6 = Card(2, "basto")
+        >>> card7 = Card(5, "espada")
 
         >>> mesa = [card1, card2, card3, card4]
         >>> hand = [card5, card6, card7]
