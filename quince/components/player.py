@@ -20,7 +20,7 @@ class Player(object):
     internal_id = 0
     names_list = ['Alicia', 'Felipe', 'Mariana', 'Pepe', 'Juanita', 'Timoteo']
 
-    def __init__(self, name=None):
+    def __init__(self, name=None, image_path=None):
         """Instantiates a player for the game.
 
         The player is assigned an empty hand to start,
@@ -50,7 +50,8 @@ class Player(object):
 
         self._total_score = 0
 
-        self.image_path = f'quince/ui/assets/avatars/{self.name().lower()}.png'
+        default_img = f'quince/ui/assets/avatars/{self.name().lower()}.png'
+        self.image_path = default_img if image_path is None else image_path
 
     def __repr__(self):
         return f'Player, {self.name()}.'
