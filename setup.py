@@ -11,8 +11,23 @@ with open('README.md', 'r') as fh:
     long_description = fh.read()
 
 APP = ['quince/main.py']
-DATA_FILES = []
-OPTIONS = {'iconfile': '/home/dliberat/Documents/programming/python/quince/quince/assets/favicon.icns'}
+DATA_FILES = [('quince/assets', ['quince/assets/img']),
+             ('quince/ui/assets', ['quince/ui/assets/avatars']),
+             ('quince/ui/assets', ['quince/ui/assets/opponent_hands']),
+             ]
+OPTIONS = {'iconfile': 'quince/assets/favicon.icns'}
+PACKAGES = ['quince',
+            'quince.components',
+            'quince.ui',
+            'quince.ui.components',
+            'quince.ui.components.common',
+            'quince.ui.components.opponents',
+            'quince.ui.components.player',
+            'quince.ui.components.score_report',
+            'quince.ui.components.table',
+            'quince.ui.components.top_menu',
+            'quince.ronda',
+            ]
 
 setup(
     name='Quince',
@@ -27,4 +42,5 @@ setup(
     data_files=DATA_FILES,
     options={'py2app': OPTIONS},
     setup_requires=['py2app'],
+    packages=PACKAGES
 )

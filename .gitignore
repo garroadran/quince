@@ -2,6 +2,7 @@
 *.pyc
 .vscode
 .coverage
+.eggs
 coverage.xml
 __pycache__
 htmlcov
