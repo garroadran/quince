@@ -7,26 +7,26 @@ Usage:
 
 from setuptools import setup
 
-with open('README.md', 'r') as fh:
+with open("README.md", "r") as fh:
     long_description = fh.read()
 
-APP = ['quince/main.py']
-DATA_FILES = [('quince/assets', ['quince/assets/img']),
-              ('quince/ui/assets', ['quince/ui/assets/avatars']),
-              ('quince/ui/assets', ['quince/ui/assets/opponent_hands']),
+APP = ["quince/main.py"]
+DATA_FILES = [("quince/assets", ["quince/assets/img"]),
+              ("quince/ui/assets", ["quince/ui/assets/avatars"]),
+              ("quince/ui/assets", ["quince/ui/assets/opponent_hands"]),
               ]
-OPTIONS = {'iconfile': 'quince/assets/favicon.icns'}
-PACKAGES = ['quince',
-            'quince.components',
-            'quince.ui',
-            'quince.ui.components',
-            'quince.ui.components.common',
-            'quince.ui.components.opponents',
-            'quince.ui.components.player',
-            'quince.ui.components.score_report',
-            'quince.ui.components.table',
-            'quince.ui.components.top_menu',
-            'quince.ronda',
+OPTIONS = {"iconfile": "quince/assets/favicon.icns"}
+PACKAGES = ["quince",
+            "quince.components",
+            "quince.ui",
+            "quince.ui.components",
+            "quince.ui.components.common",
+            "quince.ui.components.opponents",
+            "quince.ui.components.player",
+            "quince.ui.components.score_report",
+            "quince.ui.components.table",
+            "quince.ui.components.top_menu",
+            "quince.ronda",
             ]
 
 version = {}
@@ -35,17 +35,17 @@ with open("version.py") as fp:
 VERSION = version["__version__"]
 
 setup(
-    name='Quince',
+    name="Quince",
     version=VERSION,
-    description='Classic Spanish card game.',
+    description="Classic Spanish card game.",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    author='Dan Liberatori',
-    author_email='daniel.liberatori@gmail.com',
-    url='http://www.danliberatori.com',
+    author="Dan Liberatori",
+    author_email="daniel.liberatori@gmail.com",
+    url="http://www.danliberatori.com",
     app=APP,
     data_files=DATA_FILES,
-    options={'py2app': OPTIONS},
-    setup_requires=['py2app'],
+    options={"py2app": OPTIONS},
+    setup_requires=["py2app"],
     packages=PACKAGES
 )
