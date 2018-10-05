@@ -97,7 +97,7 @@ class SetentaWinner(object):
         return self._points
 
     def __repr__(self):
-        return f'{self.player} has {self.points} setenta pts.'
+        return f"{self.player} has {self.points} setenta pts."
 
     def __str__(self):
-        return f'{self.player} has {self.points} setenta pts.'
+        return f"{self.player} has {self.points} setenta pts."

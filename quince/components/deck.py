@@ -37,7 +37,7 @@ class Deck(object):
         for i in range(0, 10):
             # Sotas, caballos, and reyes are represented
             # using their real value, not their face number
-            for suit in ['oro', 'basto', 'espada', 'copa']:
+            for suit in ["oro", "basto", "espada", "copa"]:
                 new_card = self._card_type(i + 1, suit)
                 self._cards.append(new_card)
 
@@ -45,10 +45,10 @@ class Deck(object):
         random.shuffle(self._cards)
 
     def __str__(self):
-        return f'Deck containing {len(self.cards())} Cards.'
+        return f"Deck containing {len(self.cards())} Cards."
 
     def __repr__(self):
-        return f'Deck containing {len(self.cards())} Cards.'
+        return f"Deck containing {len(self.cards())} Cards."
 
     def cards(self):
         """Returns a copy of the list of cards in the deck.
@@ -56,8 +56,8 @@ class Deck(object):
         return [x.clone() for x in self._cards]
 
     def deal(self, amount):
-        """Removes cards from the deck and returns a tuple containing a new deck
-        and the hand that was dealt.
+        """Removes cards from the deck and returns a tuple containing a new
+        deck and the hand that was dealt.
 
         Args:
             amount (int) -- Amount of cards to deal

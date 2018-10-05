@@ -98,10 +98,10 @@ class TopMenu(tk.Frame):
         user = Player(self.name_entry.get())
         user.image_path = self.avatar_path
 
-        path = os.path.join(os.getcwd(), 'quince/ui/assets/avatars')
-        npc1 = NPC('Roberto', f'{path}/avatar06.png')
-        npc2 = NPC('Gus', f'{path}/avatar08.png')
-        npc3 = NPC('Diana', f'{path}/avatar07.png')
+        path = os.path.join(os.getcwd(), "quince/ui/assets/avatars")
+        npc1 = NPC("Roberto", f"{path}/avatar06.png")
+        npc2 = NPC("Gus", f"{path}/avatar08.png")
+        npc3 = NPC("Diana", f"{path}/avatar07.png")
         game_frame_factory = GameFrameFactory(user, npc1, npc2, npc3)
 
         self.start_game(game_frame_factory)

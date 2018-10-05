@@ -20,7 +20,7 @@ class Card(object):
             suit (str) -- Card suit
         """
         if number < 1 or number > 10:
-            raise ValueError('Cards can only be between 1 and 10')
+            raise ValueError("Cards can only be between 1 and 10")
 
         self._number = number
         self.number = number
@@ -31,7 +31,7 @@ class Card(object):
         if img_num >= 8:
             img_num += 2
 
-        self._image = f'quince/assets/img/card_{suit}_{img_num}.png'
+        self._image = f"quince/assets/img/card_{suit}_{img_num}.png"
 
         setenta = [11.0, 4.0, 6.0, 8.0, 10.0, 14.0, 17.5, 1, 1, 1]
         self.points_setenta = setenta[number - 1]
@@ -64,5 +64,5 @@ class Card(object):
         return Card(self.number, self.suit)
 
     def __hash__(self):
-        hashable = f'{self.number}{self.suit}'
+        hashable = f"{self.number}{self.suit}"
         return hash(hashable)

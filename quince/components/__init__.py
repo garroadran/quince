@@ -12,7 +12,7 @@ as they collect cards on their turns.
 Player - A player of the game.
 """
 
-__all__ = ['Card', 'Deck', 'Pila', 'Player', 'NPC']
+__all__ = ["Card", "Deck", "Pila", "Player", "NPC"]
 
 from quince.components.card import Card
 from quince.components.deck import Deck

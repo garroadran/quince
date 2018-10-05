@@ -15,7 +15,7 @@ class CardScroll(tk.Frame):
         player_image.thumbnail((65, 65), Image.ANTIALIAS)
         img = ImageTk.PhotoImage(player_image)
 
-        img_label = tk.Label(self, image=img, relief='solid')
+        img_label = tk.Label(self, image=img, relief="solid")
         img_label.image = img
         img_label.grid(row=0, column=0, padx=10, sticky="we", rowspan=2)
 

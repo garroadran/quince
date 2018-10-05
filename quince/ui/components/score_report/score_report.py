@@ -55,28 +55,28 @@ class ScoreReport(tk.Frame):
     def update_scores(self, ronda):
         scores = ronda.calculate_scores()
 
-        siete = scores.get('7_de_velo', "Score Error")
+        siete = scores.get("7_de_velo", "Score Error")
         self.siete.config(text=siete)
 
-        most_cards = scores.get('most_cards', "Score Error")
+        most_cards = scores.get("most_cards", "Score Error")
         self.most_cards.config(text=most_cards)
 
-        most_oros = scores.get('most_oros', "Score Error")
+        most_oros = scores.get("most_oros", "Score Error")
         self.most_oros.config(text=most_oros)
 
-        setenta = scores.get('setenta', "Score Error")
+        setenta = scores.get("setenta", "Score Error")
         self.setenta.config(text=setenta)
 
-        escobas = scores.get('escobas', 'Score Error')
+        escobas = scores.get("escobas", "Score Error")
         self.escobas.config(text=escobas)
 
         # This will blow up when we try to update scores after
         # more than one ronda
         row = 6
         for player in ronda.player_cards:
-            pila = ronda.player_cards[player]['pila']
+            pila = ronda.player_cards[player]["pila"]
             C = pila.get_cards()
-            cards = C['oro'] + C['copa'] + C['espada'] + C['basto']
+            cards = C["oro"] + C["copa"] + C["espada"] + C["basto"]
             scroll = CardScroll(self, player.image(), cards)
             scroll.grid(row=row,
                         column=0,
