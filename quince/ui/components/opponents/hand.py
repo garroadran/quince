@@ -27,10 +27,39 @@ class OpponentHand(tk.Frame):
         tk.Frame.__init__(self, parent)
 
         self.image_size = size
-
+        self.card_count = number_of_cards
         self.label = tk.Label(self)
         self.label.pack()
         self.refresh(number_of_cards)
+
+    def _get_card_backs_image(self):
+        path = f"quince/ui/assets/opponent_hands/cards_{self.card_count}.png"
+        image_path = os.path.join(os.getcwd(), path)
+        image = Image.open(image_path)
+        image.thumbnail((self.image_size, self.image_size), Image.ANTIALIAS)
+        return image
+
+    def _overlay_images(self, layer1, layer2):
+        final = Image.new("RGBA", layer1.size)
+        final = Image.alpha_composite(final, layer1)
+        final = Image.alpha_composite(final, layer2)
+        return final
+
+    def flash_card(self, card):
+        self.card_count -= 1
+        card_backs = self._get_card_backs_image()
+
+        card_base = Image.new("RGBA", card_backs.size)
+
+        card_face = card.image().copy()
+        resize = (card_base.size[0] * 0.9, card_base.size[1] * 0.9)
+        card_face.thumbnail(resize, Image.ANTIALIAS)
+        card_base.paste(card_face, (20, 8))
+
+        overlayed = self._overlay_images(card_backs, card_base)
+        final = ImageTk.PhotoImage(overlayed)
+        self.label.config(image=final)
+        self.image = final
 
     def refresh(self, card_count):
         """Redraws the widget with the correct number of cards.
@@ -38,11 +67,10 @@ class OpponentHand(tk.Frame):
         Args:
             card_count (int) - Number of cards currently in hand
         """
-        relpath = f"quince/ui/assets/opponent_hands/cards_{card_count}.png"
-        image_path = os.path.join(os.getcwd(), relpath)
-        image = Image.open(image_path)
-        image.thumbnail((self.image_size, self.image_size), Image.ANTIALIAS)
-        card_backs = ImageTk.PhotoImage(image)
+        self.card_count = card_count
+        backs = self._get_card_backs_image()
+        backs = self._overlay_images(backs, backs)
+        card_backs = ImageTk.PhotoImage(backs)
 
         self.label.config(image=card_backs)
         self.image = card_backs  # hold on to the reference

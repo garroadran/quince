@@ -35,6 +35,9 @@ class OpponentFrameBase(tk.Frame):
         self.hand.refresh(hand_size)
         self.avatar.refresh(is_active)
 
+    def flash_card(self, card):
+        self.hand.flash_card(card)
+
     def _place_elements(self):
         raise NotImplementedError("Subclasses must override this method.")
 

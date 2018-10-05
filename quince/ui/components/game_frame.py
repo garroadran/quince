@@ -169,7 +169,7 @@ class GameFrame(tk.Frame):
         if self.ronda.current_player is self.player:
             pass
         else:
-            sleep_time = random.randrange(0, 1)
+            sleep_time = random.randrange(0, 2)
             self.after(sleep_time*1000, self._play_cpu_move)
 
     def _play_cpu_move(self):
@@ -179,7 +179,19 @@ class GameFrame(tk.Frame):
         (own_card, mesa_cards) = current_player.get_move(hand, table_cards)
 
         self.ronda = self.ronda.play_turn(own_card, mesa_cards)
-        print(f"{current_player.name()}\
-            played: {own_card} and picked up: {mesa_cards}")
+        print(f"{current_player.name()} played: {own_card} "
+              "and picked up: {mesa_cards}")
+
+        # Yuck!
+        if current_player is self.npc1:
+            self.opp1.flash_card(own_card)
+        elif current_player is self.npc2:
+            self.opp2.flash_card(own_card)
+        elif current_player is self.npc3:
+            self.opp3.flash_card(own_card)
+
+        self.after(1600, self._finish_turn)
+
+    def _finish_turn(self):
         self.draw()
         self.play_next_move()
