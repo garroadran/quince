@@ -51,7 +51,7 @@ class GameFrame(tk.Frame):
                                  self.npc3)
 
         # OPPONENT 1
-        opp1_hand_size = len(self.ronda.player_cards[self.npc1]['hand'])
+        opp1_hand_size = len(self.ronda.player_cards[self.npc1]["hand"])
         opp1_active = self.ronda.current_player is self.npc1
         self.opp1 = OpponentFrameVertical(self,
                                           self.npc1.image(),
@@ -62,7 +62,7 @@ class GameFrame(tk.Frame):
 
         # OPPONENT 2
         opp2_active = self.ronda.current_player is self.npc2
-        opp2_hand_size = len(self.ronda.player_cards[self.npc2]['hand'])
+        opp2_hand_size = len(self.ronda.player_cards[self.npc2]["hand"])
         self.opp2 = OpponentFrameHorizontal(self,
                                             self.npc2.image(),
                                             self.npc2.name(),
@@ -72,7 +72,7 @@ class GameFrame(tk.Frame):
 
         # OPPONENT 3
         opp3_active = self.ronda.current_player is self.npc3
-        opp3_hand_size = len(self.ronda.player_cards[self.npc3]['hand'])
+        opp3_hand_size = len(self.ronda.player_cards[self.npc3]["hand"])
         self.opp3 = OpponentFrameVertical(self,
                                           self.npc3.image(),
                                           self.npc3.name(),
@@ -81,7 +81,7 @@ class GameFrame(tk.Frame):
         self.opp3.grid(row=1, column=2)
 
         # PLAYER
-        myhand = self.ronda.player_cards[self.player]['hand']
+        myhand = self.ronda.player_cards[self.player]["hand"]
         player_is_active = self.ronda.current_player is self.player
         self.hud = PlayerFrame(self,
                                self.player,
@@ -103,22 +103,22 @@ class GameFrame(tk.Frame):
         current_player = self.ronda.current_player
 
         # OPPONENT 1
-        opp1_hand_size = len(self.ronda.player_cards[self.npc1]['hand'])
+        opp1_hand_size = len(self.ronda.player_cards[self.npc1]["hand"])
         opp1_active = self.ronda.current_player is self.npc1
         self.opp1.refresh(opp1_hand_size, opp1_active)
 
         # OPPONENT 2
         opp2_active = current_player is self.npc2
-        opp2_hand_size = len(self.ronda.player_cards[self.npc2]['hand'])
+        opp2_hand_size = len(self.ronda.player_cards[self.npc2]["hand"])
         self.opp2.refresh(opp2_hand_size, opp2_active)
 
         # OPPONENT 3
         opp3_active = current_player is self.npc3
-        opp3_hand_size = len(self.ronda.player_cards[self.npc3]['hand'])
+        opp3_hand_size = len(self.ronda.player_cards[self.npc3]["hand"])
         self.opp3.refresh(opp3_hand_size, opp3_active)
 
         # PLAYER
-        myhand = self.ronda.player_cards[self.player]['hand']
+        myhand = self.ronda.player_cards[self.player]["hand"]
         player_is_active = current_player is self.player
         self.hud.refresh(myhand, player_is_active)
 
@@ -145,8 +145,8 @@ class GameFrame(tk.Frame):
         player clicks the "Play Hand" button.
         """
         if self.ronda.current_player is self.player:
-            print(f'Attempting to play {hand_card} and\
-                pick up: {self.selected_table_cards}')
+            print(f"Attempting to play {hand_card} and\
+                pick up: {self.selected_table_cards}")
 
             if is_valid_pickup(hand_card, self.selected_table_cards):
                 self.ronda = self.ronda.play_turn(hand_card,
@@ -175,11 +175,11 @@ class GameFrame(tk.Frame):
     def _play_cpu_move(self):
         table_cards = self.ronda.current_mesa
         current_player = self.ronda.current_player
-        hand = self.ronda.player_cards[current_player]['hand']
+        hand = self.ronda.player_cards[current_player]["hand"]
         (own_card, mesa_cards) = current_player.get_move(hand, table_cards)
 
         self.ronda = self.ronda.play_turn(own_card, mesa_cards)
-        print(f'{current_player.name()}\
-            played: {own_card} and picked up: {mesa_cards}')
+        print(f"{current_player.name()}\
+            played: {own_card} and picked up: {mesa_cards}")
         self.draw()
         self.play_next_move()

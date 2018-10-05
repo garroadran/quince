@@ -18,7 +18,7 @@ class Player(object):
     """
 
     internal_id = 0
-    names_list = ['Alicia', 'Felipe', 'Mariana', 'Pepe', 'Juanita', 'Timoteo']
+    names_list = ["Alicia", "Felipe", "Mariana", "Pepe", "Juanita", "Timoteo"]
 
     def __init__(self, name=None, image_path=None):
         """Instantiates a player for the game.
@@ -50,14 +50,14 @@ class Player(object):
 
         self._total_score = 0
 
-        default_img = f'quince/ui/assets/avatars/{self.name().lower()}.png'
+        default_img = f"quince/ui/assets/avatars/{self.name().lower()}.png"
         self.image_path = default_img if image_path is None else image_path
 
     def __repr__(self):
-        return f'Player, {self.name()}.'
+        return f"Player, {self.name()}."
 
     def __str__(self):
-        return f'Player, {self.name()}.'
+        return f"Player, {self.name()}."
 
     @property
     def id(self):
@@ -76,14 +76,14 @@ class Player(object):
 
         # fallback in case a relative path was passed in
         if not os.path.exists(path):
-            print('WARNING: Passing relative paths is deprecated \
-                  and will cause errors in future releases.')
+            print("WARNING: Passing relative paths is deprecated \
+                  and will cause errors in future releases.")
             path = os.path.join(os.getcwd(), self.image_path)
 
         if not os.path.exists(path):
             # to do: replace with a proper stock image
             path = os.path.join(os.getcwd(),
-                                'quince/ui/assets/avatars/avatar01.png')
+                                "quince/ui/assets/avatars/avatar01.png")
 
         return Image.open(path)
 

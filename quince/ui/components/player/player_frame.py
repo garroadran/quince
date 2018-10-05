@@ -64,7 +64,7 @@ class PlayerFrame(tk.Frame):
         """
         self.avatar.refresh(is_active)
 
-        btn_state = 'normal' if is_active else 'disabled'
+        btn_state = "normal" if is_active else "disabled"
         self.play_hand_btn.config(state=btn_state)
 
         self.p_hand.destroy()

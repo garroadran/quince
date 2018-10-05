@@ -34,7 +34,7 @@ class PlayerAvatar(tk.Frame):
         image.thumbnail((65, 65), Image.ANTIALIAS)
         img = ImageTk.PhotoImage(image)
 
-        self.img_label = tk.Label(self, image=img, relief='solid')
+        self.img_label = tk.Label(self, image=img, relief="solid")
         self.img_label.image = img  # hold on to the reference
 
         self.label = tk.Label(self, text=player_name)

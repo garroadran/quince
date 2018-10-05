@@ -45,7 +45,7 @@ class AboutFactory(object):
                         cursor="hand2",
                         )
         link.pack(pady=pady, padx=padx)
-        link.bind('<Button-1>', open_link)
+        link.bind("<Button-1>", open_link)
 
         ok_btn = tk.Button(window, text="Close", command=window.destroy)
         ok_btn.pack(pady=15, padx=padx)

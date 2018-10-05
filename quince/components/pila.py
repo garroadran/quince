@@ -26,7 +26,7 @@ class Pila(object):
             cards -- Dictionary of cards with which to instantiate the pile
         """
         if cards is None:
-            self._cards = {'oro': [], 'basto': [], 'espada': [], 'copa': []}
+            self._cards = {"oro": [], "basto": [], "espada": [], "copa": []}
         else:
             self._cards = deepcopy(cards)
 
@@ -94,7 +94,7 @@ class Pila(object):
     def has_siete_de_velo(self):
         """Returns True if the pila contains the 7 of oro
         """
-        for card in self._cards['oro']:
+        for card in self._cards["oro"]:
             if card.info()[0] == 7:
                 return True
 
@@ -112,4 +112,4 @@ class Pila(object):
     def total_oros(self):
         """Returns the total number of oros that the user has picked up.
         """
-        return len(self._cards['oro'])
+        return len(self._cards["oro"])
