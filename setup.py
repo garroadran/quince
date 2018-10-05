@@ -12,9 +12,9 @@ with open('README.md', 'r') as fh:
 
 APP = ['quince/main.py']
 DATA_FILES = [('quince/assets', ['quince/assets/img']),
-             ('quince/ui/assets', ['quince/ui/assets/avatars']),
-             ('quince/ui/assets', ['quince/ui/assets/opponent_hands']),
-             ]
+              ('quince/ui/assets', ['quince/ui/assets/avatars']),
+              ('quince/ui/assets', ['quince/ui/assets/opponent_hands']),
+              ]
 OPTIONS = {'iconfile': 'quince/assets/favicon.icns'}
 PACKAGES = ['quince',
             'quince.components',
@@ -29,9 +29,14 @@ PACKAGES = ['quince',
             'quince.ronda',
             ]
 
+version = {}
+with open("version.py") as fp:
+    exec(fp.read(), version)
+VERSION = version["__version__"]
+
 setup(
     name='Quince',
-    version='1.0',
+    version=VERSION,
     description='Classic Spanish card game.',
     long_description=long_description,
     long_description_content_type="text/markdown",
