@@ -4,7 +4,7 @@ The primary frame containing the content for the entire game
 import tkinter as tk
 import random as random
 from quince.utility import is_valid_pickup
-from quince.components.ronda import Ronda
+from quince.components import Ronda
 from quince.ui.opponents.opponent_frame \
     import OpponentFrameHorizontal, OpponentFrameVertical
 from quince.ui.table.table import Table
@@ -167,15 +167,13 @@ class GameFrame(tk.Frame):
         """Callback function executed when
         player clicks the "Play Hand" button.
         """
-        if self.ronda.current_player is self.player:
-            print(f"Attempting to play {hand_card} and\
-                pick up: {self.selected_table_cards}")
-
-            if is_valid_pickup(hand_card, self.selected_table_cards):
-                self.ronda = self.ronda.play_turn(hand_card,
-                                                  self.selected_table_cards)
-                self.draw()
-                self.play_next_move()
+        player = self.ronda.current_player
+        valid = is_valid_pickup(hand_card, self.selected_table_cards)
+        if player is self.player and valid:
+            self.ronda = self.ronda.play_turn(hand_card,
+                                              self.selected_table_cards)
+            self.draw()
+            self.play_next_move()
         else:
             print("not your turn")
 
