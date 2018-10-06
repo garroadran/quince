@@ -103,8 +103,7 @@ class Player(object):
 class NPC(Player):
     """A computer player"""
 
-    @staticmethod
-    def get_move(hand, mesa):
+    def get_move(self, hand, mesa):
         """Select a move for the NPC to make.
 
         Args:
