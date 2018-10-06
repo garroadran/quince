@@ -44,11 +44,16 @@ class GameFrame(tk.Frame):
         self.player = player
         self.selected_table_cards = []
 
-        self.ronda = Ronda.start([self.player,
-                                  self.npc1,
-                                  self.npc2,
-                                  self.npc3],
-                                 self.npc3)
+        self.scores = {
+            player: 0,
+            npc1: 0,
+            npc2: 0,
+            npc3: 0,
+        }
+
+        self.dealer = self.npc2
+        self.ronda = None
+        self.start_new_ronda()
 
         # OPPONENT 1
         opp1_hand_size = len(self.ronda.player_cards[self.npc1]["hand"])
@@ -94,6 +99,24 @@ class GameFrame(tk.Frame):
         table_cards = self.ronda.current_mesa
         self.tbl = Table(self, table_cards, self.register_table_card_selection)
         self.tbl.grid(row=1, column=1)
+
+    def start_new_ronda(self):
+        """Initialize a new round of gameplay."""
+        # This is disgusting
+        if self.dealer is self.player:
+            self.dealer = self.npc1
+        elif self.dealer is self.npc1:
+            self.dealer = self.npc2
+        elif self.dealer is self.npc2:
+            self.dealer = self.npc3
+        elif self.dealer is self.npc3:
+            self.dealer = self.player
+
+        self.ronda = Ronda.start([self.player,
+                                  self.npc1,
+                                  self.npc2,
+                                  self.npc3],
+                                 self.dealer)
 
     def draw(self):
         """Update all widgets on the frame"""
@@ -163,14 +186,15 @@ class GameFrame(tk.Frame):
         cycle again.
         """
         if self.ronda.is_finished:
-            self.display_scores(self.ronda)
+            self.update_scores()
+            self.display_scores(self.ronda, self.scores)
             return
 
         if self.ronda.current_player is self.player:
             pass
         else:
-            sleep_time = random.randrange(0, 2)
-            self.after(sleep_time*1000, self._play_cpu_move)
+            sleep_time = random.randrange(1, 3)
+            self.after(sleep_time*700, self._play_cpu_move)
 
     def _play_cpu_move(self):
         table_cards = self.ronda.current_mesa
@@ -179,8 +203,6 @@ class GameFrame(tk.Frame):
         (own_card, mesa_cards) = current_player.get_move(hand, table_cards)
 
         self.ronda = self.ronda.play_turn(own_card, mesa_cards)
-        print(f"{current_player.name()} played: {own_card} "
-              "and picked up: {mesa_cards}")
 
         # Yuck!
         if current_player is self.npc1:
@@ -195,3 +217,32 @@ class GameFrame(tk.Frame):
     def _finish_turn(self):
         self.draw()
         self.play_next_move()
+
+    def update_scores(self):
+        """Updates the total scores for the game.
+
+        Args:
+            scores - Dictionary whose keys are players and
+            whose values are the number of points to be added to
+            their total scores.
+        """
+        scores = self.ronda.calculate_scores()
+        siete = scores.get("7_de_velo", "Score Error")
+        self.scores[siete] += 1
+
+        (most_cards, _) = scores.get("most_cards", ([], None))
+        for player in most_cards:
+            self.scores[player] += 1
+
+        (most_oros, _) = scores.get("most_oros", ([], None))
+        for player in most_oros:
+            self.scores[player] += 1
+
+        setenta = scores.get("setenta", [])
+        for winner in setenta:
+            self.scores[winner.player] += 1
+
+        escobas = scores.get("escobas", [])
+        for escoba in escobas:
+            (player, count) = escoba
+            self.scores[player] += count

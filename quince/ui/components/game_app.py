@@ -24,17 +24,18 @@ class GameApp(tk.Tk):
                                                          self._start_new_game)
         self.frames["TopMenu"].grid(row=0, column=0, sticky="nsew")
 
-        self.frames["scores"] = ScoreReport.generate(self.container)
+        self.frames["scores"] = ScoreReport.generate(self.container,
+                                                     self.start_next_round)
         self.frames["scores"].grid(row=0, column=0, sticky="nsew")
 
         self._build_menus()
         self.show_frame("TopMenu")
 
     def _start_new_game(self, game_frame_factory):
-        previous_game = self.frames.get("GameFrame", None)
+        dummy = tk.Frame(self)
+        previous_game = self.frames.get("GameFrame", dummy)
 
-        if previous_game is not None:
-            previous_game.destroy()
+        previous_game.destroy()
 
         frame = game_frame_factory.generate(self.container,
                                             self.display_scores)
@@ -42,19 +43,30 @@ class GameApp(tk.Tk):
         frame.grid(row=0, column=0, sticky="nsew")
         self.show_frame("GameFrame")
 
-    def show_frame(self, controller):
-        """
-            Raises a frame to the top of the view.
+    def start_next_round(self):
+        """Brings up the current game frame, initializing a new round."""
+        frame = self.frames.get("GameFrame", None)
+
+        if frame is None:
+            print("Error! Attempting to start new round "
+                  "with nonexistent game.")
+            return
+
+        frame.start_new_ronda()
+        self.show_frame("GameFrame")
+        frame.draw()
+        frame.play_next_move()
+
+    def show_frame(self, key):
+        """Raises a frame to the top of the view.
 
         Args:
-            controller - tk frame to raise to the top of the view
+            key (string) - Dictionary key for the frame to raise
         """
-        frame = self.frames[controller]
-        frame.tkraise()
+        self.frames[key].tkraise()
 
     def _build_menus(self):
-        """
-            Generates the file menu, etc.
+        """Generates the file menu, etc.
         """
         menubar = tk.Menu(self)
 
@@ -76,8 +88,8 @@ class GameApp(tk.Tk):
     def _show_about(self):
         self.about_factory.generate(self)
 
-    def display_scores(self, ronda):
+    def display_scores(self, ronda, updated_scores):
         """Updates and brings up the scores panel.
         """
-        self.frames["scores"].update_scores(ronda)
+        self.frames["scores"].update_scores(ronda, updated_scores)
         self.show_frame("scores")

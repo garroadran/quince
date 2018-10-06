@@ -107,7 +107,7 @@ class Player(object):
 
     def __hash__(self):
         """Hash function for the player object"""
-        return hash(self._name) * self.id
+        return hash(self.id)
 
     def __eq__(self, other):
         """Evaluates two players as equal if they share the same id"""

@@ -3,76 +3,142 @@ Tkinter frame shown when a ronda finishes.
 Displays the scores earned during the round.
 """
 import tkinter as tk
+from os.path import join
+from os import getcwd
+from PIL import Image, ImageTk
 from quince.ui.components.score_report.card_scroll import CardScroll
+
+
+IMG_ROOT = join(getcwd(), "quince/assets/scores")
+
+
+def load_image(file_name):
+    """Returns a png image as a PhotoImage object"""
+    path = join(IMG_ROOT, file_name)
+    img = Image.open(path)
+    return ImageTk.PhotoImage(img)
+
+
+class ScoreSummary(tk.Frame):
+    """Shows who earned points in each category"""
+    def __init__(self, root):
+        tk.Frame.__init__(self, root)
+
+        for r in range(0, 10):
+            self.grid_columnconfigure(r, weight=1)
+
+        padx = (24, 4)
+
+        img = load_image("cards.png")
+        cards = tk.Label(self, image=img)
+        cards.img = img
+        cards.grid(row=0, column=0, padx=padx, sticky="nsew")
+        self.cards = tk.Label(self, text="Winners")
+        self.cards.grid(row=0, column=1, sticky="nsew")
+
+        img = load_image("oros.png")
+        oros = tk.Label(self, image=img)
+        oros.img = img
+        oros.grid(row=0, column=2, padx=padx, sticky="nsew")
+        self.oros = tk.Label(self, text="Oros winners")
+        self.oros.grid(row=0, column=3, sticky="nsew")
+
+        img = load_image("siete.png")
+        siete = tk.Label(self, image=img)
+        siete.img = img
+        siete.grid(row=0, column=4, padx=padx, sticky="nsew")
+        self.siete = tk.Label(self, text="7 winner")
+        self.siete.grid(row=0, column=5, sticky="nsew")
+
+        img = load_image("setenta.png")
+        setenta = tk.Label(self, image=img)
+        setenta.img = img
+        setenta.grid(row=0, column=6, padx=padx, sticky="nsew")
+        self.setenta = tk.Label(self, text="7a winners")
+        self.setenta.grid(row=0, column=7, sticky="nsew")
+
+        img = load_image("escobas.png")
+        escobas = tk.Label(self, image=img)
+        escobas.img = img
+        escobas.grid(row=0, column=8, padx=padx, sticky="nsew")
+        self.escobas = tk.Label(self, text="escobas winners")
+        self.escobas.grid(row=0, column=9, sticky="nsew")
+
+    def set_winners(self, cards, oros, siete, setenta, escobas):
+        """Updates the text on the labels for each of the
+        score categories.
+
+        Args:
+            cards, oros, siete, setenta escobas
+            -- Strings to display on their respoective labels
+        """
+        self.cards.config(text=cards)
+        self.oros.config(text=oros)
+        self.siete.config(text=siete)
+        self.setenta.config(text=setenta)
+        self.escobas.config(text=escobas)
 
 
 class ScoreReport(tk.Frame):
     """Tk frame that shows scores after a ronda"""
-    def __init__(self, root):
+    def __init__(self, root, callback):
+        """Instantiates a ScoreReport frame.
+
+        Args:
+            root (tk widget) - parent container
+            callback (function) - Function to execute
+            when clicking the "Next Round" button.
+        """
         tk.Frame.__init__(self, root)
 
-        self.grid_rowconfigure(0, weight=2)
+        self.grid_rowconfigure(0, weight=1)
         self.grid_rowconfigure(1, weight=1)
-        self.grid_rowconfigure(2, weight=1)
-        self.grid_rowconfigure(3, weight=1)
-        self.grid_rowconfigure(4, weight=1)
-        self.grid_rowconfigure(5, weight=1)
-        self.grid_rowconfigure(6, weight=0)
-        self.grid_rowconfigure(7, weight=0)
-        self.grid_rowconfigure(8, weight=0)
-        self.grid_rowconfigure(9, weight=0)
         self.grid_columnconfigure(0, weight=1)
-        self.grid_columnconfigure(1, weight=1)
 
-        self.title = tk.Label(self, text="Scores")
+        self.title = tk.Label(self,
+                              text="This round's scores",
+                              font=("Helvetica", 14))
+        self.back_btn = tk.Button(self,
+                                  text="Next Round",
+                                  command=callback)
         self.title.grid(row=0, column=0)
+        self.back_btn.grid(row=0, column=0, sticky="e", padx=10)
 
-        self.siete_label = tk.Label(self, text="Siete de Velo:")
-        self.siete_label.grid(row=1, column=0)
-        self.siete = tk.Label(self, text="")
-        self.siete.grid(row=1, column=1)
+        self.summary = ScoreSummary(self)
+        self.summary.grid(row=1, column=0)
 
-        self.most_cards_label = tk.Label(self, text="Most Cards:")
-        self.most_cards_label.grid(row=2, column=0)
-        self.most_cards = tk.Label(self, text="")
-        self.most_cards.grid(row=2, column=1)
+        self.scrolls = []
 
-        self.most_oros_label = tk.Label(self, text="Most Golds:")
-        self.most_oros_label.grid(row=3, column=0)
-        self.most_oros = tk.Label(self, text="")
-        self.most_oros.grid(row=3, column=1)
-
-        self.setenta_label = tk.Label(self, text="Setenta:")
-        self.setenta_label.grid(row=4, column=0)
-        self.setenta = tk.Label(self, text="")
-        self.setenta.grid(row=4, column=1)
-
-        self.escobas_label = tk.Label(self, text="Escobas:")
-        self.escobas_label.grid(row=5, column=0)
-        self.escobas = tk.Label(self, text="")
-        self.escobas.grid(row=5, column=1)
-
-    def update_scores(self, ronda):
+    def update_scores(self, ronda, updated_scores):
         scores = ronda.calculate_scores()
 
-        siete = scores.get("7_de_velo", "Score Error")
-        self.siete.config(text=siete)
+        siete_winner = scores.get("7_de_velo", None)
+        siete = siete_winner.name()  # should probably check for None here?
 
-        most_cards = scores.get("most_cards", "Score Error")
-        self.most_cards.config(text=most_cards)
+        (cards_winners, count) = scores.get("most_cards", ([], 0))
+        cards = str(count)
+        for player in cards_winners:
+            cards += f"\n{player.name()}"
 
-        most_oros = scores.get("most_oros", "Score Error")
-        self.most_oros.config(text=most_oros)
+        (oros_winners, count) = scores.get("most_oros", ([], 0))
+        oros = str(count)
+        for player in oros_winners:
+            oros += f"\n{player.name()}"
 
-        setenta = scores.get("setenta", "Score Error")
-        self.setenta.config(text=setenta)
+        setenta_winners = scores.get("setenta", [])
+        winners = [w.player.name() for w in setenta_winners]
+        setenta = "\n".join(winners)
 
-        escobas = scores.get("escobas", "Score Error")
-        self.escobas.config(text=escobas)
+        escobas_winners = scores.get("escobas", [])
+        winners = [f"{w[0].name()}: {w[1]}" for w in escobas_winners]
+        escobas = "\n".join(winners)
 
-        # This will blow up when we try to update scores after
-        # more than one ronda
-        row = 6
+        self.summary.set_winners(cards, oros, siete, setenta, escobas)
+
+        for scroll in self.scrolls:
+            scroll.destroy()
+
+        row = 3
         for player in ronda.player_cards:
             pila = ronda.player_cards[player]["pila"]
             C = pila.get_cards()
@@ -80,20 +146,22 @@ class ScoreReport(tk.Frame):
             scroll = CardScroll(self, player.image(), cards)
             scroll.grid(row=row,
                         column=0,
-                        columnspan=2,
                         sticky="sew",
                         pady=10,
                         padx=(35, 10))
+            self.scrolls.append(scroll)
             row += 1
 
     @staticmethod
-    def generate(root):
+    def generate(root, callback):
         """Generates a score report frame.
 
         Args:
             root (tk widget) - parent widget for the scorereport frame
+            callback (function) - Callback to execute when clicking
+            the "play next round" button.
 
         Returns:
             ScoreReport (tkFrame)
         """
-        return ScoreReport(root)
+        return ScoreReport(root, callback)

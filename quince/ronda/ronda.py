@@ -343,7 +343,6 @@ class Ronda(object):
 
             most_oros.compare(player, pila.total_oros())
 
-            # This method is not yet implemented
             setenta.compare(player, pila.best_setenta())
 
             if pila.has_siete_de_velo():
