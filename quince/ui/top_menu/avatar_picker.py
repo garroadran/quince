@@ -36,7 +36,7 @@ class AvatarPicker(tk.Toplevel):
         self.loaded_images = []
         self._selected_image_path = tk.StringVar()
 
-        default_dir = join(getcwd(), "quince/ui/assets/avatars")
+        default_dir = join(getcwd(), "quince/assets/avatars")
         avatars = get_files_from_dir(default_dir)
 
         self.callback = callback
@@ -56,7 +56,6 @@ class AvatarPicker(tk.Toplevel):
 
         Args:
             paths (list of string) - Absolute paths to images to be used.
-
         """
         self.loaded_images = []
 

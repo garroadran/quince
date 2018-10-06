@@ -12,21 +12,7 @@ class TestPlayer(unittest.TestCase):
     def test_name(self):
         """Getter for the player's name"""
         alice = Player("Alice")
-        self.assertEqual("Alice", alice.name())
-
-    def test_total_score(self):
-        """Getter for the player's score"""
-        alice = Player("Alice")
-        self.assertEqual(0, alice.total_score())
-
-    def test_award_points(self):
-        p = Player("Alice")
-        # Award 1 point by default
-        p.award_points()
-        self.assertEqual(1, p.total_score())
-
-        p.award_points(4)
-        self.assertEqual(5, p.total_score())
+        self.assertEqual("Alice", alice.name)
 
     def test_str(self):
         """String representation"""
@@ -45,7 +31,7 @@ class TestNPC(unittest.TestCase):
     def test_get_move_single_choice(self):
         """Given a hand and a mesa,
         select which cards to play and what to pick up."""
-        npc = NPC()
+        npc = NPC("name")
         a = Card(5, "oro")
         b = Card(10, "oro")
         hand = [a]
@@ -56,7 +42,7 @@ class TestNPC(unittest.TestCase):
 
     def test_get_move_no_choice(self):
         """Drop a card if there are no moves available."""
-        npc = NPC()
+        npc = NPC("name")
         a = Card(1, "oro")
         b = Card(1, "basto")
         c = Card(9, "copa")

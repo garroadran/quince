@@ -4,17 +4,17 @@ The primary frame containing the content for the entire game
 import tkinter as tk
 import random as random
 from quince.utility import is_valid_pickup
-from quince.ronda import Ronda
-from quince.ui.components.opponents.opponent_frame \
+from quince.components import Ronda
+from quince.ui.opponents.opponent_frame \
     import OpponentFrameHorizontal, OpponentFrameVertical
-from quince.ui.components.table.table import Table
-from quince.ui.components.player.player_frame import PlayerFrame
+from quince.ui.table.table import Table
+from quince.ui.player.player_frame import PlayerFrame
 
 
 class GameFrame(tk.Frame):
     """Tk frame containing the main gameplay display including
     cards, decks, and avatars."""
-    def __init__(self, parent, player, npc1, npc2, npc3, display_scores):
+    def __init__(self, parent, player, npcs, display_scores):
         """Instantiate a new GameFrame
 
         Args:
@@ -38,52 +38,25 @@ class GameFrame(tk.Frame):
         self.grid_columnconfigure(1, weight=3)
         self.grid_columnconfigure(2, weight=1)
 
-        self.npc1 = npc1
-        self.npc2 = npc2
-        self.npc3 = npc3
+        self.npcs = npcs
+        self.npc1 = npcs[0]
+        self.npc2 = npcs[1]
+        self.npc3 = npcs[2]
         self.player = player
         self.selected_table_cards = []
 
-        self.scores = {
-            player: 0,
-            npc1: 0,
-            npc2: 0,
-            npc3: 0,
-        }
+        self.scores = {player: 0}
+        for npc in npcs:
+            self.scores[npc] = 0
 
         self.dealer = self.npc2
         self.ronda = None
         self.start_new_ronda()
 
-        # OPPONENT 1
-        opp1_hand_size = len(self.ronda.player_cards[self.npc1]["hand"])
-        opp1_active = self.ronda.current_player is self.npc1
-        self.opp1 = OpponentFrameVertical(self,
-                                          self.npc1.image(),
-                                          self.npc1.name(),
-                                          opp1_active,
-                                          opp1_hand_size)
-        self.opp1.grid(row=1, column=0)
-
-        # OPPONENT 2
-        opp2_active = self.ronda.current_player is self.npc2
-        opp2_hand_size = len(self.ronda.player_cards[self.npc2]["hand"])
-        self.opp2 = OpponentFrameHorizontal(self,
-                                            self.npc2.image(),
-                                            self.npc2.name(),
-                                            opp2_active,
-                                            opp2_hand_size)
-        self.opp2.grid(row=0, column=1)
-
-        # OPPONENT 3
-        opp3_active = self.ronda.current_player is self.npc3
-        opp3_hand_size = len(self.ronda.player_cards[self.npc3]["hand"])
-        self.opp3 = OpponentFrameVertical(self,
-                                          self.npc3.image(),
-                                          self.npc3.name(),
-                                          opp3_active,
-                                          opp3_hand_size)
-        self.opp3.grid(row=1, column=2)
+        # OPPONENTS
+        self.opp_frames = {}
+        for npc in npcs:
+            self._instantiate_opponent_frame(npc)
 
         # PLAYER
         myhand = self.ronda.player_cards[self.player]["hand"]
@@ -99,6 +72,16 @@ class GameFrame(tk.Frame):
         table_cards = self.ronda.current_mesa
         self.tbl = Table(self, table_cards, self.register_table_card_selection)
         self.tbl.grid(row=1, column=1)
+
+    def _instantiate_opponent_frame(self, npc):
+        position = OpponentFramePosition()
+        hand_size = len(self.ronda.player_cards[npc]["hand"])
+        is_active = self.ronda.current_player is npc
+        Type = position.frame_type
+
+        frame = Type(self, npc.image, npc.name, is_active, hand_size)
+        self.opp_frames[npc] = frame
+        frame.grid(row=position.row, column=position.column)
 
     def start_new_ronda(self):
         """Initialize a new round of gameplay."""
@@ -125,20 +108,11 @@ class GameFrame(tk.Frame):
         table_cards = self.ronda.current_mesa
         current_player = self.ronda.current_player
 
-        # OPPONENT 1
-        opp1_hand_size = len(self.ronda.player_cards[self.npc1]["hand"])
-        opp1_active = self.ronda.current_player is self.npc1
-        self.opp1.refresh(opp1_hand_size, opp1_active)
-
-        # OPPONENT 2
-        opp2_active = current_player is self.npc2
-        opp2_hand_size = len(self.ronda.player_cards[self.npc2]["hand"])
-        self.opp2.refresh(opp2_hand_size, opp2_active)
-
-        # OPPONENT 3
-        opp3_active = current_player is self.npc3
-        opp3_hand_size = len(self.ronda.player_cards[self.npc3]["hand"])
-        self.opp3.refresh(opp3_hand_size, opp3_active)
+        # OPPONENTS
+        for npc in self.npcs:
+            hand_size = len(self.ronda.player_cards[npc]["hand"])
+            is_active = self.ronda.current_player is npc
+            self.opp_frames[npc].refresh(hand_size, is_active)
 
         # PLAYER
         myhand = self.ronda.player_cards[self.player]["hand"]
@@ -167,15 +141,13 @@ class GameFrame(tk.Frame):
         """Callback function executed when
         player clicks the "Play Hand" button.
         """
-        if self.ronda.current_player is self.player:
-            print(f"Attempting to play {hand_card} and\
-                pick up: {self.selected_table_cards}")
-
-            if is_valid_pickup(hand_card, self.selected_table_cards):
-                self.ronda = self.ronda.play_turn(hand_card,
-                                                  self.selected_table_cards)
-                self.draw()
-                self.play_next_move()
+        player = self.ronda.current_player
+        valid = is_valid_pickup(hand_card, self.selected_table_cards)
+        if player is self.player and valid:
+            self.ronda = self.ronda.play_turn(hand_card,
+                                              self.selected_table_cards)
+            self.draw()
+            self.play_next_move()
         else:
             print("not your turn")
 
@@ -204,13 +176,7 @@ class GameFrame(tk.Frame):
 
         self.ronda = self.ronda.play_turn(own_card, mesa_cards)
 
-        # Yuck!
-        if current_player is self.npc1:
-            self.opp1.flash_card(own_card)
-        elif current_player is self.npc2:
-            self.opp2.flash_card(own_card)
-        elif current_player is self.npc3:
-            self.opp3.flash_card(own_card)
+        self.opp_frames[current_player].flash_card(own_card)
 
         self.after(1600, self._finish_turn)
 
@@ -246,3 +212,31 @@ class GameFrame(tk.Frame):
         for escoba in escobas:
             (player, count) = escoba
             self.scores[player] += count
+
+
+class OpponentFramePosition(object):
+    """Helper class used to dynamically place opponent frames
+    on the game frame.
+
+    Each time an OpponentFramePosition is instantiated, it
+    contains a new set of attributes decribing the grid position
+    and type (ie. what class needs to be instantiated) for the
+    OpponentFrame.
+    """
+    id = 0
+    rows = [1, 0, 1]
+    columns = [0, 1, 2]
+    frame_types = [OpponentFrameVertical,
+                   OpponentFrameHorizontal,
+                   OpponentFrameVertical]
+
+    def __init__(self):
+        id = OpponentFramePosition.id
+        self.row = OpponentFramePosition.rows[id]
+        self.column = OpponentFramePosition.columns[id]
+        self.frame_type = OpponentFramePosition.frame_types[id]
+
+        if id == 2:
+            OpponentFramePosition.id = 0
+        else:
+            OpponentFramePosition.id += 1

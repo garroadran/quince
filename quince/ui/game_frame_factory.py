@@ -2,7 +2,7 @@
     Factory object that gets used to inject dependencies
     into the GameApp constructor.
 """
-from quince.ui.components.game_frame import GameFrame
+from quince.ui.game_frame import GameFrame
 
 
 class GameFrameFactory(object):
@@ -24,9 +24,8 @@ class GameFrameFactory(object):
         Args:
             root (Tk widget)
         """
+        npcs = [self.npc1, self.npc2, self.npc3]
         return GameFrame(root,
                          self.player,
-                         self.npc1,
-                         self.npc2,
-                         self.npc3,
+                         npcs,
                          callback)

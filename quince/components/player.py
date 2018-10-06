@@ -1,18 +1,40 @@
+"""Module containing the Player class
 """
-Module containing the Player class
-"""
-import random
-import os as os
+import random as random
+from os import getcwd, path
 from PIL import Image
 from quince.cpu import enumerate_possibilities
-from quince.components.pila import Pila
+
+
+STOCK_IMAGE_PATH = path.join(getcwd(), "quince/assets/avatars/avatar01.png")
+
+
+def load_image(img_path):
+    """Loads the image at the path provided, or a stock
+    image if the path doesn't exist.
+
+    Args:
+        path (string)
+
+    Returns:
+        PIL.Image object
+    """
+    # fallback in case a relative path was passed in
+    if not path.exists(img_path):
+        print("WARNING: Passing relative paths is deprecated"
+              "and will cause errors in future releases.")
+        img_path = path.join(getcwd(), img_path)
+
+    if not path.exists(img_path):
+        img_path = STOCK_IMAGE_PATH
+
+    return Image.open(img_path)
 
 
 class Player(object):
     """Represents a player in the game.
 
-    A player has a name, a total score they will accumulate
-    over the entire game, a hand of cards which they hold, and
+    A player has a name, a hand of cards which they hold, and
     a pila of cards where they accumulate the cards they
     collect over the course of a ronda.
     """
@@ -20,44 +42,23 @@ class Player(object):
     internal_id = 0
     names_list = ["Alicia", "Felipe", "Mariana", "Pepe", "Juanita", "Timoteo"]
 
-    def __init__(self, name=None, image_path=None):
+    def __init__(self, name, image_path=STOCK_IMAGE_PATH):
         """Instantiates a player for the game.
 
         The player is assigned an empty hand to start,
         and a pila, where they will accumulate the cards
         that they pick up over the course of a ronda.
 
-        The player is also given a total score of 0 to start.
-
         Args:
             name (str) -- Player's name
+            image_path (string) -- Path to the image for the player's avatar
         """
         self._id = Player.internal_id
         Player.internal_id += 1
 
-        if name is None:
-            self._name = random.choice(Player.names_list)
-        else:
-            self._name = name
+        self.name = name
 
-        # Cards held in hand
-        # changes with each ronda
-        self._current_hand = []
-
-        # Cards picked up through play
-        # Accumulates with each turn, resets when a new deck gets dealt
-        self._pila = Pila()
-
-        self._total_score = 0
-
-        default_img = f"quince/ui/assets/avatars/{self.name().lower()}.png"
-        self.image_path = default_img if image_path is None else image_path
-
-    def __repr__(self):
-        return f"Player, {self.name()}."
-
-    def __str__(self):
-        return f"Player, {self.name()}."
+        self._image = load_image(image_path)
 
     @property
     def id(self):
@@ -67,43 +68,14 @@ class Player(object):
         """
         return self._id
 
+    @property
     def image(self):
         """Getter for the player's avatar image
+
         Returns:
             PIL Image object
         """
-        path = self.image_path
-
-        # fallback in case a relative path was passed in
-        if not os.path.exists(path):
-            print("WARNING: Passing relative paths is deprecated \
-                  and will cause errors in future releases.")
-            path = os.path.join(os.getcwd(), self.image_path)
-
-        if not os.path.exists(path):
-            # to do: replace with a proper stock image
-            path = os.path.join(os.getcwd(),
-                                "quince/ui/assets/avatars/avatar01.png")
-
-        return Image.open(path)
-
-    def name(self):
-        """Getter for the player's name
-        """
-        return self._name
-
-    def total_score(self):
-        """Getter for the player's total score
-        """
-        return self._total_score
-
-    def award_points(self, points=1):
-        """Adds points to the player's total score.
-
-        Args:
-            points (int) -- Number of points to award (default=1)
-        """
-        self._total_score += points
+        return self._image.copy()
 
     def __hash__(self):
         """Hash function for the player object"""
@@ -113,12 +85,17 @@ class Player(object):
         """Evaluates two players as equal if they share the same id"""
         return self.id == other.id
 
+    def __repr__(self):
+        return f"Player, {self.name}."
+
+    def __str__(self):
+        return f"Player, {self.name}."
+
 
 class NPC(Player):
     """A computer player"""
 
-    @staticmethod
-    def get_move(hand, mesa):
+    def get_move(self, hand, mesa):
         """Select a move for the NPC to make.
 
         Args:

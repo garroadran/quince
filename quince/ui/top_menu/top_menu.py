@@ -10,12 +10,13 @@ at runtime.
 """
 
 import tkinter as tk
-import os as os
+from os import getcwd
+from os.path import join
 from PIL import Image, ImageTk
 from quince.components import Player, NPC
-from quince.ui.components.top_menu.avatar_picker import AvatarPicker
-from quince.ui.components.game_frame_factory import GameFrameFactory
-from quince.ui.components.top_menu.validating_entry import UserNameEntry
+from quince.ui.top_menu.avatar_picker import AvatarPicker
+from quince.ui.game_frame_factory import GameFrameFactory
+from quince.ui.top_menu.validating_entry import UserNameEntry
 
 
 class TopMenu(tk.Frame):
@@ -43,8 +44,8 @@ class TopMenu(tk.Frame):
 
         self.avatar_path = None
         self.avatar = tk.Label(self, text="")
-        self.set_avatar(os.path.join(os.getcwd(),
-                        "quince/ui/assets/avatars/avatar01.png"))
+        self.set_avatar(join(getcwd(),
+                        "quince/assets/avatars/avatar01.png"))
         avatar_label = tk.Label(self,
                                 text="Click to edit",
                                 font=("Helvetica", 8))
@@ -98,7 +99,7 @@ class TopMenu(tk.Frame):
         user = Player(self.name_entry.get())
         user.image_path = self.avatar_path
 
-        path = os.path.join(os.getcwd(), "quince/ui/assets/avatars")
+        path = join(getcwd(), "quince/assets/avatars")
         npc1 = NPC("Roberto", f"{path}/avatar06.png")
         npc2 = NPC("Gus", f"{path}/avatar08.png")
         npc3 = NPC("Diana", f"{path}/avatar07.png")

@@ -1,7 +1,7 @@
 import unittest
 import random
 from quince.components import Deck, Player, Card, Pila
-from quince.ronda import Ronda
+from quince.components.ronda import Ronda
 
 
 class TestRonda(unittest.TestCase):

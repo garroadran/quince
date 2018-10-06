@@ -4,11 +4,12 @@ from quince.components import Card
 
 class TestCard(unittest.TestCase):
     def test_info(self):
-        """Returns a tuple containing suit and number"""
+        """Returns a tuple containing suit and value"""
         c = Card(4, "basto")
-        self.assertEqual((4, "basto"), c.info())
+        self.assertEqual(4, c.value)
+        self.assertEqual("basto", c.suit)
 
-        # Check that an error is raised on an invalid number
+        # Check that an error is raised on an invalid value
         with self.assertRaises(ValueError):
             c = Card(13, "espada")
 
@@ -17,16 +18,15 @@ class TestCard(unittest.TestCase):
         c = Card(1, "oro")
         d = c.clone()
 
-        # Modifying this private attribute just for the purposes of testing
-        c._number = 3
-        self.assertEqual((1, "oro"), d.info())
+        c.value = 3
+        self.assertEqual(1, d.value)
+        self.assertEqual("oro", d.suit)
 
-    @unittest.skip("Not implemented")
     def test_image(self):
         """Returns an image for the card"""
-        card = Card(10, "oro") # noqa
-
-        self.fail("Failed")
+        card = Card(10, "oro")
+        img = card.image()
+        self.assertEqual("PNG", img.format)
 
     def test_points_setenta(self):
         """The number of points a card is worth in the setenta"""

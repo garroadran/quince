@@ -31,25 +31,6 @@ class Deck(object):
         else:
             self._cards = clone.cards()
 
-    def _build_new_deck(self):
-        self._cards = []
-
-        for i in range(0, 10):
-            # Sotas, caballos, and reyes are represented
-            # using their real value, not their face number
-            for suit in ["oro", "basto", "espada", "copa"]:
-                new_card = self._card_type(i + 1, suit)
-                self._cards.append(new_card)
-
-        # shuffle the deck so that cards can be popped off the end
-        random.shuffle(self._cards)
-
-    def __str__(self):
-        return f"Deck containing {len(self.cards())} Cards."
-
-    def __repr__(self):
-        return f"Deck containing {len(self.cards())} Cards."
-
     def cards(self):
         """Returns a copy of the list of cards in the deck.
         """
@@ -70,3 +51,22 @@ class Deck(object):
         newdeck = Deck(self._card_type, clone=self)
 
         return (newdeck, hand)
+
+    def _build_new_deck(self):
+        self._cards = []
+
+        for i in range(0, 10):
+            # Sotas, caballos, and reyes are represented
+            # using their real value, not their face number
+            for suit in ["oro", "basto", "espada", "copa"]:
+                new_card = self._card_type(i + 1, suit)
+                self._cards.append(new_card)
+
+        # shuffle the deck so that cards can be popped off the end
+        random.shuffle(self._cards)
+
+    def __str__(self):
+        return f"Deck containing {len(self.cards())} Cards."
+
+    def __repr__(self):
+        return f"Deck containing {len(self.cards())} Cards."

@@ -1,6 +1,4 @@
-"""
-
-Contains utility functions and classes used throughout project.
+"""Contains utility functions and classes used throughout project.
 """
 
 
@@ -13,7 +11,7 @@ def is_valid_pickup(player_card, mesa_cards):
         mesa_cards (List of Card) - The cards that the
         player picks up from the table
     """
-    total_sum = player_card.number + sum([x.number for x in mesa_cards])
+    total_sum = player_card.value + sum([x.value for x in mesa_cards])
 
     # Any single card can be dropped
     if total_sum == 15 or not mesa_cards:

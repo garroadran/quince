@@ -6,7 +6,7 @@ import tkinter as tk
 from os.path import join
 from os import getcwd
 from PIL import Image, ImageTk
-from quince.ui.components.score_report.card_scroll import CardScroll
+from quince.ui.score_report.card_scroll import CardScroll
 
 
 IMG_ROOT = join(getcwd(), "quince/assets/scores")
@@ -113,24 +113,24 @@ class ScoreReport(tk.Frame):
         scores = ronda.calculate_scores()
 
         siete_winner = scores.get("7_de_velo", None)
-        siete = siete_winner.name()  # should probably check for None here?
+        siete = siete_winner.name  # should probably check for None here?
 
         (cards_winners, count) = scores.get("most_cards", ([], 0))
         cards = str(count)
         for player in cards_winners:
-            cards += f"\n{player.name()}"
+            cards += f"\n{player.name}"
 
         (oros_winners, count) = scores.get("most_oros", ([], 0))
         oros = str(count)
         for player in oros_winners:
-            oros += f"\n{player.name()}"
+            oros += f"\n{player.name}"
 
         setenta_winners = scores.get("setenta", [])
-        winners = [w.player.name() for w in setenta_winners]
+        winners = [w.player.name for w in setenta_winners]
         setenta = "\n".join(winners)
 
         escobas_winners = scores.get("escobas", [])
-        winners = [f"{w[0].name()}: {w[1]}" for w in escobas_winners]
+        winners = [f"{w[0].name}: {w[1]}" for w in escobas_winners]
         escobas = "\n".join(winners)
 
         self.summary.set_winners(cards, oros, siete, setenta, escobas)
@@ -140,10 +140,11 @@ class ScoreReport(tk.Frame):
 
         row = 3
         for player in ronda.player_cards:
+            score = updated_scores[player]
             pila = ronda.player_cards[player]["pila"]
             C = pila.get_cards()
             cards = C["oro"] + C["copa"] + C["espada"] + C["basto"]
-            scroll = CardScroll(self, player.image(), cards)
+            scroll = CardScroll(self, player.image, cards, score)
             scroll.grid(row=row,
                         column=0,
                         sticky="sew",
