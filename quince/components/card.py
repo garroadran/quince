@@ -31,7 +31,7 @@ class Card(object):
         if img_num >= 8:
             img_num += 2
 
-        self._image = f"quince/assets/img/card_{suit}_{img_num}.png"
+        self._image = f"quince/assets/cards/card_{suit}_{img_num}.png"
 
         setenta = [11.0, 4.0, 6.0, 8.0, 10.0, 14.0, 17.5, 1, 1, 1]
         self.points_setenta = setenta[number - 1]

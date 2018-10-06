@@ -3,18 +3,17 @@ Visual display for the cards in the opponent's hand.
 Always shows the backs of the cards only.
 """
 import tkinter as tk
-import os
+from os import getcwd
+from os.path import join
 from PIL import Image, ImageTk
 
 
 class OpponentHand(tk.Frame):
-    """
-    A frame containing for an image that shows
+    """A frame containing for an image that shows
     an opponent's hand (i.e., the backs) of the cards.
     """
     def __init__(self, parent, number_of_cards, size=100):
-        """
-        Creates a frame that shows how many cards the opponent is holding.
+        """Creates a frame that shows how many cards the opponent is holding.
 
         Args:
             parent (tk.Frame) - Parent frame/container
@@ -33,8 +32,8 @@ class OpponentHand(tk.Frame):
         self.refresh(number_of_cards)
 
     def _get_card_backs_image(self):
-        path = f"quince/ui/assets/opponent_hands/cards_{self.card_count}.png"
-        image_path = os.path.join(os.getcwd(), path)
+        path = f"quince/assets/opponent_hands/cards_{self.card_count}.png"
+        image_path = join(getcwd(), path)
         image = Image.open(image_path)
         image.thumbnail((self.image_size, self.image_size), Image.ANTIALIAS)
         return image

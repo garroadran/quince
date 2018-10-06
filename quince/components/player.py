@@ -50,8 +50,7 @@ class Player(object):
 
         self._total_score = 0
 
-        default_img = f"quince/ui/assets/avatars/{self.name().lower()}.png"
-        self.image_path = default_img if image_path is None else image_path
+        self.image_path = "" if image_path is None else image_path
 
     def __repr__(self):
         return f"Player, {self.name()}."
@@ -83,7 +82,7 @@ class Player(object):
         if not os.path.exists(path):
             # to do: replace with a proper stock image
             path = os.path.join(os.getcwd(),
-                                "quince/ui/assets/avatars/avatar01.png")
+                                "quince/assets/avatars/avatar01.png")
 
         return Image.open(path)
 
