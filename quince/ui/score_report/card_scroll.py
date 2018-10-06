@@ -9,7 +9,7 @@ from PIL import Image, ImageTk
 
 class CardScroll(tk.Frame):
     """Horizontal lineup of cards"""
-    def __init__(self, parent, player_image, cards):
+    def __init__(self, parent, player_image, cards, score):
         tk.Frame.__init__(self, parent)
 
         player_image.thumbnail((65, 65), Image.ANTIALIAS)
