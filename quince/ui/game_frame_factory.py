@@ -24,9 +24,8 @@ class GameFrameFactory(object):
         Args:
             root (Tk widget)
         """
+        npcs = [self.npc1, self.npc2, self.npc3]
         return GameFrame(root,
                          self.player,
-                         self.npc1,
-                         self.npc2,
-                         self.npc3,
+                         npcs,
                          callback)
