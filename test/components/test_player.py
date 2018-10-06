@@ -14,20 +14,6 @@ class TestPlayer(unittest.TestCase):
         alice = Player("Alice")
         self.assertEqual("Alice", alice.name())
 
-    def test_total_score(self):
-        """Getter for the player's score"""
-        alice = Player("Alice")
-        self.assertEqual(0, alice.total_score())
-
-    def test_award_points(self):
-        p = Player("Alice")
-        # Award 1 point by default
-        p.award_points()
-        self.assertEqual(1, p.total_score())
-
-        p.award_points(4)
-        self.assertEqual(5, p.total_score())
-
     def test_str(self):
         """String representation"""
         p = Player("Annie")

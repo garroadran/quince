@@ -1,5 +1,4 @@
-"""
-Module containing the Player class
+"""Module containing the Player class
 """
 import random
 import os as os
@@ -11,8 +10,7 @@ from quince.components.pila import Pila
 class Player(object):
     """Represents a player in the game.
 
-    A player has a name, a total score they will accumulate
-    over the entire game, a hand of cards which they hold, and
+    A player has a name, a hand of cards which they hold, and
     a pila of cards where they accumulate the cards they
     collect over the course of a ronda.
     """
@@ -27,8 +25,6 @@ class Player(object):
         and a pila, where they will accumulate the cards
         that they pick up over the course of a ronda.
 
-        The player is also given a total score of 0 to start.
-
         Args:
             name (str) -- Player's name
         """
@@ -40,15 +36,12 @@ class Player(object):
         else:
             self._name = name
 
-        # Cards held in hand
-        # changes with each ronda
+        # Cards held in hand. Changes with each turn played.
         self._current_hand = []
 
         # Cards picked up through play
         # Accumulates with each turn, resets when a new deck gets dealt
         self._pila = Pila()
-
-        self._total_score = 0
 
         self.image_path = "" if image_path is None else image_path
 
@@ -90,19 +83,6 @@ class Player(object):
         """Getter for the player's name
         """
         return self._name
-
-    def total_score(self):
-        """Getter for the player's total score
-        """
-        return self._total_score
-
-    def award_points(self, points=1):
-        """Adds points to the player's total score.
-
-        Args:
-            points (int) -- Number of points to award (default=1)
-        """
-        self._total_score += points
 
     def __hash__(self):
         """Hash function for the player object"""
