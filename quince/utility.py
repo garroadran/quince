@@ -1,6 +1,4 @@
-"""
-
-Contains utility functions and classes used throughout project.
+"""Contains utility functions and classes used throughout project.
 """
 
 

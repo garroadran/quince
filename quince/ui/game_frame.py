@@ -5,10 +5,10 @@ import tkinter as tk
 import random as random
 from quince.utility import is_valid_pickup
 from quince.ronda import Ronda
-from quince.ui.components.opponents.opponent_frame \
+from quince.ui.opponents.opponent_frame \
     import OpponentFrameHorizontal, OpponentFrameVertical
-from quince.ui.components.table.table import Table
-from quince.ui.components.player.player_frame import PlayerFrame
+from quince.ui.table.table import Table
+from quince.ui.player.player_frame import PlayerFrame
 
 
 class GameFrame(tk.Frame):

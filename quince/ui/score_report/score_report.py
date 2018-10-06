@@ -6,7 +6,7 @@ import tkinter as tk
 from os.path import join
 from os import getcwd
 from PIL import Image, ImageTk
-from quince.ui.components.score_report.card_scroll import CardScroll
+from quince.ui.score_report.card_scroll import CardScroll
 
 
 IMG_ROOT = join(getcwd(), "quince/assets/scores")

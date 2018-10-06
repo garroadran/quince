@@ -14,9 +14,9 @@ from os import getcwd
 from os.path import join
 from PIL import Image, ImageTk
 from quince.components import Player, NPC
-from quince.ui.components.top_menu.avatar_picker import AvatarPicker
-from quince.ui.components.game_frame_factory import GameFrameFactory
-from quince.ui.components.top_menu.validating_entry import UserNameEntry
+from quince.ui.top_menu.avatar_picker import AvatarPicker
+from quince.ui.game_frame_factory import GameFrameFactory
+from quince.ui.top_menu.validating_entry import UserNameEntry
 
 
 class TopMenu(tk.Frame):

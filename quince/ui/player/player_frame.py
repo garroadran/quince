@@ -4,8 +4,8 @@ cards and avatar.
 """
 
 import tkinter as tk
-from quince.ui.components.player.hand import PlayerHand
-from quince.ui.components.common.avatar import PlayerAvatar
+from quince.ui.player.hand import PlayerHand
+from quince.ui.common.avatar import PlayerAvatar
 
 
 class PlayerFrame(tk.Frame):
