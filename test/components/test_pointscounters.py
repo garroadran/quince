@@ -1,6 +1,6 @@
 import unittest
 from quince.components import Card
-from quince.ronda import PointsCounter, SetentaCounter
+from quince.components.points_counters import PointsCounter, SetentaCounter
 
 
 class TestPointsCounter(unittest.TestCase):

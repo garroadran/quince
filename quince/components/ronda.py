@@ -32,7 +32,7 @@ until one player reaches a total of 30 points.
 """
 from copy import deepcopy
 from quince.components import Pila, Deck, Card
-from quince.ronda.points_counters import PointsCounter, SetentaCounter
+from quince.components.points_counters import PointsCounter, SetentaCounter
 
 
 def deal_to_players(players, deck):

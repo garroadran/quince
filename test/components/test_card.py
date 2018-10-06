@@ -21,12 +21,11 @@ class TestCard(unittest.TestCase):
         c._number = 3
         self.assertEqual((1, "oro"), d.info())
 
-    @unittest.skip("Not implemented")
     def test_image(self):
         """Returns an image for the card"""
-        card = Card(10, "oro") # noqa
-
-        self.fail("Failed")
+        card = Card(10, "oro")
+        img = card.image()
+        self.assertEqual("PNG", img.format)
 
     def test_points_setenta(self):
         """The number of points a card is worth in the setenta"""

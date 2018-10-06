@@ -4,7 +4,7 @@ The primary frame containing the content for the entire game
 import tkinter as tk
 import random as random
 from quince.utility import is_valid_pickup
-from quince.ronda import Ronda
+from quince.components.ronda import Ronda
 from quince.ui.opponents.opponent_frame \
     import OpponentFrameHorizontal, OpponentFrameVertical
 from quince.ui.table.table import Table
