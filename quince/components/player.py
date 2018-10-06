@@ -57,7 +57,7 @@ class Player(object):
         self._id = Player.internal_id
         Player.internal_id += 1
 
-        self._name = name
+        self.name = name
 
         # Cards held in hand. Changes with each turn played.
         self._current_hand = []
@@ -69,10 +69,10 @@ class Player(object):
         self._image = load_image(image_path)
 
     def __repr__(self):
-        return f"Player, {self.name()}."
+        return f"Player, {self.name}."
 
     def __str__(self):
-        return f"Player, {self.name()}."
+        return f"Player, {self.name}."
 
     @property
     def id(self):
@@ -89,11 +89,6 @@ class Player(object):
             PIL Image object
         """
         return self._image.copy()
-
-    def name(self):
-        """Getter for the player's name
-        """
-        return self._name
 
     def __hash__(self):
         """Hash function for the player object"""

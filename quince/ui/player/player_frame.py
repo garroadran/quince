@@ -33,7 +33,7 @@ class PlayerFrame(tk.Frame):
 
         self.avatar = PlayerAvatar(self,
                                    player.image(),
-                                   player.name(),
+                                   player.name,
                                    is_active)
         self.avatar.grid(row=0, column=0)
 

@@ -12,7 +12,7 @@ class TestPlayer(unittest.TestCase):
     def test_name(self):
         """Getter for the player's name"""
         alice = Player("Alice")
-        self.assertEqual("Alice", alice.name())
+        self.assertEqual("Alice", alice.name)
 
     def test_str(self):
         """String representation"""

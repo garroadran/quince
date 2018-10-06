@@ -113,24 +113,24 @@ class ScoreReport(tk.Frame):
         scores = ronda.calculate_scores()
 
         siete_winner = scores.get("7_de_velo", None)
-        siete = siete_winner.name()  # should probably check for None here?
+        siete = siete_winner.name  # should probably check for None here?
 
         (cards_winners, count) = scores.get("most_cards", ([], 0))
         cards = str(count)
         for player in cards_winners:
-            cards += f"\n{player.name()}"
+            cards += f"\n{player.name}"
 
         (oros_winners, count) = scores.get("most_oros", ([], 0))
         oros = str(count)
         for player in oros_winners:
-            oros += f"\n{player.name()}"
+            oros += f"\n{player.name}"
 
         setenta_winners = scores.get("setenta", [])
-        winners = [w.player.name() for w in setenta_winners]
+        winners = [w.player.name for w in setenta_winners]
         setenta = "\n".join(winners)
 
         escobas_winners = scores.get("escobas", [])
-        winners = [f"{w[0].name()}: {w[1]}" for w in escobas_winners]
+        winners = [f"{w[0].name}: {w[1]}" for w in escobas_winners]
         escobas = "\n".join(winners)
 
         self.summary.set_winners(cards, oros, siete, setenta, escobas)
