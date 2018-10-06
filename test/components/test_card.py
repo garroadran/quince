@@ -18,7 +18,7 @@ class TestCard(unittest.TestCase):
         d = c.clone()
 
         # Modifying this private attribute just for the purposes of testing
-        c._number = 3
+        c.number = 3
         self.assertEqual((1, "oro"), d.info())
 
     def test_image(self):

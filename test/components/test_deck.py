@@ -27,8 +27,8 @@ class TestDeck(unittest.TestCase):
         """Returns a copy of the deck"""
         deck = Deck(Card)
         cards = deck.cards()
-        cards[0]._number = 20
-        self.assertNotEqual(20, deck._cards[0]._number)
+        cards[0].number = 20
+        self.assertNotEqual(20, deck._cards[0].number)
 
     def test_deal(self):
         """Returns a new deck object and a hand List
