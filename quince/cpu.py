@@ -41,7 +41,7 @@ def enumerate_possibilities(mesa, hand):
         """
 
         # calculate the current sum of all cards in partial_sum
-        current_sum = sum([card.number for card in partial_sum])
+        current_sum = sum([card.value for card in partial_sum])
         if current_sum == 15:
             # found a permutation, append it to permutations
             permutations.append(tuple(partial_sum))

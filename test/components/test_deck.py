@@ -11,12 +11,12 @@ class TestDeck(unittest.TestCase):
         # Assert that there are no duplicate cards in the deck
         deck_check = {"oro": [], "espada": [], "copa": [], "basto": []}
         for card in deck.cards():
-            number = card.number
+            val = card.value
             palo = card.suit
-            if number in deck_check[palo]:
+            if val in deck_check[palo]:
                 self.fail("Duplicate card in deck")
             else:
-                deck_check[palo].append(number)
+                deck_check[palo].append(val)
 
         # And that each suit has cards 1-10
         for palo in deck_check:
@@ -28,8 +28,8 @@ class TestDeck(unittest.TestCase):
         """Returns a copy of the deck"""
         deck = Deck(Card)
         cards = deck.cards()
-        cards[0].number = 20
-        self.assertNotEqual(20, deck._cards[0].number)
+        cards[0].value = 20
+        self.assertNotEqual(20, deck._cards[0].value)
 
     def test_deal(self):
         """Returns a new deck object and a hand List
@@ -64,10 +64,10 @@ class TestDeck(unittest.TestCase):
         d2 = Deck(Card, clone=d1)
 
         # check that the right cards got passed
-        cards_in_d1 = [f"{x.number}-{x.suit}" for x in d1.cards()]
-        cards_in_d2 = [f"{x.number}-{x.suit}" for x in d2.cards()]
+        cards_in_d1 = [f"{x.value}-{x.suit}" for x in d1.cards()]
+        cards_in_d2 = [f"{x.value}-{x.suit}" for x in d2.cards()]
         self.assertEqual(cards_in_d1, cards_in_d2)
 
         # check that it really is a clone
-        d1._cards[0].number = 14
-        self.assertNotEqual(14, d2._cards[0].number)
+        d1._cards[0].value = 14
+        self.assertNotEqual(14, d2._cards[0].value)

@@ -124,7 +124,7 @@ class TestPila(unittest.TestCase):
         # Only one option
         pila1 = Pila()
         pila2 = pila1.add([basto4, oro7, espada10, copa1])
-        setenta = [f"{x.number}-{x.suit}" for x in pila2.best_setenta()]
+        setenta = [f"{x.value}-{x.suit}" for x in pila2.best_setenta()]
         self.assertTrue("4-basto" in setenta)
         self.assertTrue("7-oro" in setenta)
         self.assertTrue("10-espada" in setenta)
@@ -146,11 +146,11 @@ class TestPila(unittest.TestCase):
 
         pila1 = Pila()
         pila2 = pila1.add([basto4, oro7, espada10, copa5, copa1])
-        setenta = [f"{x.number}-{x.suit}" for x in pila2.best_setenta()]
+        setenta = [f"{x.value}-{x.suit}" for x in pila2.best_setenta()]
         self.assertTrue("1-copa" in setenta)
 
         pila1 = Pila()
         pila2 = pila1.add([copa5, basto4, oro4, espada10, oro7, copa1])
-        setenta = [f"{x.number}-{x.suit}" for x in pila2.best_setenta()]
+        setenta = [f"{x.value}-{x.suit}" for x in pila2.best_setenta()]
         self.assertTrue("1-copa" in setenta)
         self.assertTrue("7-oro" in setenta)

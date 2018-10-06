@@ -181,7 +181,7 @@ class Ronda(object):
         # and check whether or not a straight escoba was dealt
         (deck, table_deal) = deck.deal(4)
 
-        if sum([card.number for card in table_deal]) == 15:
+        if sum([card.value for card in table_deal]) == 15:
             # transfer the cards directly to the dealer's pila
             player_cards[dealer]["pila"] = player_cards[dealer]["pila"] \
                                             .add(table_deal)

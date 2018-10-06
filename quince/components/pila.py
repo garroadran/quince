@@ -95,7 +95,7 @@ class Pila(object):
         """Returns True if the pila contains the 7 of oro
         """
         for card in self._cards["oro"]:
-            if card.number == 7:
+            if card.value == 7:
                 return True
 
         return False
