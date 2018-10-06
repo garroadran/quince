@@ -1,10 +1,9 @@
 """Module containing the Player class
 """
-import random
+import random as random
 from os import getcwd, path
 from PIL import Image
 from quince.cpu import enumerate_possibilities
-from quince.components import Pila
 
 
 STOCK_IMAGE_PATH = path.join(getcwd(), "quince/assets/avatars/avatar01.png")
@@ -59,20 +58,7 @@ class Player(object):
 
         self.name = name
 
-        # Cards held in hand. Changes with each turn played.
-        self._current_hand = []
-
-        # Cards picked up through play
-        # Accumulates with each turn, resets when a new deck gets dealt
-        self._pila = Pila()
-
         self._image = load_image(image_path)
-
-    def __repr__(self):
-        return f"Player, {self.name}."
-
-    def __str__(self):
-        return f"Player, {self.name}."
 
     @property
     def id(self):
@@ -98,6 +84,12 @@ class Player(object):
     def __eq__(self, other):
         """Evaluates two players as equal if they share the same id"""
         return self.id == other.id
+
+    def __repr__(self):
+        return f"Player, {self.name}."
+
+    def __str__(self):
+        return f"Player, {self.name}."
 
 
 class NPC(Player):
