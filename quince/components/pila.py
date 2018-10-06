@@ -44,7 +44,7 @@ class Pila(object):
         existing_cards = self.get_cards()
 
         for card in cards:
-            suit = card.info()[1]
+            suit = card.suit
             existing_cards[suit].append(card)
 
         escobas_count = self._escobas
@@ -95,7 +95,7 @@ class Pila(object):
         """Returns True if the pila contains the 7 of oro
         """
         for card in self._cards["oro"]:
-            if card.info()[0] == 7:
+            if card.number == 7:
                 return True
 
         return False

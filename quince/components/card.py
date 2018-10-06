@@ -14,40 +14,29 @@ class Card(object):
     The Card object represents a Card.
     Each card has a number, and a suit or "palo".
     """
-    def __init__(self, number, suit):
+    def __init__(self, value, suit):
         """Instatiates a Card object.
 
         Args:
             number (int) -- Number on the card
             suit (str) -- Card suit
         """
-        if number < 1 or number > 10:
+        if value < 1 or value > 10:
             raise ValueError("Cards can only be between 1 and 10")
 
-        self.number = number
+        self.number = value
         self.suit = suit
 
-        img_num = number
-        if img_num >= 8:
-            img_num += 2
-
+        # Values 8, 9, and 10 use the card images numbered 10, 11, 12
+        img_num = value if value < 8 else value + 2
         self._image = f"quince/assets/cards/card_{suit}_{img_num}.png"
 
-        self.points_setenta = SETENTA_SCORING[number - 1]
+        self.points_setenta = SETENTA_SCORING[value - 1]
 
     def image(self):
-        """Getter for the card's image
-        """
+        """Getter for the card's image"""
         path = os.path.join(os.getcwd(), self._image)
         return Image.open(path)
-
-    def info(self):
-        """Getter for the number and suit of the card.
-
-        Returns:
-            Tuple containing (number, suit)
-        """
-        return (self.number, self.suit)
 
     def clone(self):
         """Clones a Card object"""

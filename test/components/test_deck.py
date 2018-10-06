@@ -11,7 +11,8 @@ class TestDeck(unittest.TestCase):
         # Assert that there are no duplicate cards in the deck
         deck_check = {"oro": [], "espada": [], "copa": [], "basto": []}
         for card in deck.cards():
-            (number, palo) = card.info()
+            number = card.number
+            palo = card.suit
             if number in deck_check[palo]:
                 self.fail("Duplicate card in deck")
             else:
@@ -63,8 +64,8 @@ class TestDeck(unittest.TestCase):
         d2 = Deck(Card, clone=d1)
 
         # check that the right cards got passed
-        cards_in_d1 = [x.info() for x in d1.cards()]
-        cards_in_d2 = [x.info() for x in d2.cards()]
+        cards_in_d1 = [f"{x.number}-{x.suit}" for x in d1.cards()]
+        cards_in_d2 = [f"{x.number}-{x.suit}" for x in d2.cards()]
         self.assertEqual(cards_in_d1, cards_in_d2)
 
         # check that it really is a clone

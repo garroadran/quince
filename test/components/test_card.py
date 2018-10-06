@@ -6,7 +6,8 @@ class TestCard(unittest.TestCase):
     def test_info(self):
         """Returns a tuple containing suit and number"""
         c = Card(4, "basto")
-        self.assertEqual((4, "basto"), c.info())
+        self.assertEqual(4, c.number)
+        self.assertEqual("basto", c.suit)
 
         # Check that an error is raised on an invalid number
         with self.assertRaises(ValueError):
@@ -19,7 +20,8 @@ class TestCard(unittest.TestCase):
 
         # Modifying this private attribute just for the purposes of testing
         c.number = 3
-        self.assertEqual((1, "oro"), d.info())
+        self.assertEqual(1, d.number)
+        self.assertEqual("oro", d.suit)
 
     def test_image(self):
         """Returns an image for the card"""
