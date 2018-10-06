@@ -42,15 +42,15 @@ class Card(object):
         """Clones a Card object"""
         return Card(self.number, self.suit)
 
-    def __hash__(self):
-        hashable = f"{self.number}{self.suit}"
-        return hash(hashable)
-
     def __str__(self):
         return str((self.number, self.suit))
 
     def __repr__(self):
         return str((self.number, self.suit))
+
+    def __hash__(self):
+        hashable = f"{self.number}{self.suit}"
+        return hash(hashable)
 
     def __eq__(self, other):
         return self.number == other.number and self.suit == other.suit
