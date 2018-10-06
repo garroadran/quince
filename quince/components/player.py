@@ -82,6 +82,7 @@ class Player(object):
         """
         return self._id
 
+    @property
     def image(self):
         """Getter for the player's avatar image
 

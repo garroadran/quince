@@ -59,7 +59,7 @@ class GameFrame(tk.Frame):
         opp1_hand_size = len(self.ronda.player_cards[self.npc1]["hand"])
         opp1_active = self.ronda.current_player is self.npc1
         self.opp1 = OpponentFrameVertical(self,
-                                          self.npc1.image(),
+                                          self.npc1.image,
                                           self.npc1.name,
                                           opp1_active,
                                           opp1_hand_size)
@@ -69,7 +69,7 @@ class GameFrame(tk.Frame):
         opp2_active = self.ronda.current_player is self.npc2
         opp2_hand_size = len(self.ronda.player_cards[self.npc2]["hand"])
         self.opp2 = OpponentFrameHorizontal(self,
-                                            self.npc2.image(),
+                                            self.npc2.image,
                                             self.npc2.name,
                                             opp2_active,
                                             opp2_hand_size)
@@ -79,7 +79,7 @@ class GameFrame(tk.Frame):
         opp3_active = self.ronda.current_player is self.npc3
         opp3_hand_size = len(self.ronda.player_cards[self.npc3]["hand"])
         self.opp3 = OpponentFrameVertical(self,
-                                          self.npc3.image(),
+                                          self.npc3.image,
                                           self.npc3.name,
                                           opp3_active,
                                           opp3_hand_size)

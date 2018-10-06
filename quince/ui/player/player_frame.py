@@ -32,7 +32,7 @@ class PlayerFrame(tk.Frame):
         self.callback = callback
 
         self.avatar = PlayerAvatar(self,
-                                   player.image(),
+                                   player.image,
                                    player.name,
                                    is_active)
         self.avatar.grid(row=0, column=0)

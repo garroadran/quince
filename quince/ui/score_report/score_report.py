@@ -143,7 +143,7 @@ class ScoreReport(tk.Frame):
             pila = ronda.player_cards[player]["pila"]
             C = pila.get_cards()
             cards = C["oro"] + C["copa"] + C["espada"] + C["basto"]
-            scroll = CardScroll(self, player.image(), cards)
+            scroll = CardScroll(self, player.image, cards)
             scroll.grid(row=row,
                         column=0,
                         sticky="sew",
