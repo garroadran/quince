@@ -20,8 +20,8 @@ class OpponentHand(tk.Frame):
             number_of_cards (int) - An int between 0 and 3
         """
         if number_of_cards < 0 or number_of_cards > 3:
-            raise AttributeError("Invalid number of cards in opponent's hand. \
-                                 Should be between 0 and 3")
+            raise AttributeError("Invalid number of cards in opponent's hand."
+                                 "Should be between 0 and 3")
 
         tk.Frame.__init__(self, parent)
 

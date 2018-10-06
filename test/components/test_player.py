@@ -31,7 +31,7 @@ class TestNPC(unittest.TestCase):
     def test_get_move_single_choice(self):
         """Given a hand and a mesa,
         select which cards to play and what to pick up."""
-        npc = NPC()
+        npc = NPC("name")
         a = Card(5, "oro")
         b = Card(10, "oro")
         hand = [a]
@@ -42,7 +42,7 @@ class TestNPC(unittest.TestCase):
 
     def test_get_move_no_choice(self):
         """Drop a card if there are no moves available."""
-        npc = NPC()
+        npc = NPC("name")
         a = Card(1, "oro")
         b = Card(1, "basto")
         c = Card(9, "copa")

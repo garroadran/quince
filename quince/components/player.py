@@ -1,10 +1,35 @@
 """Module containing the Player class
 """
 import random
-import os as os
+from os import getcwd, path
 from PIL import Image
 from quince.cpu import enumerate_possibilities
-from quince.components.pila import Pila
+from quince.components import Pila
+
+
+STOCK_IMAGE_PATH = path.join(getcwd(), "quince/assets/avatars/avatar01.png")
+
+
+def load_image(img_path):
+    """Loads the image at the path provided, or a stock
+    image if the path doesn't exist.
+
+    Args:
+        path (string)
+
+    Returns:
+        PIL.Image object
+    """
+    # fallback in case a relative path was passed in
+    if not path.exists(img_path):
+        print("WARNING: Passing relative paths is deprecated"
+              "and will cause errors in future releases.")
+        img_path = path.join(getcwd(), img_path)
+
+    if not path.exists(img_path):
+        img_path = STOCK_IMAGE_PATH
+
+    return Image.open(img_path)
 
 
 class Player(object):
@@ -18,7 +43,7 @@ class Player(object):
     internal_id = 0
     names_list = ["Alicia", "Felipe", "Mariana", "Pepe", "Juanita", "Timoteo"]
 
-    def __init__(self, name=None, image_path=None):
+    def __init__(self, name, image_path=STOCK_IMAGE_PATH):
         """Instantiates a player for the game.
 
         The player is assigned an empty hand to start,
@@ -27,14 +52,12 @@ class Player(object):
 
         Args:
             name (str) -- Player's name
+            image_path (string) -- Path to the image for the player's avatar
         """
         self._id = Player.internal_id
         Player.internal_id += 1
 
-        if name is None:
-            self._name = random.choice(Player.names_list)
-        else:
-            self._name = name
+        self._name = name
 
         # Cards held in hand. Changes with each turn played.
         self._current_hand = []
@@ -43,7 +66,7 @@ class Player(object):
         # Accumulates with each turn, resets when a new deck gets dealt
         self._pila = Pila()
 
-        self.image_path = "" if image_path is None else image_path
+        self._image = load_image(image_path)
 
     def __repr__(self):
         return f"Player, {self.name()}."
@@ -61,23 +84,11 @@ class Player(object):
 
     def image(self):
         """Getter for the player's avatar image
+
         Returns:
             PIL Image object
         """
-        path = self.image_path
-
-        # fallback in case a relative path was passed in
-        if not os.path.exists(path):
-            print("WARNING: Passing relative paths is deprecated \
-                  and will cause errors in future releases.")
-            path = os.path.join(os.getcwd(), self.image_path)
-
-        if not os.path.exists(path):
-            # to do: replace with a proper stock image
-            path = os.path.join(os.getcwd(),
-                                "quince/assets/avatars/avatar01.png")
-
-        return Image.open(path)
+        return self._image.copy()
 
     def name(self):
         """Getter for the player's name
