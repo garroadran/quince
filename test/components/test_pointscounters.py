@@ -1,6 +1,8 @@
 import unittest
 from quince.components import Card
-from quince.components.points_counters import PointsCounter, SetentaCounter
+from quince.components.points_counters import (PointsCounter,
+                                               SetentaCounter,
+                                               SetentaWinner)
 
 
 class TestPointsCounter(unittest.TestCase):
@@ -56,3 +58,17 @@ class TestSetentaCounter(unittest.TestCase):
         pc.compare("bob", b_hand)
         self.assertTrue("alice" not in [x.player for x in pc.winners])
         self.assertTrue("bob" in [x.player for x in pc.winners])
+
+
+class TestSetentaWinner(unittest.TestCase):
+    def test_attributes(self):
+        player = "Bob"
+        oro = Card(7, "oro")
+        basto = Card(7, "basto")
+        copa = Card(7, "copa")
+        espada = Card(7, "espada")
+        winner = SetentaWinner(player, [oro, basto, copa, espada])
+
+        self.assertEqual("Bob", winner.player)
+        self.assertEqual(70, winner.points)
+        self.assertEqual("Bob has 70.0 setenta pts.", str(winner))
