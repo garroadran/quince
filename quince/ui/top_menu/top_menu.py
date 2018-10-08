@@ -97,7 +97,7 @@ class TopMenu(tk.Frame):
             return
 
         user = Player(self.name_entry.get())
-        user.image_path = self.avatar_path
+        user.set_image(self.avatar_path)
 
         path = join(getcwd(), "quince/assets/avatars")
         npc1 = NPC("Roberto", f"{path}/avatar06.png")

@@ -57,7 +57,9 @@ class Player(object):
         Player.internal_id += 1
 
         self.name = name
+        self._image = load_image(image_path)
 
+    def set_image(self, image_path):
         self._image = load_image(image_path)
 
     @property
