@@ -14,4 +14,4 @@ run:
 
 build-osx:
 	rm -rf build dist
-	python3 setup.py py2app -A
+	python3 setup.py py2app --packages=PIL

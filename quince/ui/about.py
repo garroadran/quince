@@ -3,10 +3,13 @@ Class containing the "About" window
 and a factory that can be injected into
 the main tkinter app.
 """
+from os import getcwd, path
 import tkinter as tk
 import webbrowser
+from PIL import Image, ImageTk
+from version import __version__
 
-LARGE_FONT = ("Helvetica", 18)
+LARGE_FONT = ("Helvetica", 20)
 
 
 class AboutFactory(object):
@@ -27,17 +30,19 @@ class AboutFactory(object):
         window.winfo_toplevel().title("About")
         window.resizable(width=False, height=False)
 
+        icon = Image.open(path.join(getcwd(), "quince/assets/favicon_32.png"))
+        img = ImageTk.PhotoImage(icon)
         appname = tk.Label(window,
                            text="Quince",
                            font=LARGE_FONT,
+                           image=img,
+                           compound="left"
                            )
+        appname.img = img
         appname.pack(pady=pady, padx=padx)
 
-        version = tk.Label(window, text="Version:\t1.0 Release 1")
+        version = tk.Label(window, text=f"Version:\t{__version__}")
         version.pack(pady=pady, padx=padx)
-
-        released = tk.Label(window, text="Released:\tPending")
-        released.pack(pady=pady, padx=padx)
 
         link = tk.Label(window,
                         text="www.danliberatori.com",

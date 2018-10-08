@@ -11,26 +11,22 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 APP = ["quince/main.py"]
-DATA_FILES = [("quince/assets", ["quince/assets/img"]),
-              ("quince/ui/assets", ["quince/ui/assets/avatars"]),
-              ("quince/ui/assets", ["quince/ui/assets/opponent_hands"]),
+DATA_FILES = [("quince", ["quince/assets"]),
               ]
 OPTIONS = {"iconfile": "quince/assets/favicon.icns"}
 PACKAGES = ["quince",
             "quince.components",
             "quince.ui",
-            "quince.ui.components",
-            "quince.ui.components.common",
-            "quince.ui.components.opponents",
-            "quince.ui.components.player",
-            "quince.ui.components.score_report",
-            "quince.ui.components.table",
-            "quince.ui.components.top_menu",
-            "quince.ronda",
+            "quince.ui.common",
+            "quince.ui.opponents",
+            "quince.ui.player",
+            "quince.ui.score_report",
+            "quince.ui.table",
+            "quince.ui.top_menu"
             ]
 
 version = {}
-with open("version.py") as fp:
+with open("quince/version.py") as fp:
     exec(fp.read(), version)
 VERSION = version["__version__"]
 
