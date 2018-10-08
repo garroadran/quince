@@ -140,7 +140,7 @@ class ScoreReport(tk.Frame):
 
     def switch_view(self):
         state = self.scrolls[0].state
-        txt = "Cards" if state == "Scores" else "Scores"
+        txt = "Cards" if state == "Cards" else "Scores"
         self.is_card_view = not self.is_card_view
         self.view_btn.config(text=txt)
 
