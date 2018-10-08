@@ -7,7 +7,7 @@ import tkinter as tk
 class GameApp(tk.Tk):
     """Root tkinter window hosting the entire app.
     """
-    def __init__(self, AboutFactory, TopMenuFactory, ScoreReport):
+    def __init__(self, AboutFactory, HowToPlay, TopMenuFactory, ScoreReport):
         tk.Tk.__init__(self)
         self.winfo_toplevel().title("Quince")
         self.minsize(800, 600)
@@ -19,6 +19,7 @@ class GameApp(tk.Tk):
 
         self.frames = {}
 
+        self.how_to_play = HowToPlay
         self.about_factory = AboutFactory
         self.frames["TopMenu"] = TopMenuFactory.generate(self.container,
                                                          self._start_new_game)
@@ -79,9 +80,10 @@ class GameApp(tk.Tk):
                              command=lambda: self.show_frame("TopMenu"))
         filemenu.add_separator()
         filemenu.add_command(label="Exit", command=self.quit)
-        menubar.add_cascade(label="File", menu=filemenu)
+        menubar.add_cascade(label="Game", menu=filemenu)
 
         helpmenu = tk.Menu(menubar, tearoff=0)
+        helpmenu.add_command(label="How To Play", command=self._show_howtoplay)
         helpmenu.add_command(label="About", command=self._show_about)
         menubar.add_cascade(label="Help", menu=helpmenu)
 
@@ -91,6 +93,9 @@ class GameApp(tk.Tk):
 
     def _show_about(self):
         self.about_factory.generate(self)
+
+    def _show_howtoplay(self):
+        self.how_to_play.generate(self)
 
     def display_scores(self, ronda, updated_scores):
         """Updates and brings up the scores panel.
