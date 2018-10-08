@@ -25,10 +25,14 @@ class GameApp(tk.Tk):
         self.frames["TopMenu"].grid(row=0, column=0, sticky="nsew")
 
         self.frames["scores"] = ScoreReport.generate(self.container,
-                                                     self.start_next_round)
+                                                     self.start_next_round,
+                                                     self.return_to_top)
         self.frames["scores"].grid(row=0, column=0, sticky="nsew")
 
         self._build_menus()
+        self.show_frame("TopMenu")
+
+    def return_to_top(self):
         self.show_frame("TopMenu")
 
     def _start_new_game(self, game_frame_factory):

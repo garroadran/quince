@@ -81,17 +81,17 @@ class ScoreSummary(tk.Frame):
 
 class ScoreReport(tk.Frame):
     """Tk frame that shows scores after a ronda"""
-    def __init__(self, root, callback):
+    def __init__(self, root, next_round_cb, new_game_cb):
         """Instantiates a ScoreReport frame.
 
         Args:
             root (tk widget) - parent container
-            callback (function) - Function to execute
-            when clicking the "Next Round" button.
+            next_round_cb (function) - callback to advance to the next round
+            new_game_cb (function) - callback to start a new game
         """
         tk.Frame.__init__(self, root)
 
-        self.grid_rowconfigure(0, weight=1)
+        self.grid_rowconfigure(0, weight=0)
         self.grid_rowconfigure(1, weight=1)
         self.grid_columnconfigure(0, weight=1)
 
@@ -100,16 +100,76 @@ class ScoreReport(tk.Frame):
                               font=("Helvetica", 14))
         self.back_btn = tk.Button(self,
                                   text="Next Round",
-                                  command=callback)
+                                  command=next_round_cb)
         self.title.grid(row=0, column=0)
         self.back_btn.grid(row=0, column=0, sticky="e", padx=10)
+        self.new_game_cb = new_game_cb
+        self.next_round_cb = next_round_cb
 
         self.summary = ScoreSummary(self)
         self.summary.grid(row=1, column=0)
 
+        self.is_card_view = True
+        self.view_btn = tk.Button(self,
+                                  text="Scores",
+                                  command=self.switch_view)
+        self.view_btn.grid(row=2, column=0, pady=(10, 20))
         self.scrolls = []
 
     def update_scores(self, ronda, updated_scores):
+        """Updates all widgets on the report frame.
+
+        Args:
+            ronda - Ronda object whose results are to be displayed
+            updated_scores - Total running scores of the entire game
+        """
+        self._config_summary(ronda)
+        row = self._redraw_scrolls(ronda, updated_scores) + 1
+
+        self.view_btn.grid(row=row, column=0, pady=(10, 20))
+
+        is_game_over = False
+        for player in updated_scores:
+            if updated_scores[player] >= 30:
+                is_game_over = True
+
+        if is_game_over:
+            self.back_btn.config(text="New Game", command=self.new_game_cb)
+        else:
+            self.back_btn.config(text="Next Round", command=self.next_round_cb)
+
+    def switch_view(self):
+        state = self.scrolls[0].state
+        txt = "Cards" if state == "Scores" else "Scores"
+        self.is_card_view = not self.is_card_view
+        self.view_btn.config(text=txt)
+
+        for scroll in self.scrolls:
+            scroll.switch_view()
+
+    def _redraw_scrolls(self, ronda, updated_scores):
+        for scroll in self.scrolls:
+            scroll.destroy()
+        self.scrolls = []
+
+        row = 3
+        for player in ronda.player_cards:
+            score = updated_scores[player]
+            pila = ronda.player_cards[player]["pila"]
+            C = pila.get_cards()
+            cards = C["oro"] + C["copa"] + C["espada"] + C["basto"]
+            scroll = CardScroll(self, player.image, cards, score)
+            scroll.grid(row=row,
+                        column=0,
+                        sticky="sew",
+                        pady=10,
+                        padx=(35, 10))
+            self.scrolls.append(scroll)
+            row += 1
+
+        return row - 1
+
+    def _config_summary(self, ronda):
         scores = ronda.calculate_scores()
 
         siete_winner = scores.get("7_de_velo", None)
@@ -135,34 +195,17 @@ class ScoreReport(tk.Frame):
 
         self.summary.set_winners(cards, oros, siete, setenta, escobas)
 
-        for scroll in self.scrolls:
-            scroll.destroy()
-
-        row = 3
-        for player in ronda.player_cards:
-            score = updated_scores[player]
-            pila = ronda.player_cards[player]["pila"]
-            C = pila.get_cards()
-            cards = C["oro"] + C["copa"] + C["espada"] + C["basto"]
-            scroll = CardScroll(self, player.image, cards, score)
-            scroll.grid(row=row,
-                        column=0,
-                        sticky="sew",
-                        pady=10,
-                        padx=(35, 10))
-            self.scrolls.append(scroll)
-            row += 1
-
     @staticmethod
-    def generate(root, callback):
+    def generate(root, next_round_cb, new_game_cb):
         """Generates a score report frame.
 
         Args:
             root (tk widget) - parent widget for the scorereport frame
-            callback (function) - Callback to execute when clicking
+            next_round_cb (function) - Callback to execute when clicking
             the "play next round" button.
+            new_game_cb (function) - Callback for starting a new game
 
         Returns:
             ScoreReport (tkFrame)
         """
-        return ScoreReport(root, callback)
+        return ScoreReport(root, next_round_cb, new_game_cb)
