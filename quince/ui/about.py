@@ -7,7 +7,8 @@ from os import getcwd, path
 import tkinter as tk
 import webbrowser
 from PIL import Image, ImageTk
-from version import __version__
+from quince.version import __version__
+
 
 LARGE_FONT = ("Helvetica", 20)
 
